@@ -1,5 +1,7 @@
+import Router from './router/Router';
+
 function App() {
-  return <div className="flex justify-center items-center h-screen">시작</div>;
+  return <Router />;
 }
 
 export default App;
