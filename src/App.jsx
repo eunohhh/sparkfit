@@ -1,5 +1,5 @@
 function App() {
-    return <div>시작</div>;
+  return <div className="flex justify-center items-center h-screen">시작</div>;
 }
 
 export default App;
