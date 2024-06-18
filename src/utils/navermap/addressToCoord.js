@@ -1,4 +1,4 @@
-import Swal from 'sweetalert2';
+import swal from '../sweetalert/swal';
 
 function searchAddressToCoordinate(infoWindow, searchInputRef, map, setSelectedGeoData, setSelectButtonDom, marker) {
   window.naver.maps.Service.geocode(
@@ -7,15 +7,12 @@ function searchAddressToCoordinate(infoWindow, searchInputRef, map, setSelectedG
     },
     function (status, response) {
       if (status === window.naver.maps.Service.Status.ERROR) {
-        return alert('Something Wrong!');
+        swal('error', 'Something Wrong!');
+        return;
       }
 
       if (response.v2.meta.totalCount === 0) {
-        Swal.fire({
-          title: 'Oops!',
-          text: `검색결과가 없습니다. 결과 ${response.v2.meta.totalCount}건`,
-          icon: 'error'
-        });
+        swal('error', `검색결과가 없습니다. 결과 ${response.v2.meta.totalCount}건`);
         return;
       }
 

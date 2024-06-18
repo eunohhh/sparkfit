@@ -1,3 +1,4 @@
+import swal from '../sweetalert/swal';
 import makeAddress from './makeAddress';
 
 function searchCoordinateToAddress(infoWindow, map, latlng, setSelectButtonDom, setSelectedGeoData) {
@@ -9,7 +10,8 @@ function searchCoordinateToAddress(infoWindow, map, latlng, setSelectButtonDom, 
     },
     function (status, response) {
       if (status === window.naver.maps.Service.Status.ERROR) {
-        return alert('Something Wrong!');
+        swal('error', 'Something Wrong!');
+        return;
       }
 
       let items = response.v2.results,

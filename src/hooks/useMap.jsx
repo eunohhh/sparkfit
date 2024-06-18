@@ -1,8 +1,8 @@
 import searchCoordinateToAddress from '@/utils/navermap/coordToAddress';
 import initGeocoder from '@/utils/navermap/initGeocoder';
+import swal from '@/utils/sweetalert/swal';
 import useMapStore from '@/zustand/map.store';
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import Swal from 'sweetalert2';
 import { useShallow } from 'zustand/react/shallow';
 import { INITIAL_CENTER, INITIAL_ZOOM } from '../constants/navermap';
 import getDate from '../utils/navermap/getDate';
@@ -76,26 +76,16 @@ function useMap({ searchInputRef, searchButtonRef }) {
 
     const error = (err) => {
       if (err.code === err.PERMISSION_DENIED) {
-        Swal.fire({
-          title: '위치 정보 제공 거부',
-          text: '위치 정보를 제공하지 않으면 일부 기능을 사용할 수 없습니다.',
-          icon: 'warning'
-        });
+        swal('warning', '위치 정보를 제공하지 않으면 일부 기능을 사용할 수 없습니다.');
+        return;
       } else {
-        Swal.fire({
-          title: '에러',
-          text: '위치 정보를 가져오는 중 오류가 발생했습니다.',
-          icon: 'error'
-        });
+        swal('error', '위치 정보를 가져오는 중 오류가 발생했습니다.');
+        return;
       }
     };
     const getUserLocation = () => {
       if (!navigator.geolocation) {
-        Swal.fire({
-          title: '에러',
-          text: '위치정보가 지원되지 않습니다',
-          icon: 'error'
-        });
+        swal('error', '위치정보가 지원되지 않습니다');
         return;
       } else {
         navigator.geolocation.getCurrentPosition(success, error);
@@ -158,9 +148,7 @@ function useMap({ searchInputRef, searchButtonRef }) {
       });
     }
     return () => {
-      if (listener) {
-        window.naver.maps.Event.removeListener(listener);
-      }
+      if (listener) window.naver.maps.Event.removeListener(listener);
     };
   }, [basicMarker, selectedGeoData, gps, infoWindow, mapRef, setSelectButtonDom, setSelectedGeoData]);
 
