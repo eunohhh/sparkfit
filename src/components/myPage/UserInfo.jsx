@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Ellipse1 from '../../styles/image/Ellipse1.png';
 import { FaUser } from 'react-icons/fa';
-import ProfileButton from '../../styles/image/ProfileButton.png';
 import { STSection } from './MyPage';
+import { HiPencilSquare } from 'react-icons/hi2';
 
 const UserInfo = () => {
   const [image, setImage] = useState(Ellipse1);
@@ -13,7 +13,7 @@ const UserInfo = () => {
       <h3 className="flex gap-2 border-b-2 border-slate-300 mt-4 ml-4 mr-4">
         <FaUser />내 정보
       </h3>
-      <STUserWrap className="flex rounded-2xl p-4 mr-4 mb-4 ml-4 gap-12 md: ">
+      <STUserWrap className="flex rounded-2xl p-4 mr-4 mb-4 ml-4 gap-12">
         <div className="relative flex items-center">
           <img
             src={image}
@@ -21,7 +21,7 @@ const UserInfo = () => {
             className="relative rounded-full overflow-hidden max-w-[95px] max-h-[95px]"
           />
           <label htmlFor="profile_image" className="absolute bottom-1 right-2">
-            <img src={ProfileButton} alt="progile-change-btn" className="w-5" />
+            <HiPencilSquare />
           </label>
           <input
             type="file"
