@@ -4,11 +4,12 @@ import GatheringList from '../page/GatheringList';
 import NavermapScriptComponent from '../pages/MainPage/NavermapScriptComponent';
 import DefaultLayout from '../layout/DefaultLayout';
 import DetailedPost from '../pages/DetailedPost';
+import MyPage from '@/components/myPage/MyPage';
+
 
 export default function Router() {
   return (
     <BrowserRouter>
-      <Routes>
         <Routes>
           <Route element={<DefaultLayout />}>
             <Route path="/" element={<NavermapScriptComponent />} />
@@ -19,7 +20,6 @@ export default function Router() {
             <Route path="/detail/:id" element={<DetailedPost />} />
           </Route>
         </Routes>
-      </Routes>
     </BrowserRouter>
   );
 }
