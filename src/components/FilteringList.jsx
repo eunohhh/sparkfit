@@ -3,6 +3,9 @@ import React, { useState } from 'react';
 const FilteringList = () => {
   const [selectedDistrict, setSelectedDistrict] = useState('');
   const districts = ['강남구', '강동구', '강서구', '강북구', '광진구', '구로구', '도봉구', '성동구', '용산구'];
+  const districtCoords = {
+    성동구: { lat: 37.551, lng: 127.0436 }
+  };
   const handleDistrictSelect = (idx) => {
     setSelectedDistrict(idx);
   };
