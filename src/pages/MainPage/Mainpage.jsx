@@ -17,8 +17,8 @@ function Mainpage() {
   }, [selectedCoord]);
 
   return (
-    <section className="relative flex w-[calc(100vw-64px)]">
-      <form className="absolute z-10 flex items-center gap-1 rounded-lg bg-white p-1 border border-gray-300 box-border ml-1">
+    <section className="relative flex w-dvw h-dvh">
+      <form className="absolute z-10 flex items-center gap-1 rounded-lg bg-white p-1 border border-gray-300 box-border left-20 ml-1">
         <input
           type="text"
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 py-[3px] px-2"
@@ -32,7 +32,7 @@ function Mainpage() {
           위치검색
         </button>
       </form>
-      <div id="map01" className="h-dvh w-full" />
+      <div id="map01" className="h-full w-full" />
     </section>
   );
 }
