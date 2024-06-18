@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import UserInfo from './components/UserInfo';
-import ClubList from './components/ClubList';
+import UserInfo from './UserInfo';
+import ClubList from './ClubList';
 
 const MyPage = () => {
   return (
