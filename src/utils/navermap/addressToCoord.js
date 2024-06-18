@@ -1,6 +1,6 @@
 import Swal from 'sweetalert2';
 
-function searchAddressToCoordinate(infoWindow, address, map, setSelectedAddress) {
+function searchAddressToCoordinate(infoWindow, address, map, setSelectedAddress, setSelectButtonDom) {
   window.naver.maps.Service.geocode(
     {
       query: address
@@ -51,6 +51,15 @@ function searchAddressToCoordinate(infoWindow, address, map, setSelectedAddress)
 
       map.setCenter(point);
       infoWindow.open(map, point);
+
+      const infoWindowInnerContent = infoWindow.getContentElement();
+
+      const infoWindowOuterContent = infoWindowInnerContent.parentNode.parentNode;
+
+      infoWindowOuterContent.style.top = '-32px';
+      infoWindowOuterContent.style.left = '-1px';
+
+      setSelectButtonDom(infoWindowInnerContent.querySelector('#selectCoord'));
     }
   );
 }

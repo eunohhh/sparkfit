@@ -1,6 +1,6 @@
 import makeAddress from './makeAddress';
 
-function searchCoordinateToAddress(infoWindow, map, latlng) {
+function searchCoordinateToAddress(infoWindow, map, latlng, setSelectButtonDom) {
   infoWindow.close();
   window.naver.maps.Service.reverseGeocode(
     {
@@ -39,10 +39,14 @@ function searchCoordinateToAddress(infoWindow, map, latlng) {
         anchorSize: { width: 10, height: 12 }
       });
 
-      const infoWindowOuterContent = infoWindow.getContentElement().parentNode.parentNode;
+      const infoWindowInnerContent = infoWindow.getContentElement();
+
+      const infoWindowOuterContent = infoWindowInnerContent.parentNode.parentNode;
 
       infoWindowOuterContent.style.top = '-32px';
       infoWindowOuterContent.style.left = '-1px';
+
+      setSelectButtonDom(infoWindowInnerContent.querySelector('#selectCoord'));
     }
   );
 }

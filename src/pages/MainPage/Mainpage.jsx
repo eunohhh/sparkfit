@@ -6,11 +6,15 @@ function Mainpage() {
   const searchInputRef = useRef();
   const searchButtonRef = useRef();
 
-  const { gps } = useMap({ mapRef, searchInputRef, searchButtonRef });
+  const { gps, selectedCoord } = useMap({ mapRef, searchInputRef, searchButtonRef });
 
   useEffect(() => {
     console.log(`현재 위도, 경도는 => ${gps && gps.lat}, ${gps && gps.long}`);
   }, [gps]);
+
+  useEffect(() => {
+    console.log(selectedCoord);
+  }, [selectedCoord]);
 
   return (
     <div className="flex">

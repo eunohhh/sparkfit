@@ -14,7 +14,8 @@ function useMap({ mapRef, searchInputRef, searchButtonRef }) {
       anchorSkew: true
     });
   });
-  const [selectedAddress, setSelectedAddress] = useState(null);
+  const [selectedCoord, setSelectedCoord] = useState(null);
+  const [selectButtonDom, setSelectButtonDom] = useState(null);
 
   const initializeMap = useCallback(
     (gps) => {
@@ -26,15 +27,9 @@ function useMap({ mapRef, searchInputRef, searchButtonRef }) {
         mapDataControl: false,
         minZoom: 8,
         anchorSkew: true,
-        // 줌 컨트롤의 옵션
         zoomControlOptions: {
-          // 줌 컨트롤의 위치를 우측 상단으로 배치함
-          position: window.naver.maps.Position.TOP_RIGHT
+          position: window.naver.maps.Position.TOP_RIGHT // 줌 컨트롤의 위치를 우측 상단으로 배치함
         }
-        // scaleControl: false,
-        // logoControlOptions: {
-        //   position: naver.maps.Position.BOTTOM_LEFT
-        // }
       };
       if (!naverMap) {
         const map = new window.naver.maps.Map('map01', mapOptions);
@@ -112,16 +107,53 @@ function useMap({ mapRef, searchInputRef, searchButtonRef }) {
   }, [infoWindow]);
 
   useEffect(() => {
-    if (infoWindow && naverMap)
-      window.naver.maps.onJSContentLoaded = () =>
-        initGeocoder(infoWindow, naverMap, searchInputRef.current, searchButtonRef.current, marker, setSelectedAddress);
-  }, [infoWindow, naverMap, searchInputRef, searchButtonRef, marker]);
+    const handleSelectButtonDom = () => {
+      // 선택 버튼 클릭시 동작 여기에
+      console.log(selectedCoord);
+    };
+
+    if (selectButtonDom) selectButtonDom.addEventListener('click', handleSelectButtonDom);
+
+    return () => {
+      if (selectButtonDom) selectButtonDom.removeEventListener('click', handleSelectButtonDom);
+    };
+  }, [selectButtonDom, selectedCoord]);
 
   useEffect(() => {
-    console.log(selectedAddress);
-  }, [selectedAddress]);
+    let listener = null;
+    if (marker) {
+      listener = window.naver.maps.Event.addListener(marker, 'click', function () {
+        // 마커 클릭시 동작 여기에
+        if (selectedCoord) {
+          console.log(selectedCoord);
+        } else {
+          console.log({ lat: gps.lat, long: gps.long });
+        }
+      });
+    }
 
-  return { gps, naverMap, infoWindow, initializeMap };
+    return () => {
+      if (listener) {
+        window.naver.maps.Event.removeListener(listener);
+      }
+    };
+  }, [marker, selectedCoord, gps]);
+
+  useEffect(() => {
+    if (infoWindow && naverMap)
+      window.naver.maps.onJSContentLoaded = () =>
+        initGeocoder(
+          infoWindow,
+          naverMap,
+          searchInputRef.current,
+          searchButtonRef.current,
+          marker,
+          setSelectedCoord,
+          setSelectButtonDom
+        );
+  }, [infoWindow, naverMap, searchInputRef, searchButtonRef, marker]);
+
+  return { gps, naverMap, infoWindow, selectedCoord, initializeMap };
 }
 
 export default useMap;
