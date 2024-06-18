@@ -1,5 +1,5 @@
 import React from 'react';
-import ClubInfo from '../../components/mypage/ClubInfo';
+import ClubInfo from './ClubInfo';
 import { STSection } from '../../pages/MyPage';
 
 const ClubList = () => {
