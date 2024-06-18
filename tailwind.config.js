@@ -10,6 +10,16 @@ export default {
         customSocialButton: '#FFD056',
         'btn-blue': '#82C0F9',
         default: '#efefef'
+      },
+      boxShadow: {
+        sidebarshaow: '10px 4px 15px rgba(0, 0, 0, 0.05)'
+      },
+      width: {
+        logowidth: '31px',
+        iconwidth: '24px'
+      },
+      height: {
+        iconheight: '24px'
       }
     }
   },
