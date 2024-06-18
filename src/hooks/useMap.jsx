@@ -1,4 +1,5 @@
 import initGeocoder from '@/utils/navermap/initGeocoder';
+import useMapStore from '@/zustand/map.store';
 import { useCallback, useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import { INITIAL_CENTER, INITIAL_ZOOM } from '../constants/navermap';
@@ -14,7 +15,7 @@ function useMap({ mapRef, searchInputRef, searchButtonRef }) {
       anchorSkew: true
     });
   });
-  const [selectedCoord, setSelectedCoord] = useState(null);
+  const { selectedCoord, setSelectedCoord } = useMapStore();
   const [selectButtonDom, setSelectButtonDom] = useState(null);
 
   const initializeMap = useCallback(
@@ -151,9 +152,9 @@ function useMap({ mapRef, searchInputRef, searchButtonRef }) {
           setSelectedCoord,
           setSelectButtonDom
         );
-  }, [infoWindow, naverMap, searchInputRef, searchButtonRef, marker]);
+  }, [infoWindow, naverMap, searchInputRef, searchButtonRef, marker, setSelectedCoord, setSelectButtonDom]);
 
-  return { gps, naverMap, infoWindow, selectedCoord, initializeMap };
+  return { gps, naverMap, infoWindow, initializeMap };
 }
 
 export default useMap;

@@ -1,3 +1,4 @@
+import useMapStore from '@/zustand/map.store';
 import { useEffect, useRef } from 'react';
 import useMap from '../../hooks/useMap';
 
@@ -6,7 +7,9 @@ function Mainpage() {
   const searchInputRef = useRef();
   const searchButtonRef = useRef();
 
-  const { gps, selectedCoord } = useMap({ mapRef, searchInputRef, searchButtonRef });
+  const { gps } = useMap({ mapRef, searchInputRef, searchButtonRef });
+
+  const { selectedCoord } = useMapStore();
 
   useEffect(() => {
     console.log(`현재 위도, 경도는 => ${gps && gps.lat}, ${gps && gps.long}`);
