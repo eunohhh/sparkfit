@@ -15,19 +15,20 @@ function initGeocoder(
 
   map.addListener('click', (e) => {
     searchCoordinateToAddress(infoWindow, map, e.coord, setSelectButtonDom, setSelectedGeoData);
+    marker.setMap(map);
     marker.setPosition(e.coord);
   });
 
   searchInputRef.addEventListener('keydown', (e) => {
     let keyCode = e.which;
     if (keyCode === 13) {
-      searchAddressToCoordinate(infoWindow, searchInputRef, map, setSelectedGeoData, setSelectButtonDom);
+      searchAddressToCoordinate(infoWindow, searchInputRef, map, setSelectedGeoData, setSelectButtonDom, marker);
     }
   });
 
   searchButtonRef.addEventListener('click', (e) => {
     e.preventDefault();
-    searchAddressToCoordinate(infoWindow, searchInputRef, map, setSelectedGeoData, setSelectButtonDom);
+    searchAddressToCoordinate(infoWindow, searchInputRef, map, setSelectedGeoData, setSelectButtonDom, marker);
   });
 }
 export default initGeocoder;

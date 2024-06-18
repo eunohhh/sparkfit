@@ -9,7 +9,7 @@ import getDate from '../utils/navermap/getDate';
 
 function useMap({ searchInputRef, searchButtonRef }) {
   const [gps, setGps] = useState(null);
-  const [marker, setMarker] = useState(null);
+  const [basicMarker, setBasicMarker] = useState(null);
   const [infoWindow, setInfoWindow] = useState(() =>
     !window.naver
       ? null
@@ -59,9 +59,10 @@ function useMap({ searchInputRef, searchButtonRef }) {
       position: new window.naver.maps.LatLng(...gps),
       map: map
     });
-    setMarker(marker);
+    setBasicMarker(marker);
   }, []);
 
+  // 초기에 사용자의 위치 정보를 가져옴
   useLayoutEffect(() => {
     function getUserLocation() {
       if (!navigator.geolocation) {
@@ -103,17 +104,20 @@ function useMap({ searchInputRef, searchButtonRef }) {
     getUserLocation();
   }, []);
 
-  useEffect(() => {
-    if (gps && marker && mapRef.current) {
-      mapRef.current.setCenter(new window.naver.maps.LatLng(gps.lat, gps.long));
-      marker.setPosition(new window.naver.maps.LatLng(gps.lat, gps.long));
-    }
-  }, [gps, marker, mapRef]);
-
+  // 최초 실행
   useEffect(() => {
     initializeMap(INITIAL_CENTER);
   }, [initializeMap]);
 
+  // 사용자 gps 값 저장 성공시 실행
+  useEffect(() => {
+    if (gps && basicMarker && mapRef.current) {
+      mapRef.current.setCenter(new window.naver.maps.LatLng(gps.lat, gps.long));
+      basicMarker.setPosition(new window.naver.maps.LatLng(gps.lat, gps.long));
+    }
+  }, [gps, basicMarker, mapRef]);
+
+  // 기본 정보창 객체 생성
   useEffect(() => {
     if (!infoWindow) {
       const infoWindow = new window.naver.maps.InfoWindow();
@@ -121,9 +125,9 @@ function useMap({ searchInputRef, searchButtonRef }) {
     }
   }, [infoWindow]);
 
+  // 선택 버튼 클릭시 동작 여기에
   useEffect(() => {
     const handleSelectButtonDom = () => {
-      // 선택 버튼 클릭시 동작 여기에
       console.log(selectedGeoData);
     };
 
@@ -134,11 +138,11 @@ function useMap({ searchInputRef, searchButtonRef }) {
     };
   }, [selectButtonDom, selectedGeoData]);
 
+  // 마커 클릭시 동작 여기에
   useEffect(() => {
     let listener = null;
-    if (marker && gps && infoWindow && mapRef.current && setSelectButtonDom) {
-      listener = window.naver.maps.Event.addListener(marker, 'click', () => {
-        // 마커 클릭시 동작 여기에
+    if (basicMarker && gps && infoWindow && mapRef.current && setSelectButtonDom) {
+      listener = window.naver.maps.Event.addListener(basicMarker, 'click', () => {
         if (selectedGeoData) {
           console.log(selectedGeoData);
         } else {
@@ -153,14 +157,14 @@ function useMap({ searchInputRef, searchButtonRef }) {
         }
       });
     }
-
     return () => {
       if (listener) {
         window.naver.maps.Event.removeListener(listener);
       }
     };
-  }, [marker, selectedGeoData, gps, infoWindow, mapRef, setSelectButtonDom, setSelectedGeoData]);
+  }, [basicMarker, selectedGeoData, gps, infoWindow, mapRef, setSelectButtonDom, setSelectedGeoData]);
 
+  // 정보창객체와 맵 객체가 설정되면 initGeocoder 실행
   useEffect(() => {
     if (infoWindow && mapRef.current)
       window.naver.maps.onJSContentLoaded = () =>
@@ -169,13 +173,13 @@ function useMap({ searchInputRef, searchButtonRef }) {
           mapRef.current,
           searchInputRef.current,
           searchButtonRef.current,
-          marker,
+          basicMarker,
           setSelectedGeoData,
           setSelectButtonDom
         );
-  }, [infoWindow, mapRef, searchInputRef, searchButtonRef, marker, setSelectedGeoData, setSelectButtonDom]);
+  }, [infoWindow, mapRef, searchInputRef, searchButtonRef, basicMarker, setSelectedGeoData, setSelectButtonDom]);
 
-  return { gps, naverMap: mapRef.current, infoWindow, initializeMap };
+  return { gps, naverMap: mapRef.current, infoWindow, basicMarker, initializeMap };
 }
 
 export default useMap;

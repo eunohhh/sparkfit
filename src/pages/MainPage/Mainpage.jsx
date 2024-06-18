@@ -6,7 +6,7 @@ import useMap from '../../hooks/useMap';
 function Mainpage() {
   const searchInputRef = useRef();
   const searchButtonRef = useRef();
-  const { gps, naverMap } = useMap({ searchInputRef, searchButtonRef });
+  const { gps, naverMap, basicMarker } = useMap({ searchInputRef, searchButtonRef });
   const { selectedGeoData } = useMapStore((state) => ({ selectedGeoData: state.selectedGeoData }));
   const { places } = usePlaces();
 
@@ -53,10 +53,13 @@ function Mainpage() {
 
       // 마커 리스트와 정보창 리스트 추가
       markers.forEach((marker, idx) => {
-        marker.addListener('click', () => infoWindows[idx].open(naverMap, marker));
+        marker.addListener('click', () => {
+          if (basicMarker) basicMarker.setMap(null);
+          infoWindows[idx].open(naverMap, marker);
+        });
       });
     }
-  }, [places, naverMap]);
+  }, [places, naverMap, basicMarker]);
 
   return (
     <section className="relative flex w-dvw h-dvh">

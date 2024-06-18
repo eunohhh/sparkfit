@@ -1,6 +1,6 @@
 import Swal from 'sweetalert2';
 
-function searchAddressToCoordinate(infoWindow, searchInputRef, map, setSelectedGeoData, setSelectButtonDom) {
+function searchAddressToCoordinate(infoWindow, searchInputRef, map, setSelectedGeoData, setSelectButtonDom, marker) {
   window.naver.maps.Service.geocode(
     {
       query: searchInputRef.value
@@ -63,6 +63,9 @@ function searchAddressToCoordinate(infoWindow, searchInputRef, map, setSelectedG
           height: 12
         }
       });
+
+      marker.setMap(map);
+      marker.setPosition(point);
 
       map.setCenter(point);
       infoWindow.open(map, point);
