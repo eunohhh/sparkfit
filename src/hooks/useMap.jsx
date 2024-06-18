@@ -4,9 +4,10 @@ import Swal from 'sweetalert2';
 import { INITIAL_CENTER, INITIAL_ZOOM } from '../constants/navermap';
 import getDate from '../utils/navermap/getDate';
 
-function useMap({ mapRef, markerRef, searchInputRef, searchButtonRef }) {
+function useMap({ mapRef, searchInputRef, searchButtonRef }) {
   const [gps, setGps] = useState(null);
   const [naverMap, setNaverMap] = useState(null);
+  const [marker, setMarker] = useState(null);
   const [infoWindow, setInfoWindow] = useState(() => {
     if (!window.naver) return null;
     return new window.naver.maps.InfoWindow({
@@ -47,9 +48,9 @@ function useMap({ mapRef, markerRef, searchInputRef, searchButtonRef }) {
         position: new window.naver.maps.LatLng(...gps),
         map: mapRef.current
       });
-      markerRef.current = marker;
+      setMarker(marker);
     },
-    [mapRef, markerRef, naverMap]
+    [mapRef, naverMap]
   );
 
   useEffect(() => {
@@ -113,15 +114,8 @@ function useMap({ mapRef, markerRef, searchInputRef, searchButtonRef }) {
   useEffect(() => {
     if (infoWindow && naverMap)
       window.naver.maps.onJSContentLoaded = () =>
-        initGeocoder(
-          infoWindow,
-          naverMap,
-          searchInputRef.current,
-          searchButtonRef.current,
-          markerRef.current,
-          setSelectedAddress
-        );
-  }, [infoWindow, naverMap, searchInputRef, searchButtonRef, markerRef]);
+        initGeocoder(infoWindow, naverMap, searchInputRef.current, searchButtonRef.current, marker, setSelectedAddress);
+  }, [infoWindow, naverMap, searchInputRef, searchButtonRef, marker]);
 
   useEffect(() => {
     console.log(selectedAddress);

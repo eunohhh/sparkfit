@@ -1,14 +1,14 @@
 import searchAddressToCoordinate from './addressToCoord';
 import searchCoordinateToAddress from './coordToAddress';
 
-function initGeocoder(infoWindow, map, searchInputRef, searchButtonRef, markerRef, setSelectedAddress) {
+function initGeocoder(infoWindow, map, searchInputRef, searchButtonRef, marker, setSelectedAddress) {
   if (!infoWindow || !map) return;
   // if (!window.naver.maps.Service) return;
 
   map.addListener('click', (e) => {
     searchCoordinateToAddress(infoWindow, map, e.coord);
     setSelectedAddress({ lat: e.coord.y, long: e.coord.x });
-    markerRef.setPosition(e.coord);
+    marker.setPosition(e.coord);
   });
 
   searchInputRef.addEventListener('keydown', (e) => {
