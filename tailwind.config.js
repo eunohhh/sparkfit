@@ -4,6 +4,10 @@ export default {
   theme: {
     extend: {
       colors: {
+        customBackground: '#EAF6FE',
+        customLoginButton: '#82C0F9',
+        customSignupButton: '#E4E4E4',
+        customSocialButton: '#FFD056',
         'btn-blue': '#82C0F9',
         default: '#efefef'
       },
