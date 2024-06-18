@@ -6,6 +6,7 @@ import { RiSearchLine } from 'react-icons/ri';
 import { RiLogoutBoxRLine } from 'react-icons/ri';
 import { RiUser3Line } from 'react-icons/ri';
 import { RiGroupLine } from 'react-icons/ri';
+
 export default function Sidebar() {
   return (
     <>
