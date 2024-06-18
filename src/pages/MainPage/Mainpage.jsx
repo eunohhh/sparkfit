@@ -6,9 +6,7 @@ function Mainpage() {
   const mapRef = useRef();
   const searchInputRef = useRef();
   const searchButtonRef = useRef();
-
   const { gps } = useMap({ mapRef, searchInputRef, searchButtonRef });
-
   const { selectedCoord } = useMapStore();
 
   useEffect(() => {

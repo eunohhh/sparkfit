@@ -1,6 +1,6 @@
 import initGeocoder from '@/utils/navermap/initGeocoder';
 import useMapStore from '@/zustand/map.store';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import { INITIAL_CENTER, INITIAL_ZOOM } from '../constants/navermap';
 import getDate from '../utils/navermap/getDate';
@@ -9,12 +9,13 @@ function useMap({ mapRef, searchInputRef, searchButtonRef }) {
   const [gps, setGps] = useState(null);
   const [naverMap, setNaverMap] = useState(null);
   const [marker, setMarker] = useState(null);
-  const [infoWindow, setInfoWindow] = useState(() => {
-    if (!window.naver) return null;
-    return new window.naver.maps.InfoWindow({
-      anchorSkew: true
-    });
-  });
+  const [infoWindow, setInfoWindow] = useState(() =>
+    !window.naver
+      ? null
+      : new window.naver.maps.InfoWindow({
+          anchorSkew: true
+        })
+  );
   const { selectedCoord, setSelectedCoord } = useMapStore();
   const [selectButtonDom, setSelectButtonDom] = useState(null);
 
@@ -49,7 +50,7 @@ function useMap({ mapRef, searchInputRef, searchButtonRef }) {
     [mapRef, naverMap]
   );
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     function getUserLocation() {
       if (!navigator.geolocation) {
         Swal.fire({
