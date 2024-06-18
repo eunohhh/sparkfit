@@ -27,13 +27,22 @@ function searchCoordinateToAddress(infoWindow, map, latlng) {
       infoWindow.setContent(
         [
           '<div style="padding:10px;min-width:200px;line-height:150%;">',
-          '<h4 style="margin-top:5px;">검색 좌표</h4><br />',
+          '<div class="flex flex-row justify-between"><h4 style="margin-top:5px;">검색좌표</h4><button id="selectCoord" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-0.5 px-2 rounded">선택</button></div>',
           htmlAddresses.join('<br />'),
           '</div>'
         ].join('\n')
       );
 
       infoWindow.open(map, latlng);
+
+      infoWindow.setOptions({
+        anchorSize: { width: 10, height: 12 }
+      });
+
+      const infoWindowOuterContent = infoWindow.getContentElement().parentNode.parentNode;
+
+      infoWindowOuterContent.style.top = '-32px';
+      infoWindowOuterContent.style.left = '-1px';
     }
   );
 }
