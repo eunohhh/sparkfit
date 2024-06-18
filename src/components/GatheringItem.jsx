@@ -23,12 +23,6 @@ const GatheringItem = () => {
       {places.map((place) => {
         return (
           <div key={place.id} className="flex gap-8 bg-[#ffffff] p-8 shadow-lg rounded-xl relative">
-            <svg
-              className="absolute w-[25%] h-[25%] left-[-14%] top-[33%] fill-[#ffffff] rotate-90"
-              viewBox="0 0 100 100"
-            >
-              <polygon points="0,0 100,0 50,100" />
-            </svg>
             {/* 모임 이미지 */}
             <div>
               <img src="http://via.placeholder.com/300x200" alt="모임이미지" />
@@ -62,6 +56,12 @@ const GatheringItem = () => {
                 </button>
               </div>
             </div>
+            <svg
+              className="absolute w-[25%] h-[25%] right-[-14%] top-[33%] fill-[#ffffff] rotate-90"
+              viewBox="0 0 100 100"
+            >
+              <polygon points="50,0 100,100 0,100" />
+            </svg>
           </div>
         );
       })}
