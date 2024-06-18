@@ -1,21 +1,22 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import logo from './../assets/logo.png';
+import { useState } from 'react';
 import {
   RiArrowGoBackLine,
-  RiSearchLine,
-  RiLogoutBoxRLine,
-  RiUser3Line,
   RiGroupLine,
-  RiHome2Line
+  RiHome2Line,
+  RiLogoutBoxRLine,
+  RiSearchLine,
+  RiUser3Line
 } from 'react-icons/ri';
+import { Link, useNavigate } from 'react-router-dom';
+import logo from './../assets/logo.png';
+
 
 export default function Sidebar() {
   const navigate = useNavigate();
   const [activeItem, setActiveItem] = useState('');
   return (
     <>
-      <div className="bg-white shadow-sidebarshaow fixed top-0 left-0 h-lvh w-20 justify-center items-center h-screen sm:flex hidden text-sm">
+      <div className="bg-white shadow-sidebarshaow fixed top-0 left-0 h-lvh w-20 justify-center items-center h-screen sm:flex hidden text-sm z-10">
         <div className="h-calc-full-minus-110 w-11 mx-auto flex flex-col justify-between">
           <div className="h-80 flex flex-col justify-between items-center">
             <h1 className="w-logowidth h-logoheight">
