@@ -1,6 +1,6 @@
 import makeAddress from './makeAddress';
 
-function searchCoordinateToAddress(infoWindow, map, latlng, setSelectButtonDom) {
+function searchCoordinateToAddress(infoWindow, map, latlng, setSelectButtonDom, setSelectedGeoData) {
   infoWindow.close();
   window.naver.maps.Service.reverseGeocode(
     {
@@ -24,6 +24,8 @@ function searchCoordinateToAddress(infoWindow, map, latlng, setSelectButtonDom) 
         htmlAddresses.push(i + 1 + '. ' + addrType + ' ' + address);
       }
 
+      console.log(htmlAddresses);
+
       infoWindow.setContent(
         [
           '<div style="padding:10px;min-width:200px;line-height:150%;">',
@@ -34,6 +36,14 @@ function searchCoordinateToAddress(infoWindow, map, latlng, setSelectButtonDom) 
       );
 
       infoWindow.open(map, latlng);
+
+      setSelectedGeoData({
+        address: {
+          jibunAddress: htmlAddresses[0],
+          roadAddress: htmlAddresses[1]
+        },
+        coord: { lat: latlng.y, long: latlng.x }
+      });
 
       infoWindow.setOptions({
         anchorSize: { width: 10, height: 12 }

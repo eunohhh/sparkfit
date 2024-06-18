@@ -6,15 +6,15 @@ function Mainpage() {
   const searchInputRef = useRef();
   const searchButtonRef = useRef();
   const { gps } = useMap({ searchInputRef, searchButtonRef });
-  const { selectedCoord } = useMapStore();
+  const { selectedGeoData } = useMapStore();
 
   useEffect(() => {
     console.log(`현재 위도, 경도는 => ${gps && gps.lat}, ${gps && gps.long}`);
   }, [gps]);
 
   useEffect(() => {
-    console.log(selectedCoord);
-  }, [selectedCoord]);
+    console.log(selectedGeoData);
+  }, [selectedGeoData]);
 
   return (
     <section className="relative flex w-dvw h-dvh">

@@ -3,6 +3,7 @@ import initGeocoder from '@/utils/navermap/initGeocoder';
 import useMapStore from '@/zustand/map.store';
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Swal from 'sweetalert2';
+import { useShallow } from 'zustand/react/shallow';
 import { INITIAL_CENTER, INITIAL_ZOOM } from '../constants/navermap';
 import getDate from '../utils/navermap/getDate';
 
@@ -17,7 +18,12 @@ function useMap({ searchInputRef, searchButtonRef }) {
         })
   );
   const [selectButtonDom, setSelectButtonDom] = useState(null);
-  const { selectedCoord, setSelectedCoord } = useMapStore();
+  const { selectedGeoData, setSelectedGeoData } = useMapStore(
+    useShallow((state) => ({
+      selectedGeoData: state.selectedGeoData,
+      setSelectedGeoData: state.setSelectedGeoData
+    }))
+  );
 
   const mapRef = useRef(null);
 
@@ -120,7 +126,7 @@ function useMap({ searchInputRef, searchButtonRef }) {
   useEffect(() => {
     const handleSelectButtonDom = () => {
       // 선택 버튼 클릭시 동작 여기에
-      console.log(selectedCoord);
+      console.log(selectedGeoData);
     };
 
     if (selectButtonDom) selectButtonDom.addEventListener('click', handleSelectButtonDom);
@@ -128,18 +134,24 @@ function useMap({ searchInputRef, searchButtonRef }) {
     return () => {
       if (selectButtonDom) selectButtonDom.removeEventListener('click', handleSelectButtonDom);
     };
-  }, [selectButtonDom, selectedCoord]);
+  }, [selectButtonDom, selectedGeoData]);
 
   useEffect(() => {
     let listener = null;
     if (marker && gps && infoWindow && mapRef.current && setSelectButtonDom) {
       listener = window.naver.maps.Event.addListener(marker, 'click', () => {
         // 마커 클릭시 동작 여기에
-        if (selectedCoord) {
-          console.log(selectedCoord);
+        if (selectedGeoData) {
+          console.log(selectedGeoData);
         } else {
           console.log({ lat: gps.lat, long: gps.long });
-          searchCoordinateToAddress(infoWindow, mapRef.current, { y: gps.lat, x: gps.long }, setSelectButtonDom);
+          searchCoordinateToAddress(
+            infoWindow,
+            mapRef.current,
+            { y: gps.lat, x: gps.long },
+            setSelectButtonDom,
+            setSelectedGeoData
+          );
         }
       });
     }
@@ -149,7 +161,7 @@ function useMap({ searchInputRef, searchButtonRef }) {
         window.naver.maps.Event.removeListener(listener);
       }
     };
-  }, [marker, selectedCoord, gps, infoWindow, mapRef, setSelectButtonDom]);
+  }, [marker, selectedGeoData, gps, infoWindow, mapRef, setSelectButtonDom, setSelectedGeoData]);
 
   useEffect(() => {
     if (infoWindow && mapRef.current)
@@ -160,10 +172,10 @@ function useMap({ searchInputRef, searchButtonRef }) {
           searchInputRef.current,
           searchButtonRef.current,
           marker,
-          setSelectedCoord,
+          setSelectedGeoData,
           setSelectButtonDom
         );
-  }, [infoWindow, mapRef, searchInputRef, searchButtonRef, marker, setSelectedCoord, setSelectButtonDom]);
+  }, [infoWindow, mapRef, searchInputRef, searchButtonRef, marker, setSelectedGeoData, setSelectButtonDom]);
 
   return { gps, naverMap: mapRef.current, infoWindow, initializeMap };
 }

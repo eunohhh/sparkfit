@@ -1,9 +1,9 @@
 import Swal from 'sweetalert2';
 
-function searchAddressToCoordinate(infoWindow, address, map, setSelectedAddress, setSelectButtonDom) {
+function searchAddressToCoordinate(infoWindow, searchInputRef, map, setSelectedGeoData, setSelectButtonDom) {
   window.naver.maps.Service.geocode(
     {
-      query: address
+      query: searchInputRef.value
     },
     function (status, response) {
       if (status === window.naver.maps.Service.Status.ERROR) {
@@ -24,7 +24,13 @@ function searchAddressToCoordinate(infoWindow, address, map, setSelectedAddress,
         point = new window.naver.maps.Point(item.x, item.y);
 
       // item.y === lat / item.x === long
-      setSelectedAddress({ lat: Number(item.y), long: Number(item.x) });
+      setSelectedGeoData({
+        address: {
+          jibunAddress: htmlAddresses[0],
+          roadAddress: htmlAddresses[1]
+        },
+        coord: { lat: Number(item.y), long: Number(item.x) }
+      });
 
       if (item.roadAddress) {
         htmlAddresses.push('[도로명 주소] ' + item.roadAddress);
@@ -42,7 +48,7 @@ function searchAddressToCoordinate(infoWindow, address, map, setSelectedAddress,
         [
           '<div style="padding:10px;min-width:200px;line-height:150%;">',
           '<div class="flex flex-row justify-between"><h4 style="margin-top:5px;">검색 주소 : ' +
-            address +
+            searchInputRef +
             '</h4><button id="selectCoord" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-0.5 px-2 rounded">선택</button></div>',
           htmlAddresses.join('<br />'),
           '</div>'
@@ -60,6 +66,8 @@ function searchAddressToCoordinate(infoWindow, address, map, setSelectedAddress,
       infoWindowOuterContent.style.left = '-1px';
 
       setSelectButtonDom(infoWindowInnerContent.querySelector('#selectCoord'));
+
+      searchInputRef.value = '';
     }
   );
 }
