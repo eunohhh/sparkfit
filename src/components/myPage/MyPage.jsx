@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import UserInfo from './UserInfo';
 import ClubList from './ClubList';
 
 const MyPage = () => {
+  useEffect(() => {}, []);
+
   return (
     <STMyPageContainer>
       <h1>마이페이지~~</h1>

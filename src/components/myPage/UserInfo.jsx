@@ -3,9 +3,35 @@ import Ellipse1 from '../../styles/image/Ellipse1.png';
 import { FaUser } from 'react-icons/fa';
 import { STSection } from './MyPage';
 import { HiPencilSquare } from 'react-icons/hi2';
+import supabase from '@/supabase';
+import { useQuery } from '@tanstack/react-query';
 
 const UserInfo = () => {
   const [image, setImage] = useState(Ellipse1);
+
+  //세션 트루인 사람으로 가져오기 (임시)
+  const getUser = async () => {
+    const { data } = await supabase.from('Users').select('*').eq('session', true);
+
+    if (error) {
+      console.log(error);
+    }
+    return data[0];
+  };
+
+  // 유저도 쥬스탠드로 관리하기 차후 수정
+  const { data, isPending, error } = useQuery({
+    queryKey: ['users'],
+    queryFn: getUser
+  });
+
+  if (isPending) {
+    return <div>loading...</div>;
+  }
+
+  if (error) {
+    return <div>error!</div>;
+  }
 
   return (
     <STSection>
@@ -20,7 +46,7 @@ const UserInfo = () => {
             className="relative rounded-full overflow-hidden max-w-[95px] max-h-[95px]"
           />
           <label htmlFor="profile_image" className="absolute bottom-1 right-2">
-            <HiPencilSquare />
+            <HiPencilSquare className="w-6 h-6" />
           </label>
           <input
             type="file"
@@ -32,8 +58,11 @@ const UserInfo = () => {
           />
         </div>
         <div>
-          <div className="flex mt-5">닉네임 님 반갑습니다.</div>
-          <div className="flex mt-2 text-slate-400 text-sm"> ID : text</div>
+          <div className="flex mt-5">
+            {data && data.username} 님
+            반갑습니다아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아ㅏ.
+          </div>
+          <div className="flex mt-2 text-slate-400 text-sm"> ID : {data && data.id}</div>
         </div>
       </div>
     </STSection>
