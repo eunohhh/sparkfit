@@ -8,11 +8,6 @@ export default function Router() {
     <BrowserRouter>
       <Routes>
         <Route element={<DefaultLayout />}>
-          {/* <Route path="/" element={<Mainpage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/join" element={<Join />} />
-          <Route path="/mypage" element={<MyPage />} />
-          <Route path="/detail/:id" element={<DetailedPost />} /> */}
           <Route path="/gathering" element={<GatheringList />} />
         </Route>
       </Routes>
