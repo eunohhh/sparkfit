@@ -12,14 +12,20 @@ export default {
         default: '#efefef'
       },
       boxShadow: {
-        sidebarshaow: '10px 4px 15px rgba(0, 0, 0, 0.05)'
+        sidebarshaow: '10px 4px 15px rgba(0, 0, 0, 0.05)',
+        bottomsidebarshaow: '0px 4px 15px rgba(0, 0, 0, 0.1)'
       },
       width: {
         logowidth: '31px',
         iconwidth: '24px'
       },
       height: {
-        iconheight: '24px'
+        iconheight: '24px',
+        logoheight: '31px',
+        'calc-full-minus-110': '90%'
+      },
+      marginTop: {
+        sidebarmargin: '5px'
       }
     }
   },

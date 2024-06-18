@@ -1,3 +1,4 @@
+import searchCoordinateToAddress from '@/utils/navermap/coordToAddress';
 import initGeocoder from '@/utils/navermap/initGeocoder';
 import useMapStore from '@/zustand/map.store';
 import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
@@ -5,7 +6,7 @@ import Swal from 'sweetalert2';
 import { INITIAL_CENTER, INITIAL_ZOOM } from '../constants/navermap';
 import getDate from '../utils/navermap/getDate';
 
-function useMap({ mapRef, searchInputRef, searchButtonRef }) {
+function useMap({ searchInputRef, searchButtonRef }) {
   const [gps, setGps] = useState(null);
   const [naverMap, setNaverMap] = useState(null);
   const [marker, setMarker] = useState(null);
@@ -19,36 +20,39 @@ function useMap({ mapRef, searchInputRef, searchButtonRef }) {
   const { selectedCoord, setSelectedCoord } = useMapStore();
   const [selectButtonDom, setSelectButtonDom] = useState(null);
 
-  const initializeMap = useCallback(
-    (gps) => {
-      const mapOptions = {
-        center: new window.naver.maps.LatLng(...gps),
-        zoom: INITIAL_ZOOM,
-        zoomControl: true,
-        mapTypeControl: false,
-        mapDataControl: false,
-        minZoom: 8,
-        anchorSkew: true,
-        zoomControlOptions: {
-          position: window.naver.maps.Position.TOP_RIGHT // 줌 컨트롤의 위치를 우측 상단으로 배치함
-        }
-      };
-      if (!naverMap) {
-        const map = new window.naver.maps.Map('map01', mapOptions);
-        setNaverMap(map);
-      } else {
-        naverMap.setCenter(new window.naver.maps.LatLng(...gps));
+  const initializeMap = useCallback((gps) => {
+    const mapOptions = {
+      center: new window.naver.maps.LatLng(...gps),
+      zoom: INITIAL_ZOOM,
+      scaleControl: false,
+      logoControl: false,
+      mapDataControl: false,
+      zoomControl: false,
+      mapTypeControl: false,
+      minZoom: 8,
+      tileTransition: true,
+      // 확대 시 타일 변경되는 시간
+      tileDuration: 400,
+      // // 타일 투명도 ( 투명도 낮추면 배경 색이 보임 )
+      // baseTileOpacity: 1,
+      // //배경 색
+      // background: 'white',
+      tileSpare: 5,
+      zoomControlOptions: {
+        position: window.naver.maps.Position.RIGHT_TOP, // 줌 컨트롤의 위치를 우측 상단으로 배치함
+        style: window.naver.maps.ZoomControlStyle.SMALL
       }
-      mapRef.current = naverMap;
+    };
 
-      const marker = new window.naver.maps.Marker({
-        position: new window.naver.maps.LatLng(...gps),
-        map: mapRef.current
-      });
-      setMarker(marker);
-    },
-    [mapRef, naverMap]
-  );
+    const map = new window.naver.maps.Map('map01', mapOptions);
+    setNaverMap(map);
+
+    const marker = new window.naver.maps.Marker({
+      position: new window.naver.maps.LatLng(...gps),
+      map: map
+    });
+    setMarker(marker);
+  }, []);
 
   useLayoutEffect(() => {
     function getUserLocation() {
@@ -92,12 +96,15 @@ function useMap({ mapRef, searchInputRef, searchButtonRef }) {
   }, []);
 
   useEffect(() => {
-    if (gps) {
-      initializeMap([gps.lat, gps.long]);
-    } else {
-      initializeMap(INITIAL_CENTER);
+    if (gps && marker && naverMap) {
+      naverMap.setCenter(new window.naver.maps.LatLng(gps.lat, gps.long));
+      marker.setPosition(new window.naver.maps.LatLng(gps.lat, gps.long));
     }
-  }, [gps, initializeMap]);
+  }, [gps, marker, naverMap]);
+
+  useEffect(() => {
+    initializeMap(INITIAL_CENTER);
+  }, [initializeMap]);
 
   useEffect(() => {
     if (!infoWindow) {
@@ -123,13 +130,14 @@ function useMap({ mapRef, searchInputRef, searchButtonRef }) {
 
   useEffect(() => {
     let listener = null;
-    if (marker) {
-      listener = window.naver.maps.Event.addListener(marker, 'click', function () {
+    if (marker && gps && infoWindow && naverMap && setSelectButtonDom) {
+      listener = window.naver.maps.Event.addListener(marker, 'click', () => {
         // 마커 클릭시 동작 여기에
         if (selectedCoord) {
           console.log(selectedCoord);
         } else {
           console.log({ lat: gps.lat, long: gps.long });
+          searchCoordinateToAddress(infoWindow, naverMap, { y: gps.lat, x: gps.long }, setSelectButtonDom);
         }
       });
     }
@@ -139,7 +147,7 @@ function useMap({ mapRef, searchInputRef, searchButtonRef }) {
         window.naver.maps.Event.removeListener(listener);
       }
     };
-  }, [marker, selectedCoord, gps]);
+  }, [marker, selectedCoord, gps, infoWindow, naverMap, setSelectButtonDom]);
 
   useEffect(() => {
     if (infoWindow && naverMap)
