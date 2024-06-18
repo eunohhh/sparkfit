@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import LoginPage from '../pagess/LoginPage/LoginPage';
+import LoginPage from '../pages/LoginPage/LoginPage';
 import SignupPage from '../pages/LoginPage/SignupPage';
 import HomePage from '../pages/LoginPage/HomePage';
 import NavermapScriptComponent from '../pages/MainPage/NavermapScriptComponent';
