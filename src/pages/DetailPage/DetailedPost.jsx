@@ -63,7 +63,6 @@ const DetailedPost = () => {
         <div className="text-start my-4 bg-white rounded-md px-5 py-5">{`스포츠명 : ${posts.sports_name}`}</div>
         <div className="text-start my-4 bg-white rounded-md px-5 py-5">{`마감기한 : ${posts.deadline}`}</div>
       </div>
-
       <button className="text-5xl" onClick={() => setCreateGroupModal(true)}>
         test
       </button>
@@ -74,6 +73,7 @@ const DetailedPost = () => {
           }}
         />
       )}
+      ㅎ
     </>
   );
 };
