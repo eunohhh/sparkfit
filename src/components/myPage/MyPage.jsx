@@ -37,6 +37,15 @@ export const STSection = styled.section`
   // 테일 윈드일 때는 sm
   @media (max-width: 640px) {
     padding: 0.5rem;
+    margin: 0 auto;
+  }
+  //md, lg 1024px  ,768px
+  @media (max-widt: 768px) {
+    margin-left: 4rem;
+  }
+
+  @media (max-width: 1024px) {
+    margin-left: 4rem;
   }
 `;
 

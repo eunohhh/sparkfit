@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Ellipse1 from '../../styles/image/Ellipse1.png';
-import { FaUser } from 'react-icons/fa';
+import { RiUser3Line } from 'react-icons/ri';
 import { STSection } from './MyPage';
 import { HiPencilSquare } from 'react-icons/hi2';
 import supabase from '@/supabase';
@@ -35,10 +35,10 @@ const UserInfo = () => {
 
   return (
     <STSection>
-      <h3 className="flex gap-2 border-b-2 border-slate-300 mt-4 ml-4 mr-4">
-        <FaUser />내 정보
+      <h3 className="flex gap-2 border-b-2 border-slate-300 mt-4 ml-4 mr-4 w-[600px]">
+        <RiUser3Line />내 정보
       </h3>
-      <div className="flex rounded-2xl p-4 mr-4 mb-4 ml-4 gap-12 bg-customBackground">
+      <div className="flex rounded-2xl p-4 mr-4 mb-4 ml-4 gap-12 bg-customBackground w-[600px] ">
         <div className="relative flex items-center">
           <img
             src={image}
@@ -58,10 +58,7 @@ const UserInfo = () => {
           />
         </div>
         <div>
-          <div className="flex mt-5">
-            {data && data.username} 님
-            반갑습니다아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아ㅏ.
-          </div>
+          <div className="flex mt-5">{data && data.username} 님 반갑습니다.</div>
           <div className="flex mt-2 text-slate-400 text-sm"> ID : {data && data.id}</div>
         </div>
       </div>
