@@ -4,6 +4,7 @@ import DefaultLayout from '../layout/DefaultLayout';
 import LoginPage from '../pages/LoginPage/LoginPage';
 import SignupPage from '../pages/LoginPage/SignupPage';
 import HomePage from '../pages/LoginPage/HomePage';
+import GatheringList from '../page/GatheringList';
 import NavermapScriptComponent from '../pages/MainPage/NavermapScriptComponent';
 
 export default function Router() {
@@ -18,6 +19,7 @@ export default function Router() {
           {/* <Route path="/join" element={<Join />} /> */}
           {/* <Route path="/mypage" element={<MyPage />} /> */}
           {/* <Route path="/detail/:id" element={<DetailedPost />} /> */}
+          <Route path="/gathering" element={<GatheringList />} />
         </Route>
       </Routes>
     </BrowserRouter>
