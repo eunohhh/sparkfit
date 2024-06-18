@@ -1,5 +1,5 @@
 import React from 'react';
-import MainLogo from '../assets/MainLogo.png';
+import MainLogo from '../../assets/MainLogo.png';
 import { Link } from 'react-router-dom';
 
 const HomePage = () => {

@@ -1,12 +1,14 @@
-import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import DefaultLayout from '../layout/DefaultLayout';
 import LoginPage from '../pages/LoginPage/LoginPage';
 import SignupPage from '../pages/LoginPage/SignupPage';
 import HomePage from '../pages/LoginPage/HomePage';
-import GatheringList from '../page/GatheringList';
 import NavermapScriptComponent from '../pages/MainPage/NavermapScriptComponent';
+import GatheringList from '@/pages/GatheringList';
 import MyPage from '@/components/myPage/MyPage';
+
+// import DetailedPost from '../pages/DetailedPost';
+// import MyPage from '@/components/myPage/MyPage';
 
 export default function Router() {
   return (
@@ -17,11 +19,8 @@ export default function Router() {
           <Route path="/" element={<NavermapScriptComponent />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
-          {/* <Route path="/join" element={<Join />} /> */}
-          {/* <Route path="/mypage" element={<MyPage />} /> */}
-          {/* <Route path="/detail/:id" element={<DetailedPost />} /> */}
-          <Route path="/gathering" element={<GatheringList />} />
           <Route path="/mypage" element={<MyPage />} />
+          <Route path="/gathering" element={<GatheringList />} />
         </Route>
       </Routes>
     </BrowserRouter>
