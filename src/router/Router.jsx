@@ -1,16 +1,24 @@
 import React from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import DefaultLayout from '../layout/DefaultLayout';
+import LoginPage from '../page/LoginPage';
+import SignupPage from '../page/SignupPage';
+import HomePage from '../page/HomePage';
 
 export default function Router() {
   return (
     <BrowserRouter>
-      <Route element={<DefaultLayout />}>
-        {/* <Route path="/" element={<Mainpage />} /> */}
-        <Route path="/login" element={<Login />} />
-        {/* <Route path="/join" element={<Join />} /> */}
-        {/* <Route path="/mypage" element={<MyPage />} /> */}
-        {/* <Route path="/detail/:id" element={<DetailedPost />} /> */}
-      </Route>
+      <Routes>
+        <Route element={<DefaultLayout />}>
+          <Route path="/home" element={<HomePage />} />
+          {/* <Route path="/" element={<Mainpage />} /> */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          {/* <Route path="/join" element={<Join />} /> */}
+          {/* <Route path="/mypage" element={<MyPage />} /> */}
+          {/* <Route path="/detail/:id" element={<DetailedPost />} /> */}
+        </Route>
+      </Routes>
     </BrowserRouter>
   );
 }

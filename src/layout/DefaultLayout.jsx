@@ -6,9 +6,9 @@ import Sidebar from './Sidebar';
 export default function DefaultLayout() {
   return (
     <>
-      <Sidebar />
+      {/* <Sidebar /> */}
       <Outlet />
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }
