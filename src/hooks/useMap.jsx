@@ -86,7 +86,7 @@ function useMap({ mapRef, markerRef }) {
   }, [infoWindow]);
 
   useEffect(() => {
-    if (infoWindow && naverMap) initGeocoder(infoWindow, naverMap);
+    if (infoWindow && naverMap) window.naver.maps.onJSContentLoaded = () => initGeocoder(infoWindow, naverMap);
   }, [infoWindow, naverMap]);
 
   return { gps, naverMap, infoWindow, initializeMap, getUserLocation };

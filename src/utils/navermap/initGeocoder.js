@@ -1,7 +1,10 @@
 import searchCoordinateToAddress from './coordToAddress';
 
 function initGeocoder(infoWindow, map) {
-  map.addListener('click', function (e) {
+  if (!infoWindow || !map) return;
+  // if (!window.naver.maps.Service) return;
+
+  map.addListener('click', (e) => {
     searchCoordinateToAddress(infoWindow, map, e.coord);
   });
 

@@ -2,7 +2,6 @@ import makeAddress from './makeAddress';
 
 function searchCoordinateToAddress(infoWindow, map, latlng) {
   infoWindow.close();
-  console.log(window.naver.maps.Service);
   window.naver.maps.Service.reverseGeocode(
     {
       coords: latlng,
