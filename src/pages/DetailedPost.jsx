@@ -5,6 +5,7 @@ const DetailedPost = () => {
   const [joinModal, setJoinModal] = useState(false);
   return (
     <>
+      test
       <div className="w-[1280px] mx-auto">
         <div className="flex justify-between items-center w-full">
           <div className="text-5xl font-bold ">클라이밍 하우스</div>
