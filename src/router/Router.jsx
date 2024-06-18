@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import MyPage from '../pages/MyPage';
+import MyPage from '../pages/myPages/MyPage';
 
 export default function Router() {
   return (

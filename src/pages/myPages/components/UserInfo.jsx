@@ -1,17 +1,21 @@
 import React from 'react';
-import { STSection } from '../../pages/MyPage';
+import { STSection } from '../MyPage';
 import styled from 'styled-components';
-import Ellipse1 from '../../styles/image/Ellipse1.png';
+import Ellipse1 from '../../../styles/image/Ellipse1.png';
+import { FaUser } from 'react-icons/fa';
+import ProfileButton from '../../../styles/image/ProfileButton.png';
 
 const UserInfo = () => {
   return (
     <STSection>
+      <h3 className="flex gap-2 border-b-2 border-slate-300 mt-4 ml-4 mr-4">
+        <FaUser />내 정보
+      </h3>
       <STUserWrap>
-        <div>
-          <STImage src={Ellipse1} alt="profile-img" />
-          <label htmlFor="progileImageBtn">
-            {/* div를이미지로바꿀것임 */}
-            <div>프로필변경이미지버튼</div>
+        <div className="relative flex items-center">
+          <STImage src={Ellipse1} alt="profile-img" className="relative" />
+          <label htmlFor="progileImageBtn" className="absolute bottom-1 right-2">
+            <img src={ProfileButton} alt="progile-change-btn" className="w-5" />
           </label>
           <input type="file" className="hidden" accept="image/*" id="progileImageBtn" />
         </div>
@@ -35,7 +39,7 @@ const STUserWrap = styled.div`
   height: auto;
   padding: 1rem;
   background-color: #ebf7ff;
-  margin: 4rem 1rem 1rem 1rem;
+  margin: 0 1rem 1rem 1rem;
   display: flex;
   gap: 3rem;
 `;
