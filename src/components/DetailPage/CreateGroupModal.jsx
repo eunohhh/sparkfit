@@ -1,8 +1,7 @@
 import { useRef } from 'react';
 import useOutsideClick from './useOutsideClick';
-import SearchAddressApi from './SearchAddressApi';
 
-const JoinModal = ({ close }) => {
+const CreateGroupModal = ({ close }) => {
   // const [name, setName] = useState('');
   const modalRef = useRef(null);
 
@@ -19,48 +18,44 @@ const JoinModal = ({ close }) => {
         ref={modalRef}
       >
         <div className="m-2 flex justify-center items-center">
-          <h3>가입 신청서</h3>
+          <h3>모임 생성</h3>
         </div>
 
         <form>
           <div className="my-3 mx-3">
             <div className="flex flex-col">
-              <label htmlFor="name" className="ml-1">
-                이름
+              <label htmlFor="Groupname" className="ml-1">
+                모임명
               </label>
               <input className="px-5 py-2.5 rounded-md m-1.5 font-semibold border" type="text" autoFocus />
             </div>
 
             <div className="flex flex-col">
-              <label htmlFor="phoneNumber" className="ml-1">
-                전화번호
+              <label htmlFor="sportsname" className="ml-1">
+                스포츠명
               </label>
-              <input className="px-5 py-2.5 rounded-md m-1.5 font-semibold border" type="number" />
+              <input className="px-5 py-2.5 rounded-md m-1.5 font-semibold border" type="text" />
             </div>
 
             <div className="flex flex-col">
-              <label htmlFor="title" className="ml-1">
-                생년월일
+              <label htmlFor="deadline" className="ml-1">
+                마감기한
               </label>
               <input className="px-5 py-2.5 rounded-md m-1.5 font-semibold border" type="date" />
             </div>
 
             <div className="flex flex-col">
-              <label htmlFor="email" className="ml-1">
-                이메일
+              <label htmlFor="address" className="ml-1">
+                지역
               </label>
-              <input className="px-5 py-2.5 rounded-md m-1.5 font-semibold border" type="email" />
+              <input className="px-5 py-2.5 rounded-md m-1.5 font-semibold border" type="address" />
             </div>
 
             <div className="flex flex-col">
-              <label htmlFor="title" className="ml-1">
-                가입동기
+              <label htmlFor="content" className="ml-1">
+                모임 설명
               </label>
               <input className="px-5 py-2.5 rounded-md m-1.5 font-semibold border h-[300px]" type="textarea" />
-            </div>
-            <div>
-              <label htmlFor="address">주소</label>
-              <SearchAddressApi />
             </div>
           </div>
           <div className="flex justify-center items-center my-3">
@@ -68,7 +63,7 @@ const JoinModal = ({ close }) => {
               className=" text-base px-5 py-2.5 border-none bg-btn-blue rounded-md text-white m-1.5 font-semibold cursor-pointer "
               type="submit"
             >
-              신청
+              생성
             </button>
             <button
               className=" text-base px-5 py-2.5 border-none bg-btn-blue rounded-md text-white m-1.5 font-semibold cursor-pointer "
@@ -84,4 +79,4 @@ const JoinModal = ({ close }) => {
   );
 };
 
-export default JoinModal;
+export default CreateGroupModal;
