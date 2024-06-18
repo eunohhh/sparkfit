@@ -1,5 +1,4 @@
 import { Outlet } from 'react-router-dom';
-import Footer from './Footer';
 import Sidebar from './Sidebar';
 
 export default function DefaultLayout() {
@@ -7,7 +6,7 @@ export default function DefaultLayout() {
     <>
       <Sidebar />
       <Outlet />
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }
