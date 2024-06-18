@@ -46,7 +46,7 @@ function searchAddressToCoordinate(infoWindow, searchInputRef, map, setSelectedG
 
       infoWindow.setContent(
         [
-          '<div style="padding:10px;min-width:200px;line-height:150%;">',
+          '<div style="padding: 10px; box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 16px 0px;">',
           '<div class="flex flex-row justify-between"><h4 style="margin-top:5px;">검색 주소 : ' +
             searchInputRef +
             '</h4><button id="selectCoord" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-0.5 px-2 rounded">선택</button></div>',
@@ -54,6 +54,15 @@ function searchAddressToCoordinate(infoWindow, searchInputRef, map, setSelectedG
           '</div>'
         ].join('\n')
       );
+
+      infoWindow.setOptions({
+        anchorSkew: true,
+        borderColor: '#cecdc7',
+        anchorSize: {
+          width: 10,
+          height: 12
+        }
+      });
 
       map.setCenter(point);
       infoWindow.open(map, point);

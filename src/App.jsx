@@ -1,10 +1,13 @@
+import QueryProvider from './providers/QueryProvider';
 import Router from './router/Router';
 
 function App() {
   return (
-    <main className="flex justify-center items-center h-screen bg-customBackground">
-      <Router />
-    </main>
+    <QueryProvider>
+      <main className="flex justify-center items-center h-screen bg-customBackground">
+        <Router />
+      </main>
+    </QueryProvider>
   );
 }
 

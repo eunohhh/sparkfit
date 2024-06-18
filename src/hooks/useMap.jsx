@@ -116,9 +116,7 @@ function useMap({ searchInputRef, searchButtonRef }) {
 
   useEffect(() => {
     if (!infoWindow) {
-      const infoWindow = new window.naver.maps.InfoWindow({
-        anchorSkew: true
-      });
+      const infoWindow = new window.naver.maps.InfoWindow();
       setInfoWindow(infoWindow);
     }
   }, [infoWindow]);
