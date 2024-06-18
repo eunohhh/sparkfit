@@ -64,7 +64,32 @@ function useMap({ searchInputRef, searchButtonRef }) {
 
   // 초기에 사용자의 위치 정보를 가져옴
   useLayoutEffect(() => {
-    function getUserLocation() {
+    const success = ({ coords, timestamp }) => {
+      const date = getDate(timestamp);
+      const gpsData = {
+        lat: coords.latitude,
+        long: coords.longitude,
+        date: date
+      };
+      setGps(gpsData);
+    };
+
+    const error = (err) => {
+      if (err.code === err.PERMISSION_DENIED) {
+        Swal.fire({
+          title: '위치 정보 제공 거부',
+          text: '위치 정보를 제공하지 않으면 일부 기능을 사용할 수 없습니다.',
+          icon: 'warning'
+        });
+      } else {
+        Swal.fire({
+          title: '에러',
+          text: '위치 정보를 가져오는 중 오류가 발생했습니다.',
+          icon: 'error'
+        });
+      }
+    };
+    const getUserLocation = () => {
       if (!navigator.geolocation) {
         Swal.fire({
           title: '에러',
@@ -73,34 +98,9 @@ function useMap({ searchInputRef, searchButtonRef }) {
         });
         return;
       } else {
-        navigator.geolocation.getCurrentPosition(
-          async ({ coords, timestamp }) => {
-            const date = getDate(timestamp);
-            const gpsData = {
-              lat: coords.latitude,
-              long: coords.longitude,
-              date: date
-            };
-            setGps(gpsData);
-          },
-          (err) => {
-            if (err.code === err.PERMISSION_DENIED) {
-              Swal.fire({
-                title: '위치 정보 제공 거부',
-                text: '위치 정보를 제공하지 않으면 일부 기능을 사용할 수 없습니다.',
-                icon: 'warning'
-              });
-            } else {
-              Swal.fire({
-                title: '에러',
-                text: '위치 정보를 가져오는 중 오류가 발생했습니다.',
-                icon: 'error'
-              });
-            }
-          }
-        );
+        navigator.geolocation.getCurrentPosition(success, error);
       }
-    }
+    };
     getUserLocation();
   }, []);
 
