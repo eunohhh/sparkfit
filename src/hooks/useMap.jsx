@@ -1,14 +1,13 @@
 import searchCoordinateToAddress from '@/utils/navermap/coordToAddress';
 import initGeocoder from '@/utils/navermap/initGeocoder';
 import useMapStore from '@/zustand/map.store';
-import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Swal from 'sweetalert2';
 import { INITIAL_CENTER, INITIAL_ZOOM } from '../constants/navermap';
 import getDate from '../utils/navermap/getDate';
 
 function useMap({ searchInputRef, searchButtonRef }) {
   const [gps, setGps] = useState(null);
-  const [naverMap, setNaverMap] = useState(null);
   const [marker, setMarker] = useState(null);
   const [infoWindow, setInfoWindow] = useState(() =>
     !window.naver
@@ -17,8 +16,10 @@ function useMap({ searchInputRef, searchButtonRef }) {
           anchorSkew: true
         })
   );
-  const { selectedCoord, setSelectedCoord } = useMapStore();
   const [selectButtonDom, setSelectButtonDom] = useState(null);
+  const { selectedCoord, setSelectedCoord } = useMapStore();
+
+  const mapRef = useRef(null);
 
   const initializeMap = useCallback((gps) => {
     const mapOptions = {
@@ -45,7 +46,8 @@ function useMap({ searchInputRef, searchButtonRef }) {
     };
 
     const map = new window.naver.maps.Map('map01', mapOptions);
-    setNaverMap(map);
+    // setNaverMap(map);
+    mapRef.current = map;
 
     const marker = new window.naver.maps.Marker({
       position: new window.naver.maps.LatLng(...gps),
@@ -96,11 +98,11 @@ function useMap({ searchInputRef, searchButtonRef }) {
   }, []);
 
   useEffect(() => {
-    if (gps && marker && naverMap) {
-      naverMap.setCenter(new window.naver.maps.LatLng(gps.lat, gps.long));
+    if (gps && marker && mapRef.current) {
+      mapRef.current.setCenter(new window.naver.maps.LatLng(gps.lat, gps.long));
       marker.setPosition(new window.naver.maps.LatLng(gps.lat, gps.long));
     }
-  }, [gps, marker, naverMap]);
+  }, [gps, marker, mapRef]);
 
   useEffect(() => {
     initializeMap(INITIAL_CENTER);
@@ -130,14 +132,14 @@ function useMap({ searchInputRef, searchButtonRef }) {
 
   useEffect(() => {
     let listener = null;
-    if (marker && gps && infoWindow && naverMap && setSelectButtonDom) {
+    if (marker && gps && infoWindow && mapRef.current && setSelectButtonDom) {
       listener = window.naver.maps.Event.addListener(marker, 'click', () => {
         // 마커 클릭시 동작 여기에
         if (selectedCoord) {
           console.log(selectedCoord);
         } else {
           console.log({ lat: gps.lat, long: gps.long });
-          searchCoordinateToAddress(infoWindow, naverMap, { y: gps.lat, x: gps.long }, setSelectButtonDom);
+          searchCoordinateToAddress(infoWindow, mapRef.current, { y: gps.lat, x: gps.long }, setSelectButtonDom);
         }
       });
     }
@@ -147,23 +149,23 @@ function useMap({ searchInputRef, searchButtonRef }) {
         window.naver.maps.Event.removeListener(listener);
       }
     };
-  }, [marker, selectedCoord, gps, infoWindow, naverMap, setSelectButtonDom]);
+  }, [marker, selectedCoord, gps, infoWindow, mapRef, setSelectButtonDom]);
 
   useEffect(() => {
-    if (infoWindow && naverMap)
+    if (infoWindow && mapRef.current)
       window.naver.maps.onJSContentLoaded = () =>
         initGeocoder(
           infoWindow,
-          naverMap,
+          mapRef.current,
           searchInputRef.current,
           searchButtonRef.current,
           marker,
           setSelectedCoord,
           setSelectButtonDom
         );
-  }, [infoWindow, naverMap, searchInputRef, searchButtonRef, marker, setSelectedCoord, setSelectButtonDom]);
+  }, [infoWindow, mapRef, searchInputRef, searchButtonRef, marker, setSelectedCoord, setSelectButtonDom]);
 
-  return { gps, naverMap, infoWindow, initializeMap };
+  return { gps, naverMap: mapRef.current, infoWindow, initializeMap };
 }
 
 export default useMap;
