@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import DefaultLayout from '../layout/DefaultLayout';
-import GatheringList from '../page/GatheringList';
+import GatheringList from '../pages/GatheringList';
 import NavermapScriptComponent from '../pages/MainPage/NavermapScriptComponent';
 
 export default function Router() {

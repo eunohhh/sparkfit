@@ -21,7 +21,7 @@ const FilteringList = () => {
           </li>
         ))}
       </ul>
-      <button className="bg-[#82C0F9] text-[#ffffff] lg:text-sm lg:px-4 lg:py-2 sm:text-[12px] sm:px-3 rounded-md hover:bg-[#6FA3D4] transition-all duration-300 ease-in-out">
+      <button className="bg-[#82C0F9] text-[#ffffff] lg:text-sm lg:px-4 lg:py-2 sm:text-[12px] sm:px-3 sm:hidden md:block rounded-md hover:bg-[#6FA3D4] transition-all duration-300 ease-in-out">
         + 새로운 모임 만들기
       </button>
     </div>

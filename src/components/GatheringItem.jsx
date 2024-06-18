@@ -18,26 +18,26 @@ const GatheringItem = () => {
             <div>
               <h2 className="text-xl mb-3 font-semibold">클라이밍하우스</h2>
               <ul className="flex gap-2.5">
-                <li className="rounded-full bg-default px-5 py-1.5 line-height-none text-xs">운동/스포츠</li>
+                <li className="rounded-full bg-[#efefef] px-5 py-1.5 line-height-none text-xs">운동/스포츠</li>
                 <li className="py-1.5 line-height-none text-xs">의정부</li>
                 <li className="py-1.5 line-height-none text-xs">멤버 50</li>
               </ul>
             </div>
-            <div>
-              <button className="transition-all duration-300 ease-in-out bg-default rounded-lg px-8 py-3 text-sm text-[#2e2e2e] hover:bg-[#dddddd]">
+            <div className="md:block sm:hidden">
+              <button className="transition-all duration-300 ease-in-out bg-[#efefef] rounded-lg px-8 py-3 text-sm text-[#2e2e2e] hover:bg-[#dddddd]">
                 상세보기
               </button>
             </div>
           </div>
 
-          <p className="text-sm w-[80%] overflow-hidden text-ellipsis line-clamp-2 ">
+          <p className="text-sm md:w-[80%] sm:w-full overflow-hidden text-ellipsis line-clamp-2 ">
             자연에서 이루어지는 암벽등반에서 출발한 스포츠 클라이밍은 건물 벽이나 암벽을 연상케하는 벽에 달린 인공
             홀드를 이용해 높이 오르는 스포츠이다. 일상 생활에서 흔히 느끼지 못한 수직벽을 오르기 위해서는 전신 근력을
             쓰는 동시에 집중력을 지속적으로 발휘해야 하는 스포츠이다.
           </p>
 
-          <div className="sm:hidden">
-            <button className="transition-all duration-300 ease-in-out bg-default rounded-lg px-8 py-3 text-sm text-[#2e2e2e] hover:bg-[#dddddd]">
+          <div className="sm:block md:hidden">
+            <button className="w-full transition-all duration-300 ease-in-out bg-[#efefef] rounded-lg px-8 py-3 text-sm text-[#2e2e2e] hover:bg-[#dddddd]">
               상세보기
             </button>
           </div>
