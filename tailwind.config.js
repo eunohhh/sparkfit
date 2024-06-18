@@ -4,7 +4,8 @@ export default {
   theme: {
     extend: {
       colors: {
-        'btn-blue': '#82C0F9'
+        'btn-blue': '#82C0F9',
+        default: '#efefef'
       }
     }
   },
