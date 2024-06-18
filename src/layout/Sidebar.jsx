@@ -1,15 +1,10 @@
-import React from 'react';
+import { RiArrowGoBackLine, RiGroupLine, RiLogoutBoxRLine, RiSearchLine, RiUser3Line } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
 import logo from './../assets/logo.png';
-import { RiArrowGoBackLine } from 'react-icons/ri';
-import { RiSearchLine } from 'react-icons/ri';
-import { RiLogoutBoxRLine } from 'react-icons/ri';
-import { RiUser3Line } from 'react-icons/ri';
-import { RiGroupLine } from 'react-icons/ri';
 export default function Sidebar() {
   return (
     <>
-      <div className="bg-white shadow-sidebarshaow fixed top-0 left-0 h-lvh w-16 flex justify-center items-center h-screen">
+      <div className="bg-white shadow-sidebarshaow relative top-0 left-0 h-lvh w-16 flex justify-center items-center h-screen z-10">
         <div className="h-5/6 w-11 mx-auto flex flex-col justify-between">
           <div className="h-80 flex flex-col justify-between items-center">
             <h1 className="w-logowidth">
