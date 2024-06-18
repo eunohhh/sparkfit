@@ -6,6 +6,7 @@ import SignupPage from '../pages/LoginPage/SignupPage';
 import HomePage from '../pages/LoginPage/HomePage';
 import GatheringList from '../page/GatheringList';
 import NavermapScriptComponent from '../pages/MainPage/NavermapScriptComponent';
+import MyPage from '@/components/myPage/MyPage';
 
 export default function Router() {
   return (
@@ -20,6 +21,7 @@ export default function Router() {
           {/* <Route path="/mypage" element={<MyPage />} /> */}
           {/* <Route path="/detail/:id" element={<DetailedPost />} /> */}
           <Route path="/gathering" element={<GatheringList />} />
+          <Route path="/mypage" element={<MyPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
