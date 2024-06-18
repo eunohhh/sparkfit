@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import DefaultLayout from '../layout/DefaultLayout';
-import LoginPage from '../page/LoginPage';
-import SignupPage from '../page/SignupPage';
-import HomePage from '../page/HomePage';
+import LoginPage from '../pages/LoginPage/LoginPage';
+import SignupPage from '../pages/LoginPage/SignupPage';
+import HomePage from '../pages/LoginPage/HomePage';
 import NavermapScriptComponent from '../pages/MainPage/NavermapScriptComponent';
 
 export default function Router() {
