@@ -3,7 +3,7 @@ import AddressInfoWindow from './AddressInfoWindow';
 import InfoWindow from './InfoWindow';
 import CoordInfoWindow from './SelectInfoWindow';
 
-function SetInfoWindowContent(type, searchedValue, htmlAddresses, infoWindow, place = null) {
+function SetInfoWindowContent(type, searchedValue, htmlAddresses, infoWindow, place = null, navigate = null) {
   // 임시 컨테이너 생성
   const container = document.createElement('div');
 
@@ -21,7 +21,7 @@ function SetInfoWindowContent(type, searchedValue, htmlAddresses, infoWindow, pl
   } else if (type === 'coord') {
     root.render(<CoordInfoWindow htmlAddresses={htmlAddresses} infoWindow={infoWindow} />);
   } else if (type === 'place') {
-    root.render(<InfoWindow place={place} infoWindow={infoWindow} />);
+    root.render(<InfoWindow place={place} infoWindow={infoWindow} navigate={navigate} />);
   }
 
   return container;

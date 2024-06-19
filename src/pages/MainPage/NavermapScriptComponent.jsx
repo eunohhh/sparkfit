@@ -1,6 +1,7 @@
 import swal from '@/utils/sweetalert/swal';
 import useMapStore from '@/zustand/map.store';
 import { Suspense, lazy, useLayoutEffect } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import Mainpage from './Mainpage';
 
 const ExternalComponent = lazy(() => {
@@ -30,10 +31,14 @@ const ExternalComponent = lazy(() => {
 });
 
 function NavermapScriptComponent() {
-  const { setUserGps: setGps } = useMapStore((state) => ({ setUserGps: state.setUserGps }));
+  const { userGps, setUserGps: setGps } = useMapStore(
+    useShallow((state) => ({ userGps: state.userGps, setUserGps: state.setUserGps }))
+  );
 
   // 초기에 사용자의 위치 정보를 가져옴
   useLayoutEffect(() => {
+    // console.log('초기 gps =>', userGps);
+    if (userGps) return;
     const success = ({ coords }) => {
       const gpsData = {
         lat: coords.latitude,
@@ -60,7 +65,7 @@ function NavermapScriptComponent() {
       }
     };
     getUserLocation();
-  }, [setGps]);
+  }, [setGps, userGps]);
 
   return (
     <Suspense fallback={<div>Loading...</div>}>

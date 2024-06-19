@@ -3,10 +3,13 @@ import usePlaces from '@/hooks/usePlaces';
 import checkForMarkersRendering from '@/utils/navermap/checkForMarkersRendering';
 import useMapStore from '@/zustand/map.store';
 import { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useShallow } from 'zustand/react/shallow';
 import useMap from '../../hooks/useMap';
 
 function Mainpage() {
+  const navigate = useNavigate();
+
   const searchInputRef = useRef();
   const searchButtonRef = useRef();
   const { gps, naverMap, basicMarker } = useMap({ searchInputRef, searchButtonRef });
@@ -28,6 +31,7 @@ function Mainpage() {
       // 마커 리스트와 정보창 리스트 선언
       const markers = [];
       const infoWindows = [];
+
       places.forEach((place) => {
         const marker = new window.naver.maps.Marker({
           // 생성될 마커의 위치
@@ -47,7 +51,7 @@ function Mainpage() {
         });
 
         // setInfoWindowContent 함수 호출
-        const container = SetInfoWindowContent('place', '', '', infoWindow, place);
+        const container = SetInfoWindowContent('place', '', '', infoWindow, place, navigate);
 
         infoWindow.setContent(container);
 
@@ -77,7 +81,7 @@ function Mainpage() {
         }
       });
     }
-  }, [places, naverMap, basicMarker]);
+  }, [places, naverMap, basicMarker, navigate]);
 
   return (
     <section className="relative flex w-dvw h-dvh">

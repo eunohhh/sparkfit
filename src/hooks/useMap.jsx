@@ -124,8 +124,10 @@ function useMap({ searchInputRef, searchButtonRef }) {
 
   // 정보창객체와 맵 객체가 설정되면 initGeocoder 실행
   useEffect(() => {
-    if (infoWindow && mapRef.current)
-      window.naver.maps.onJSContentLoaded = () =>
+    // 처음에는 onsJsContentLoaded 에 등록하고 실행하고 다음부터는 등록하지 않고 실행하는 방법도 있음
+    if (infoWindow && mapRef.current && basicMarker)
+      window.naver.maps.onJSContentLoaded = () => {
+        console.log('이게 한번만??');
         initGeocoder(
           infoWindow,
           mapRef.current,
@@ -135,6 +137,7 @@ function useMap({ searchInputRef, searchButtonRef }) {
           setSelectedGeoData,
           setSelectButtonDom
         );
+      };
   }, [infoWindow, mapRef, searchInputRef, searchButtonRef, basicMarker, setSelectedGeoData, setSelectButtonDom]);
 
   return { gps, naverMap: mapRef.current, infoWindow, basicMarker, initializeMap };

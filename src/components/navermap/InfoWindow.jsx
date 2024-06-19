@@ -1,6 +1,20 @@
-function InfoWindow({ place, infoWindow }) {
+import useMapStore from '@/zustand/map.store';
+
+function InfoWindow({ place, infoWindow, navigate }) {
+  const { setUserGps: setGps } = useMapStore((state) => ({ setUserGps: state.setUserGps }));
+
   const handleCloseButton = () => {
     infoWindow.close();
+  };
+
+  const handleJoinButton = () => {
+    // detail/:id 로 navigate 하여 place.id 보내기
+    const gpsData = {
+      lat: place.lat,
+      long: place.long
+    };
+    setGps(gpsData);
+    navigate(`/detail/${place.id}`);
   };
 
   return (
@@ -8,8 +22,12 @@ function InfoWindow({ place, infoWindow }) {
       <div className="flex flex-row justify-between text-sm">
         <h4>{place.sports_name}</h4>
         <div className="flex flex-row gap-1">
-          <button id="makeGathering" className="bg-btn-blue hover:bg-blue-400 text-white font-bold py-0.5 px-2 rounded">
-            모임만들기
+          <button
+            onClick={handleJoinButton}
+            id="makeGathering"
+            className="bg-btn-blue hover:bg-blue-400 text-white font-bold py-0.5 px-2 rounded"
+          >
+            모임참여하기
           </button>
           <button
             id="closeCoord"

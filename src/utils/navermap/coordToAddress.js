@@ -60,7 +60,7 @@ function searchCoordinateToAddress(infoWindow, map, latlng, setSelectButtonDom, 
         infoWindowInnerContent.parentNode.style.width = 'fit-content';
         infoWindowInnerContent.parentNode.style.height = 'fit-content';
         infoWindowInnerContent.parentNode.style.minWidth = '370px';
-        infoWindowInnerContent.parentNode.style.fontSize = '12px';
+        infoWindowInnerContent.parentNode.style.fontSize = '14px';
 
         infoWindowOuterContent.style.top =
           infoWindowInnerContent.getBoundingClientRect().height < 79 ? '-75px' : '-95px';

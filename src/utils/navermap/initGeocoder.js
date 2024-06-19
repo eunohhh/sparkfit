@@ -10,9 +10,6 @@ function initGeocoder(
   setSelectedGeoData,
   setSelectButtonDom
 ) {
-  if (!infoWindow || !map) return;
-  // if (!window.naver.maps.Service) return;
-
   map.addListener('click', (e) => {
     searchCoordinateToAddress(infoWindow, map, e.coord, setSelectButtonDom, setSelectedGeoData);
     marker.setMap(map);
