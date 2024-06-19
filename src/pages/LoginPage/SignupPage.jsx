@@ -1,18 +1,16 @@
 import React, { useState } from 'react';
-import { RiMapPinUserLine } from 'react-icons/ri';
+import { RiUser3Line } from 'react-icons/ri';
 import { MdOutlineEmail } from 'react-icons/md';
 import { RiLockPasswordLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { useUserStore } from '@/zustand/auth.store';
-import { getUserErrorMessage } from './getUserErrorMessage';
 
 const SignupPage = () => {
   const [nickname, setNickname] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [pwError, setPwError] = useState('');
-
   const signUp = useUserStore((state) => state.signUp);
   const navigate = useNavigate();
 
@@ -23,7 +21,6 @@ const SignupPage = () => {
     } else {
       setPwError('');
     }
-    // console.log(pwError);
     return isValid;
   };
 
@@ -39,8 +36,6 @@ const SignupPage = () => {
 
   const handleSignUp = async (event) => {
     event.preventDefault();
-    // form 요소에서 값 가져오기
-    // const { email, password, nickname } = event.target.elements;
     try {
       if (!email || !password || !nickname) {
         Swal.fire({
@@ -72,46 +67,44 @@ const SignupPage = () => {
   };
 
   return (
-    <div className="bg-customBackground h-full w-full">
+    <div className="flex justify-center items-center h-screen bg-customBackground">
       <form
         onSubmit={handleSignUp}
-        className="flex flex-col justify-center items-center my-0 mx-auto w-96 h-full gap-6 text-base"
+        className="flex flex-col justify-center items-center my-0 mx-auto w-96 h-full gap-5 text-base"
       >
         <h2 className="text-4xl font-semibold mb-10">회원가입</h2>
-
-        <div className="w-full items-center border border-none rounded-full flex gap-3 p-0 px-6">
-          <MdOutlineEmail className="text-3xl" />
-          <input
-            className="w-full h-15 border-none text-lg p-1.5 focus:outline-none"
-            type="email"
-            name="email"
-            placeholder="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div className="w-full items-center border border-none rounded-full flex gap-3 p-0 px-6">
-          <RiLockPasswordLine className="text-3xl" />
-          <input
-            className="w-full h-15 border-none text-lg p-1.5 focus:outline-none"
-            type="password"
-            name="password"
-            placeholder="password"
-            value={password}
-            onChange={handleChangePassword}
-          />
-        </div>
-        <div className="w-full items-center border border-none rounded-full flex gap-3 p-0 px-6">
-          <RiMapPinUserLine className="text-3xl" />
+        <div className="w-full items-center border bg-white rounded-full flex gap-3 p-2 px-6">
+          <RiUser3Line className="text-3xl" />
           <input
             className="w-full h-15 border-none text-lg p-1.5 focus:outline-none"
             type="text"
-            name="nickname"
             placeholder="nickname"
             value={nickname}
             onChange={(e) => setNickname(e.target.value)}
           />
         </div>
+
+        <div className="w-full items-center border bg-white rounded-full flex gap-3 p-2 px-6">
+          <MdOutlineEmail className="text-3xl" />
+          <input
+            className="w-full h-15 border-none text-lg p-1.5 focus:outline-none"
+            type="email"
+            placeholder="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+        <div className="w-full items-center border bg-white rounded-full flex gap-3 p-2 px-6">
+          <RiLockPasswordLine className="text-3xl" />
+          <input
+            className="w-full h-15 border-none text-lg p-1.5 focus:outline-none"
+            type="password"
+            placeholder="password"
+            value={password}
+            onChange={handleChangePassword}
+          />
+        </div>
+        {pwError && <p className="text-gray-400 text-sm">{pwError}</p>}
         <button className="flex justify-center items-center w-full h-14 text-lg rounded-xl bg-customLoginButton text-white mt-4 p-1.5 cursor-pointer">
           회원가입
         </button>
