@@ -1,4 +1,7 @@
-import { Suspense, lazy } from 'react';
+import swal from '@/utils/sweetalert/swal';
+import useMapStore from '@/zustand/map.store';
+import { Suspense, lazy, useLayoutEffect } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import Mainpage from './Mainpage';
 
 const ExternalComponent = lazy(() => {
@@ -28,6 +31,42 @@ const ExternalComponent = lazy(() => {
 });
 
 function NavermapScriptComponent() {
+  const { userGps, setUserGps: setGps } = useMapStore(
+    useShallow((state) => ({ userGps: state.userGps, setUserGps: state.setUserGps }))
+  );
+
+  // 초기에 사용자의 위치 정보를 가져옴
+  useLayoutEffect(() => {
+    // console.log('초기 gps =>', userGps);
+    if (userGps) return;
+    const success = ({ coords }) => {
+      const gpsData = {
+        lat: coords.latitude,
+        long: coords.longitude
+      };
+      setGps(gpsData);
+    };
+
+    const error = (err) => {
+      if (err.code === err.PERMISSION_DENIED) {
+        swal('warning', '위치 정보를 제공하지 않으면 일부 기능을 사용할 수 없습니다.');
+        return;
+      } else {
+        swal('error', '위치 정보를 가져오는 중 오류가 발생했습니다.');
+        return;
+      }
+    };
+    const getUserLocation = () => {
+      if (!navigator.geolocation) {
+        swal('error', '위치정보가 지원되지 않습니다');
+        return;
+      } else {
+        navigator.geolocation.getCurrentPosition(success, error);
+      }
+    };
+    getUserLocation();
+  }, [setGps, userGps]);
+
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <ExternalComponent />
