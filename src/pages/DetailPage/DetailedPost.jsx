@@ -4,6 +4,7 @@ import CreateGroupModal from '../../components/DetailPage/CreateGroupModal';
 import { useQuery } from '@tanstack/react-query';
 import { getPost } from '@/api/postsListApi';
 import { useParams } from 'react-router-dom';
+import { profileApi } from '@/api/profileApi';
 
 const DetailedPost = () => {
   const { id } = useParams();
@@ -13,6 +14,7 @@ const DetailedPost = () => {
   const [openCreateGroupModal, setCreateGroupModal] = useState(false);
 
   const { data: posts, isLoading, isError } = useQuery({ queryKey: ['posts', id], queryFn: () => getPost(id) });
+  // const { data: profiles, loading, error } = useQuery({ queryKey: ['profiles', id], queryFn: () => profileApi(id) });
 
   if (isLoading) {
     return <div>로딩중</div>;
@@ -21,7 +23,7 @@ const DetailedPost = () => {
   if (isError) {
     return <div>오류 발생</div>;
   }
-  console.log(posts);
+
   return (
     <>
       <div className="w-[1280px] mx-auto">
@@ -51,9 +53,9 @@ const DetailedPost = () => {
         </div>
 
         <div className=" rounded-full border-none flex flex-row items-center">
-          <img src="/snowman_yukidaruma_tokeru.png" alt="기본" className="w-[80px] h-[80px]" />
+          <img src="/default-user-profile.png" alt="기본" className="w-[80px] h-[80px]" />
           <div className="flex flex-row mx-2 items-center">
-            <div className="text-2xl">닉네임</div>
+            {/* <div className="text-2xl">{profiles.nickname}</div> */}
             <div className="text-1xl ml-2">모임장</div>
           </div>
         </div>
