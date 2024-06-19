@@ -9,11 +9,14 @@ import {
 } from 'react-icons/ri';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from './../assets/logo.png';
-
+import { useSignOutStore } from '@/zustand/auth.store';
+import Swal from 'sweetalert2';
 
 export default function Sidebar() {
   const navigate = useNavigate();
   const [activeItem, setActiveItem] = useState('');
+  const signOut = useSignOutStore((state) => state.signOut);
+
   return (
     <>
       <div className="bg-white shadow-sidebarshaow fixed top-0 left-0 h-lvh w-20 justify-center items-center h-screen sm:flex hidden text-sm z-10">
@@ -50,9 +53,17 @@ export default function Sidebar() {
               <SidebarItem
                 icon={RiLogoutBoxRLine}
                 text="로그아웃"
-                onClick={() => {
-                  //TODOS: 로그아웃함수 추가필요
-                  navigate('/');
+                onClick={async () => {
+                  try {
+                    await signOut();
+                    Swal.fire({
+                      title: '로그아웃 완료!',
+                      icon: 'success'
+                    });
+                    navigate('/login');
+                  } catch (error) {
+                    console.error('Sign-out failed', error);
+                  }
                 }}
               />
             </ul>
@@ -99,10 +110,18 @@ export default function Sidebar() {
           icon={RiLogoutBoxRLine}
           text="로그아웃"
           isActive={activeItem === '로그아웃'}
-          onClick={() => {
-            // TODOS: 로그아웃 함수 추가 필요
-            setActiveItem('로그아웃');
-            navigate('/');
+          onClick={async () => {
+            try {
+              await signOut();
+              setActiveItem('로그아웃');
+              Swal.fire({
+                title: '로그아웃 완료!',
+                icon: 'success'
+              });
+              navigate('/login');
+            } catch (error) {
+              console.error('Sign-out failed', error);
+            }
           }}
         />
       </ul>

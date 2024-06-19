@@ -4,7 +4,7 @@ import { MdOutlineEmail } from 'react-icons/md';
 import { RiLockPasswordLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { useSignUpStore } from '@/zustand/auth.store';
+import { useUserStore } from '@/zustand/auth.store';
 import { getUserErrorMessage } from './getUserErrorMessage';
 
 const SignupPage = () => {
@@ -13,7 +13,7 @@ const SignupPage = () => {
   const [password, setPassword] = useState('');
   const [pwError, setPwError] = useState('');
 
-  const signUp = useSignUpStore((state) => state.signUp);
+  const signUp = useUserStore((state) => state.signUp);
   const navigate = useNavigate();
 
   const validatePassword = (pwd) => {
@@ -23,7 +23,7 @@ const SignupPage = () => {
     } else {
       setPwError('');
     }
-    console.log(pwError);
+    // console.log(pwError);
     return isValid;
   };
 

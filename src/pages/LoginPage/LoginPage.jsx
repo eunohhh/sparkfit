@@ -1,15 +1,15 @@
-import { useSignInStore } from '@/zustand/auth.store';
+import { useUserStore } from '@/zustand/auth.store';
 import React, { useState } from 'react';
 import { MdOutlineEmail } from 'react-icons/md';
 import { RiLockPasswordLine } from 'react-icons/ri';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  const signIn = useSignInStore((state) => state.signIn);
+  const navigate = useNavigate();
+  const signIn = useUserStore((state) => state.signIn);
 
   const handleSignIn = async (event) => {
     event.preventDefault();
@@ -34,7 +34,8 @@ const LoginPage = () => {
     } catch (error) {
       Swal.fire({
         icon: 'error',
-        text: { error }
+        title: '로그인 실패',
+        text: `오류가 발생했습니다: ${error.message}`
       });
     }
   };
