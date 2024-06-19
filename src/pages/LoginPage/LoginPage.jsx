@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { MdOutlineEmail } from 'react-icons/md';
 import { RiLockPasswordLine } from 'react-icons/ri';
 import { Link, useNavigate } from 'react-router-dom';
-import swal from '@/utils/sweetalert/swal';
+import Swal from 'sweetalert2';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -26,7 +26,7 @@ const LoginPage = () => {
 
       setPassword('');
       setEmail('');
-      swal.fire({
+      Swal.fire({
         title: '로그인 완료!',
         icon: 'success'
       });

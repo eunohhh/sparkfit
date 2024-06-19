@@ -1,4 +1,4 @@
-import supabase from '@/supabase';
+import supabase from '@/supabase/supabaseClient';
 
 export const profileApi = async (id) => {
   const { data, error } = await supabase.from('Users').select('*').eq('user_id', id).single();
