@@ -1,30 +1,27 @@
-import Swal from 'sweetalert2';
+import SetInfoWindowContent from '@/components/navermap/SetInfoWindow';
+import swal from '../sweetalert/swal';
 
-function searchAddressToCoordinate(infoWindow, address, map, setSelectedAddress, setSelectButtonDom) {
+function searchAddressToCoordinate(infoWindow, searchInputRef, map, setSelectedGeoData, setSelectButtonDom, marker) {
+  const searchedValue = searchInputRef.value;
+
   window.naver.maps.Service.geocode(
     {
-      query: address
+      query: searchedValue
     },
     function (status, response) {
       if (status === window.naver.maps.Service.Status.ERROR) {
-        return alert('Something Wrong!');
+        swal('error', 'Something Wrong!');
+        return;
       }
 
       if (response.v2.meta.totalCount === 0) {
-        Swal.fire({
-          title: 'Oops!',
-          text: `검색결과가 없습니다. 결과 ${response.v2.meta.totalCount}건`,
-          icon: 'error'
-        });
+        swal('error', `검색결과가 없습니다. 결과 ${response.v2.meta.totalCount}건`);
         return;
       }
 
       let htmlAddresses = [],
         item = response.v2.addresses[0],
         point = new window.naver.maps.Point(item.x, item.y);
-
-      // item.y === lat / item.x === long
-      setSelectedAddress({ lat: Number(item.y), long: Number(item.x) });
 
       if (item.roadAddress) {
         htmlAddresses.push('[도로명 주소] ' + item.roadAddress);
@@ -38,16 +35,32 @@ function searchAddressToCoordinate(infoWindow, address, map, setSelectedAddress,
         htmlAddresses.push('[영문명 주소] ' + item.englishAddress);
       }
 
-      infoWindow.setContent(
-        [
-          '<div style="padding:10px;min-width:200px;line-height:150%;">',
-          '<div class="flex flex-row justify-between"><h4 style="margin-top:5px;">검색 주소 : ' +
-            address +
-            '</h4><button id="selectCoord" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-0.5 px-2 rounded">선택</button></div>',
-          htmlAddresses.join('<br />'),
-          '</div>'
-        ].join('\n')
-      );
+      // item.y === lat / item.x === long
+      setSelectedGeoData({
+        address: {
+          jibunAddress: htmlAddresses[1]?.substring(8),
+          roadAddress: htmlAddresses[0]?.substring(9)
+        },
+        coord: { lat: Number(item.y), long: Number(item.x) }
+      });
+
+      // setInfoWindowContent 함수 호출
+      const container = SetInfoWindowContent('address', searchedValue, htmlAddresses, infoWindow);
+
+      infoWindow.setContent(container);
+
+      infoWindow.setOptions({
+        anchorSkew: true,
+        borderColor: '#cecdc7',
+        anchorSize: {
+          width: 10,
+          height: 12
+        },
+        maxWidth: 300
+      });
+
+      marker.setMap(map);
+      marker.setPosition(point);
 
       map.setCenter(point);
       infoWindow.open(map, point);
@@ -56,10 +69,16 @@ function searchAddressToCoordinate(infoWindow, address, map, setSelectedAddress,
 
       const infoWindowOuterContent = infoWindowInnerContent.parentNode.parentNode;
 
-      infoWindowOuterContent.style.top = '-32px';
-      infoWindowOuterContent.style.left = '-1px';
+      infoWindowInnerContent.parentNode.style.width = 'fit-content';
+      infoWindowInnerContent.parentNode.style.height = 'fit-content';
+      infoWindowInnerContent.parentNode.style.minWidth = '300px';
+      infoWindowInnerContent.parentNode.style.fontSize = '14px';
+
+      infoWindowOuterContent.style.top = '-130px';
 
       setSelectButtonDom(infoWindowInnerContent.querySelector('#selectCoord'));
+
+      searchInputRef.value = '';
     }
   );
 }
