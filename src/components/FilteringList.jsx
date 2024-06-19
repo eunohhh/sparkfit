@@ -1,4 +1,3 @@
-import React from 'react';
 import useFilterStore from '@/zustand/filter.list';
 import { RiPencilLine } from 'react-icons/ri';
 
