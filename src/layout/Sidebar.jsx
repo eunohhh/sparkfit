@@ -1,4 +1,7 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import logo from './../assets/logo.png';
+
 import {
   RiArrowGoBackLine,
   RiGroupLine,
@@ -10,8 +13,6 @@ import {
 } from 'react-icons/ri';
 import Modal from 'react-modal';
 import supabase from '@/supabase';
-import { Link, useNavigate } from 'react-router-dom';
-import logo from './../assets/logo.png';
 import { useUserStore } from '@/zustand/auth.store';
 import Swal from 'sweetalert2';
 
@@ -160,7 +161,7 @@ export default function Sidebar() {
           }}
         />
       </ul>
-      <div className="sm:hidden absolute bottom-28 right-5  cursor-pointer w-14 h-14 bg-slate-300 rounded-full flex justify-center items-center z-10">
+      <div className="sm:hidden fixed bottom-20 right-5  cursor-pointer p-4 bg-slate-300 rounded-full flex justify-center items-center z-10">
         <RiArrowGoBackLine
           className="w-5 h-5"
           text="뒤로가기"
