@@ -1,6 +1,6 @@
 
+import React, { useCallback, useEffect, useState } from 'react';
 import supabase from '@/supabase/supabaseClient';
-import { useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   RiArrowGoBackLine,
@@ -14,7 +14,9 @@ import {
 import Modal from 'react-modal';
 import { useUserStore } from '@/zustand/auth.store';
 import Swal from 'sweetalert2';
+import { usePlacesCount } from '@/zustand/placescount.store';
 import logo from './../assets/logo.png';
+
 
 export default function Sidebar() {
   const navigate = useNavigate();
@@ -24,6 +26,19 @@ export default function Sidebar() {
   const [searchKeyword, setSearchKeyword] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const currentDate = new Date().toISOString().split('T')[0];
+  const [previousCount, setPreviousCount] = useState(0) 
+  //이전카운터값이랑 새로운값비교하기위해
+  const { placesCount, startFetching, stopFetching } = usePlacesCount((state) => state);
+
+  console.log(placesCount);
+
+  useEffect(() => {
+    startFetching();
+
+    return () => {
+      stopFetching();
+    };
+  }, [startFetching, stopFetching]);
 
   const openModal = () => {
     setActiveItem('검색');
@@ -34,32 +49,82 @@ export default function Sidebar() {
   const closeModal = () => {
     setIsModalOpen(false);
     document.body.style.overflow = 'visible';
+    setSearchResults([]);
   };
 
   const searchPlace = useCallback(
     async (e) => {
       e.preventDefault();
+      Swal.fire({
+        title: '검색 중입니다...',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
       try {
         const { data, error } = await supabase
           .from('Places')
           .select()
           .or(`region.ilike.%${searchKeyword}%,sports_name.ilike.%${searchKeyword}%`)
           .lte('created_at', currentDate)
-          .gte('deadline', currentDate);
+          .gte('deadline', currentDate)
+          .order('deadline', { ascending: true });
         if (error) {
           console.log('error =>', error);
+          Swal.fire({
+            title: '검색 실패!',
+            text: `에러: ${error.message}`,
+            icon: 'error'
+          });
           return;
         }
         setSearchResults([...data]);
+        Swal.close();
       } catch (error) {
         console.log('서버 통신 error => ', error);
+        Swal.fire({
+          title: '서버 통신 오류!',
+          text: `에러: ${error.message}`,
+          icon: 'error'
+        });
+        Swal.close();
       }
     },
     [searchKeyword]
   );
 
-  console.log(searchResults);
-  //Places테이블의 region과sports_name에서  searchQuery와 일치한거를 찾는거
+  const handleSignOut = async () => {
+    try {
+      const result = await Swal.fire({
+        title: '로그아웃 하시겠습니까?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: '확인'
+      });
+
+      if (result.isConfirmed) {
+        await signOut();
+        Swal.fire({
+          title: '로그아웃 완료!',
+          icon: 'success'
+        }).then(() => {
+          navigate('/login');
+        });
+      }
+    } catch (error) {
+      console.error('로그아웃 중 에러 발생:', error);
+      Swal.fire({
+        title: '에러!',
+        text: '로그아웃 중 문제가 발생했습니다.',
+        icon: 'error'
+      });
+    }
+  };
+
   return (
     <>
       <div className="bg-white shadow-sidebarshaow fixed top-0 left-0 h-lvh w-20 justify-center items-center h-screen sm:flex hidden text-sm z-10">
@@ -73,7 +138,13 @@ export default function Sidebar() {
 
             <ul className="h-60 flex flex-col justify-between items-center text-xs">
               <SidebarItem icon={RiSearchLine} text="검색" onClick={openModal} />
-              <SidebarItem icon={RiGroupLine} text="모임" />
+              <SidebarItem
+                icon={RiGroupLine}
+                text="모임"
+                onClick={() => {
+                  navigate('/gathering');
+                }}
+              />
               <SidebarItem
                 icon={RiArrowGoBackLine}
                 text="뒤로가기"
@@ -93,27 +164,11 @@ export default function Sidebar() {
                   navigate('/mypage');
                 }}
               />
-              <SidebarItem
-                icon={RiLogoutBoxRLine}
-                text="로그아웃"
-                onClick={async () => {
-                  try {
-                    await signOut();
-                    Swal.fire({
-                      title: '로그아웃 완료!',
-                      icon: 'success'
-                    });
-                    navigate('/login');
-                  } catch (error) {
-                    console.error('Sign-out failed', error);
-                  }
-                }}
-              />
+              <SidebarItem icon={RiLogoutBoxRLine} text="로그아웃" onClick={handleSignOut} />
             </ul>
           </div>
         </div>
       </div>
-
       <ul className="bg-white shadow-bottomsidebarshaow fixed bottom-0 left-0 w-full h-16 flex justify-around items-center sm:hidden text-sm z-10">
         <SidebarItem
           icon={RiHome2Line}
@@ -130,6 +185,7 @@ export default function Sidebar() {
           isActive={activeItem === '모임'}
           onClick={() => {
             setActiveItem('모임');
+            navigate('/gathering');
           }}
         />
         <SidebarItem icon={RiSearchLine} text="검색" isActive={activeItem === '검색'} onClick={openModal} />
@@ -146,19 +202,7 @@ export default function Sidebar() {
           icon={RiLogoutBoxRLine}
           text="로그아웃"
           isActive={activeItem === '로그아웃'}
-          onClick={async () => {
-            try {
-              await signOut();
-              setActiveItem('로그아웃');
-              Swal.fire({
-                title: '로그아웃 완료!',
-                icon: 'success'
-              });
-              navigate('/login');
-            } catch (error) {
-              console.error('Sign-out failed', error);
-            }
-          }}
+          onClick={handleSignOut}
         />
       </ul>
       <div className="sm:hidden fixed bottom-20 right-5  cursor-pointer p-4 bg-slate-300 rounded-full flex justify-center items-center z-10">
@@ -197,7 +241,7 @@ export default function Sidebar() {
                 type="text"
                 value={searchKeyword}
                 onChange={(e) => setSearchKeyword(e.target.value)}
-                placeholder="지역명 또는 모임명을 입력하세요"
+                placeholder="지역 또는 스포츠명을 입력하세요"
                 className="px-3 py-2 border rounded w-full box-border"
                 maxLength={20}
               />
@@ -221,7 +265,15 @@ export default function Sidebar() {
                         <span>{item.region}</span> | <span>{item.sports_name}</span> |{' '}
                         <span>{item.created_at.slice(0, 10)}</span>
                       </div>
-                      <button className="bg-customLoginButton text-white px-2 py-1 rounded box-border">상세보기</button>
+                      <button
+                        className="bg-customLoginButton text-white px-2 py-1 rounded box-border"
+                        onClick={() => {
+                          navigate(`/detail/${item.id}}`);
+                          closeModal();
+                        }}
+                      >
+                        상세보기
+                      </button>
                     </div>
                   </li>
                 ))}
