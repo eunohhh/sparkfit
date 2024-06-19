@@ -1,15 +1,15 @@
-import { useSignInStore } from '@/zustand/auth.store';
+import { useUserStore } from '@/zustand/auth.store';
 import React, { useState } from 'react';
 import { MdOutlineEmail } from 'react-icons/md';
 import { RiLockPasswordLine } from 'react-icons/ri';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  const signIn = useSignInStore((state) => state.signIn);
+  const navigate = useNavigate();
+  const signIn = useUserStore((state) => state.signIn);
 
   const handleSignIn = async (event) => {
     event.preventDefault();
@@ -34,19 +34,20 @@ const LoginPage = () => {
     } catch (error) {
       Swal.fire({
         icon: 'error',
-        text: { error }
+        title: '로그인 실패',
+        text: `오류가 발생했습니다: ${error.message}`
       });
     }
   };
 
   return (
-    <div className="bg-customBackground h-full w-full">
+    <div className="flex justify-center items-center h-screen bg-customBackground">
       <form
         onSubmit={handleSignIn}
-        className="flex flex-col justify-center items-center my-0 mx-auto w-96 h-full gap-6 text-base"
+        className="flex flex-col justify-center items-center my-0 mx-auto w-96 h-full gap-5 text-base"
       >
         <h2 className="text-4xl font-semibold mb-10">로그인</h2>
-        <div className="w-full items-center border border-none rounded-full flex gap-3 p-0 px-6">
+        <div className="w-full items-center border bg-white rounded-full flex gap-3 p-2 px-6">
           <MdOutlineEmail className="text-3xl" />
           <input
             className="w-full h-15 border-none text-lg p-2 focus:outline-none"
@@ -56,7 +57,7 @@ const LoginPage = () => {
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-        <div className="w-full items-center border border-none rounded-full flex gap-3 p-0 px-6">
+        <div className="w-full items-center border bg-white rounded-full flex gap-3 p-2 px-6">
           <RiLockPasswordLine className="text-3xl" />
           <input
             className="w-full h-15 border-none text-lg p-1.5 focus:outline-none"
@@ -66,6 +67,7 @@ const LoginPage = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
+
         <button className="w-full h-14 text-lg rounded-xl bg-customLoginButton text-white mt-4 p-1.5 cursor-pointer">
           로그인하기
         </button>
