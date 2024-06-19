@@ -3,36 +3,37 @@ import ClubInfo from './ClubInfo';
 import { RiGroupLine } from 'react-icons/ri';
 import { STSection } from './MyPage';
 import supabase from '@/supabase/supabaseClient';
+import { useQuery } from '@tanstack/react-query';
 
 const ClubList = () => {
-  const getG = async () => {
-    const { data, error } = await supabase
-      .from('Users')
-      .select('email, profile_image, nickname')
-      .eq('user_id', userData.user.id);
+  // const getG = async () => {
+  //   const { data, error } = await supabase
+  //     .from('Users')
+  //     .select('email, profile_image, nickname')
+  //     .eq('user_id', userData.user.id);
 
-    if (error) {
-      console.log(error);
-    }
-    return data;
-  };
+  //   if (error) {
+  //     console.log(error);
+  //   }
+  //   return data;
+  // };
 
-  const {
-    data: theUser,
-    isPending,
-    error: usersError
-  } = useQuery({
-    queryKey: ['Users'],
-    queryFn: getUser
-  });
+  // const {
+  //   data: theUser,
+  //   isPending,
+  //   error: usersError
+  // } = useQuery({
+  //   queryKey: ['Users'],
+  //   queryFn: getUser
+  // });
 
-  if (isPending) {
-    return <div>loading...</div>;
-  }
+  // if (isPending) {
+  //   return <div>loading...</div>;
+  // }
 
-  if (usersError) {
-    return <div>error!</div>;
-  }
+  // if (usersError) {
+  //   return <div>error!</div>;
+  // }
 
   return (
     <STSection>
