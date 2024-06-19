@@ -1,11 +1,30 @@
 import { useRef, useState } from 'react';
 import useOutsideClick from './useOutsideClick';
 import AlertModal from './AlertModal';
+import supabase from '@/supabase';
+import { getPost } from '@/api/postsListApi';
+import { useQuery } from '@tanstack/react-query';
+import { useParams } from 'react-router-dom';
 
 const JoinModal = ({ close }) => {
   // const [name, setName] = useState('');
+  const { id } = useParams();
   const modalRef = useRef(null);
   const [openAlertModal, setOpenAlertModal] = useState(false);
+  const { data: posts } = useQuery({ queryKey: ['posts', id], queryFn: () => getPost(id) });
+
+  const test = async () => {
+    setOpenAlertModal(true);
+    const { data, error } = await supabase
+      .from('Contracts')
+      .insert([{ gather_name: posts.gather_name, place_id: posts.id }])
+      .select();
+    if (error) {
+      console.error(error.message);
+    } else {
+      console.log(data);
+    }
+  };
 
   const handleClose = () => {
     close?.();
@@ -29,9 +48,7 @@ const JoinModal = ({ close }) => {
             <button
               className=" text-base px-5 py-2.5 border-none bg-btn-blue rounded-md text-white m-1.5 font-semibold cursor-pointer "
               type="button"
-              onClick={() => {
-                setOpenAlertModal(true);
-              }}
+              onClick={test}
             >
               신청
             </button>

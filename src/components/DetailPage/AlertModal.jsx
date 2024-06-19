@@ -19,7 +19,7 @@ const AlertModal = ({ close }) => {
       >
         <div className="py-10">
           <div className="m-2 flex justify-center items-center flex-col">
-            <h3 className="flex text-2xl mb-2">신청되었습니다</h3>
+            <h3 className="flex text-2xl mb-2">완료되었습니다</h3>
           </div>
 
           <div className="flex justify-center items-center my-3">

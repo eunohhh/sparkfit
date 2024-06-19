@@ -4,12 +4,10 @@ import CreateGroupModal from '../../components/DetailPage/CreateGroupModal';
 import { useQuery } from '@tanstack/react-query';
 import { getPost } from '@/api/postsListApi';
 import { useParams } from 'react-router-dom';
-import { profileApi } from '@/api/profileApi';
+// import { profileApi } from '@/api/profileApi';
 
 const DetailedPost = () => {
   const { id } = useParams();
-  // const queryClient = useQueryClient();
-
   const [openJoinModal, setOpenJoinModal] = useState(false);
   const [openCreateGroupModal, setCreateGroupModal] = useState(false);
 
@@ -53,7 +51,7 @@ const DetailedPost = () => {
         </div>
 
         <div className=" rounded-full border-none flex flex-row items-center">
-          <img src="/default-user-profile.png" alt="기본" className="w-[80px] h-[80px]" />
+          <img src="/sparkfit/public/logo.png" alt="기본" className="w-[80px] h-[80px]" />
           <div className="flex flex-row mx-2 items-center">
             {/* <div className="text-2xl">{profiles.nickname}</div> */}
             <div className="text-1xl ml-2">모임장</div>
@@ -75,7 +73,6 @@ const DetailedPost = () => {
           }}
         />
       )}
-      ㅎ
     </>
   );
 };
