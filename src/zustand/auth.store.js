@@ -29,10 +29,11 @@ export const useUserStore = create((set) => ({
       }
       console.log(userData);
       // 회원가입, 추가 정보 저장이 성공하면 데이터 상태 저장, 로딩 상태 해제
-      set({ userData: signUpData, loading: false });
+      set({ userData: signUpData, loading: false, error: null });
       console.log(signUpData);
     } catch (error) {
       set({ loading: false, error: `Sign-up failed: ${error.message}` });
+      throw error;
     }
   },
 
@@ -55,6 +56,7 @@ export const useUserStore = create((set) => ({
       const { error: signOutError } = await supabase.auth.signOut();
       if (signOutError) throw new Error(signOutError.message);
       set({ loading: false, userData: null, error: null });
+      localStorage.removeItem('supabase.auth.token');
     } catch (error) {
       set({ loading: false, error: `Sign-out failed: ${error.message}` });
       throw error;
