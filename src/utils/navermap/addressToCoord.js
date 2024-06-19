@@ -45,7 +45,7 @@ function searchAddressToCoordinate(infoWindow, searchInputRef, map, setSelectedG
       });
 
       // setInfoWindowContent 함수 호출
-      const container = SetInfoWindowContent('address', searchedValue, htmlAddresses);
+      const container = SetInfoWindowContent('address', searchedValue, htmlAddresses, infoWindow);
 
       infoWindow.setContent(container);
 

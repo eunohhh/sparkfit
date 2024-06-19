@@ -36,7 +36,7 @@ function searchCoordinateToAddress(infoWindow, map, latlng, setSelectButtonDom, 
       });
 
       // setInfoWindowContent 함수 호출
-      const container = SetInfoWindowContent('address', '', htmlAddresses);
+      const container = SetInfoWindowContent('address', '', htmlAddresses, infoWindow);
 
       infoWindow.setContent(container);
 
@@ -54,17 +54,13 @@ function searchCoordinateToAddress(infoWindow, map, latlng, setSelectButtonDom, 
 
       setTimeout(() => {
         const infoWindowInnerContent = infoWindow.getContentElement();
-        console.log(infoWindowInnerContent);
 
         const infoWindowOuterContent = infoWindowInnerContent.parentNode.parentNode;
 
         infoWindowInnerContent.parentNode.style.width = 'fit-content';
         infoWindowInnerContent.parentNode.style.height = 'fit-content';
         infoWindowInnerContent.parentNode.style.minWidth = '370px';
-        // infoWindowInnerContent.parentNode.style.minHeight = '80px';
         infoWindowInnerContent.parentNode.style.fontSize = '12px';
-
-        console.log(infoWindowInnerContent.getBoundingClientRect().height);
 
         infoWindowOuterContent.style.top =
           infoWindowInnerContent.getBoundingClientRect().height < 79 ? '-75px' : '-95px';
