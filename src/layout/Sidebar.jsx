@@ -1,40 +1,35 @@
-
 import React, { useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from './../assets/logo.png';
-
 import {
   RiArrowGoBackLine,
   RiGroupLine,
   RiHome2Line,
-    RiLogoutBoxRLine,
+  RiLogoutBoxRLine,
   RiSearchLine,
   RiUser3Line,
   RiCloseFill
 } from 'react-icons/ri';
 import Modal from 'react-modal';
 import supabase from '@/supabase';
-import { Link, useNavigate } from 'react-router-dom';
-import logo from './../assets/logo.png';
-
 
 export default function Sidebar() {
   const navigate = useNavigate();
   const [activeItem, setActiveItem] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const [searchKeyword, setSearchKeyword] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const currentDate = new Date().toISOString().split('T')[0];
 
   const openModal = () => {
     setActiveItem('검색');
     setIsModalOpen(true);
-    document.body.style.overflow = 'hidden'; // 모달이 열릴 때 body에 overflow: hidden 스타일 적용
+    document.body.style.overflow = 'hidden';
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
-    document.body.style.overflow = 'visible'; // 모달이 닫힐 때 body에 원래 스타일로 복원
+    document.body.style.overflow = 'visible';
   };
 
   const searchPlace = useCallback(
@@ -44,7 +39,9 @@ export default function Sidebar() {
         const { data, error } = await supabase
           .from('Places')
           .select()
-          .or(`region.ilike.%${searchKeyword}%,sports_name.ilike.%${searchKeyword}%`);
+          .or(`region.ilike.%${searchKeyword}%,sports_name.ilike.%${searchKeyword}%`)
+          .lte('created_at', currentDate)
+          .gte('deadline', currentDate);
         if (error) {
           console.log('error =>', error);
           return;
@@ -56,6 +53,7 @@ export default function Sidebar() {
     },
     [searchKeyword]
   );
+
   console.log(searchResults);
   //Places테이블의 region과sports_name에서  searchQuery와 일치한거를 찾는거
   return (
@@ -156,13 +154,19 @@ export default function Sidebar() {
         isOpen={isModalOpen}
         onRequestClose={closeModal}
         contentLabel="번개 검색 모달"
-        className="modal fixed inset-0 flex items-center sm:left-60  z-50 "
-        overlayClassName="overlay fixed inset-0 bg-black bg-opacity-50 z-40"
+        className="modal  inset-0 w-full h-full  items-center   z-50 "
+        overlayClassName="overlay fixed inset-0 bg-black bg-opacity-50 absolute z-40"
         shouldCloseOnOverlayClick={false}
       >
-        <div className="bg-white p-6 rounded-lg max-w-full max-w-screen-md w-4/5 h-3/4">
+        <div className="bg-white p-6 rounded-lg w-2/3 h-3/4 absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/3 sm:top-1/2 sm:left-2/3 sm:transform sm:-translate-x-2/3 sm:-translate-y-1/2 ">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-bold">Spark Fit 검색</h2>
+            <h2 className="text-lg font-bold w-fit">
+              Spark Fit 검색{' '}
+              <span className="text-xs text-gray-500">
+                결과 : {searchResults.length > 99 ? '99+' : searchResults.length}
+              </span>
+            </h2>
+
             <button onClick={closeModal} className="w-iconwidth h-iconheight">
               <RiCloseFill className="w-full h-full" />
             </button>
