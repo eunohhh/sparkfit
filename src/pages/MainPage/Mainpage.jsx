@@ -57,6 +57,14 @@ function Mainpage() {
 
         infoWindow.setContent(container);
 
+        setTimeout(() => {
+          const infoWindowInnerContent = infoWindow.getContentElement();
+          infoWindowInnerContent.parentNode.style.width = 'fit-content';
+          infoWindowInnerContent.parentNode.style.height = 'fit-content';
+          infoWindowInnerContent.parentNode.style.minWidth = '300px';
+          infoWindowInnerContent.parentNode.style.fontSize = '14px';
+        }, 0);
+
         markers.push(marker);
         infoWindows.push(infoWindow);
       });

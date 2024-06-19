@@ -70,20 +70,22 @@ function searchAddressToCoordinate(infoWindow, searchInputRef, map, setSelectedG
       map.setCenter(point);
       infoWindow.open(map, point);
 
-      const infoWindowInnerContent = infoWindow.getContentElement();
+      setTimeout(() => {
+        const infoWindowInnerContent = infoWindow.getContentElement();
 
-      const infoWindowOuterContent = infoWindowInnerContent.parentNode.parentNode;
+        const infoWindowOuterContent = infoWindowInnerContent.parentNode.parentNode;
 
-      infoWindowInnerContent.parentNode.style.width = 'fit-content';
-      infoWindowInnerContent.parentNode.style.height = 'fit-content';
-      infoWindowInnerContent.parentNode.style.minWidth = '300px';
-      infoWindowInnerContent.parentNode.style.fontSize = '14px';
+        infoWindowInnerContent.parentNode.style.width = 'fit-content';
+        infoWindowInnerContent.parentNode.style.height = 'fit-content';
+        infoWindowInnerContent.parentNode.style.minWidth = '300px';
+        infoWindowInnerContent.parentNode.style.fontSize = '14px';
 
-      infoWindowOuterContent.style.top = '-130px';
+        infoWindowOuterContent.style.top = '-130px';
 
-      setSelectButtonDom(infoWindowInnerContent.querySelector('#selectCoord'));
+        setSelectButtonDom(infoWindowInnerContent.querySelector('#selectCoord'));
 
-      searchInputRef.value = '';
+        searchInputRef.value = '';
+      }, 0);
     }
   );
 }
