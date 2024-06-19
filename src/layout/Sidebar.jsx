@@ -1,7 +1,7 @@
 import supabase from '@/supabase/supabaseClient';
 import { useCallback, useState } from 'react';
 
-import { useSignOutStore } from '@/zustand/auth.store';
+import { useUserStore } from '@/zustand/auth.store';
 import {
   RiArrowGoBackLine,
   RiCloseFill,
@@ -19,7 +19,7 @@ import logo from './../assets/logo.png';
 export default function Sidebar() {
   const navigate = useNavigate();
   const [activeItem, setActiveItem] = useState('');
-  const signOut = useSignOutStore((state) => state.signOut);
+  const signOut = useUserStore((state) => state.signOut);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState('');
   const [searchResults, setSearchResults] = useState([]);
