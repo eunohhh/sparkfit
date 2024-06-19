@@ -1,18 +1,20 @@
+import CreateGroupModal from '@/components/DetailPage/CreateGroupModal';
 import SetInfoWindowContent from '@/components/navermap/SetInfoWindow';
 import usePlaces from '@/hooks/usePlaces';
 import checkForMarkersRendering from '@/utils/navermap/checkForMarkersRendering';
 import useMapStore from '@/zustand/map.store';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useShallow } from 'zustand/react/shallow';
 import useMap from '../../hooks/useMap';
 
 function Mainpage() {
   const navigate = useNavigate();
-
   const searchInputRef = useRef();
   const searchButtonRef = useRef();
-  const { gps, naverMap, basicMarker } = useMap({ searchInputRef, searchButtonRef });
+  const [openCreateGroupModal, setCreateGroupModal] = useState(false);
+
+  const { gps, naverMap, basicMarker, makeGatherButtonDom } = useMap({ searchInputRef, searchButtonRef });
   const { selectedGeoData } = useMapStore(
     useShallow((state) => ({ selectedGeoData: state.selectedGeoData, setUserGps: state.setUserGps }))
   );
@@ -55,6 +57,14 @@ function Mainpage() {
 
         infoWindow.setContent(container);
 
+        setTimeout(() => {
+          const infoWindowInnerContent = infoWindow.getContentElement();
+          infoWindowInnerContent.parentNode.style.width = 'fit-content';
+          infoWindowInnerContent.parentNode.style.height = 'fit-content';
+          infoWindowInnerContent.parentNode.style.minWidth = '300px';
+          infoWindowInnerContent.parentNode.style.fontSize = '14px';
+        }, 0);
+
         markers.push(marker);
         infoWindows.push(infoWindow);
       });
@@ -83,24 +93,38 @@ function Mainpage() {
     }
   }, [places, naverMap, basicMarker, navigate]);
 
+  // 모임만들기 버튼 클릭시 동작 여기에
+  useEffect(() => {
+    const handleSelectButtonDom = () => setCreateGroupModal((prev) => !prev);
+
+    if (makeGatherButtonDom) makeGatherButtonDom.addEventListener('click', handleSelectButtonDom);
+
+    return () => {
+      if (makeGatherButtonDom) makeGatherButtonDom.removeEventListener('click', handleSelectButtonDom);
+    };
+  }, [makeGatherButtonDom, selectedGeoData]);
+
   return (
-    <section className="relative flex w-dvw h-dvh">
-      <form className="absolute z-10 flex items-center gap-1 rounded-lg bg-white p-1 border border-gray-300 box-border left-20 ml-1">
-        <input
-          type="text"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 py-[3px] px-2"
-          ref={searchInputRef}
-        />
-        <button
-          type="submit"
-          className="bg-btn-blue hover:bg-blue-400 text-white font-bold py-0.5 px-2 rounded"
-          ref={searchButtonRef}
-        >
-          위치검색
-        </button>
-      </form>
-      <div id="map01" className="h-full w-full" />
-    </section>
+    <>
+      {openCreateGroupModal && <CreateGroupModal close={() => setCreateGroupModal(false)} />}
+      <section className="relative flex w-dvw h-dvh">
+        <form className="absolute z-10 flex items-center gap-1 rounded-lg bg-white p-1 border border-gray-300 box-border left-20 ml-1">
+          <input
+            type="text"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 py-[3px] px-2"
+            ref={searchInputRef}
+          />
+          <button
+            type="submit"
+            className="bg-btn-blue hover:bg-blue-400 text-white font-bold py-0.5 px-2 rounded"
+            ref={searchButtonRef}
+          >
+            위치검색
+          </button>
+        </form>
+        <div id="map01" className="h-full w-full" />
+      </section>
+    </>
   );
 }
 

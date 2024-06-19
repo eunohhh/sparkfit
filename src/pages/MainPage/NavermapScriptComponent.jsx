@@ -1,6 +1,7 @@
 import swal from '@/utils/sweetalert/swal';
 import useMapStore from '@/zustand/map.store';
 import { Suspense, lazy, useLayoutEffect } from 'react';
+import Swal from 'sweetalert2';
 import { useShallow } from 'zustand/react/shallow';
 import Mainpage from './Mainpage';
 
@@ -45,6 +46,7 @@ function NavermapScriptComponent() {
         long: coords.longitude
       };
       setGps(gpsData);
+      Swal.close(); // 위치정보 세팅 후 모달 닫기
     };
 
     const error = (err) => {
@@ -61,6 +63,17 @@ function NavermapScriptComponent() {
         swal('error', '위치정보가 지원되지 않습니다');
         return;
       } else {
+        Swal.fire({
+          title: '위치 정보 가져오는 중',
+          text: '당신의 위치로 이동중...',
+          allowOutsideClick: false,
+          showLoaderOnConfirm: false,
+          showCancelButton: false,
+          showConfirmButton: false,
+          onBeforeOpen: () => {
+            Swal.showLoading();
+          }
+        });
         navigator.geolocation.getCurrentPosition(success, error);
       }
     };
