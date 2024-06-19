@@ -1,33 +1,35 @@
-import supabase from '@/supabase';
 import useFilterStore from '@/zustand/filter.list';
 import React, { useEffect, useState } from 'react';
 import PlaceItem from './PlaceItem';
+import supabase from '@/supabase/supabaseClient';
+import usePlaces from '@/hooks/usePlaces';
 
 const GatheringItem = () => {
-  const [places, setPlaces] = useState([]);
+  //const [places, setPlaces] = useState([]);
   const { selectedButton } = useFilterStore();
+  const { places, placesLoading } = usePlaces();
+
+  console.log(places);
 
   useEffect(() => {
     const fetchPlace = async () => {
-      const { data: placeData, error } = await supabase.from('Places').select('*');
-
-      if (placeData) {
+      if (places) {
         navigator.geolocation.getCurrentPosition(async (position) => {
           const userLatitude = position.coords.latitude;
           const userLongitude = position.coords.longitude;
 
-          const sortedPlace = placeData
+          const sortedPlace = places
             .map((place) => ({
               ...place,
               distance: calculateDistance(userLatitude, userLongitude, place.lat, place.long)
             }))
             .sort((a, b) => a.distance - b.distance);
 
-          setPlaces(sortedPlace);
+          console.log('sortedPlace', sortedPlace);
 
           if (selectedButton === 1) {
             //마감기한순 정렬
-            return sortedPlace.sort((a, b) => a.deadline.localeCompare(b.deadline));
+            sortedPlace.sort((a, b) => a.deadline.localeCompare(b.deadline));
           }
         });
       } else {

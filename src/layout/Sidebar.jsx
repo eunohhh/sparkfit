@@ -1,19 +1,20 @@
-import React, { useCallback, useState } from 'react';
+import supabase from '@/supabase/supabaseClient';
+import { useCallback, useState } from 'react';
+
+import { useUserStore } from '@/zustand/auth.store';
 import {
   RiArrowGoBackLine,
+  RiCloseFill,
   RiGroupLine,
   RiHome2Line,
   RiLogoutBoxRLine,
   RiSearchLine,
-  RiUser3Line,
-  RiCloseFill
+  RiUser3Line
 } from 'react-icons/ri';
 import Modal from 'react-modal';
-import supabase from '@/supabase';
 import { Link, useNavigate } from 'react-router-dom';
-import logo from './../assets/logo.png';
-import { useUserStore } from '@/zustand/auth.store';
 import Swal from 'sweetalert2';
+import logo from './../assets/logo.png';
 
 export default function Sidebar() {
   const navigate = useNavigate();
