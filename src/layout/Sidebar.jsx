@@ -1,22 +1,17 @@
-
-import React, { useCallback, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import logo from './../assets/logo.png';
-
+import supabase from '@/supabase/supabaseClient';
+import { useCallback, useState } from 'react';
 import {
   RiArrowGoBackLine,
+  RiCloseFill,
   RiGroupLine,
   RiHome2Line,
-    RiLogoutBoxRLine,
+  RiLogoutBoxRLine,
   RiSearchLine,
-  RiUser3Line,
-  RiCloseFill
+  RiUser3Line
 } from 'react-icons/ri';
 import Modal from 'react-modal';
-import supabase from '@/supabase';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from './../assets/logo.png';
-
 
 export default function Sidebar() {
   const navigate = useNavigate();

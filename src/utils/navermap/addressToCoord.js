@@ -20,15 +20,6 @@ function searchAddressToCoordinate(infoWindow, searchInputRef, map, setSelectedG
         item = response.v2.addresses[0],
         point = new window.naver.maps.Point(item.x, item.y);
 
-      // item.y === lat / item.x === long
-      setSelectedGeoData({
-        address: {
-          jibunAddress: htmlAddresses[0],
-          roadAddress: htmlAddresses[1]
-        },
-        coord: { lat: Number(item.y), long: Number(item.x) }
-      });
-
       if (item.roadAddress) {
         htmlAddresses.push('[도로명 주소] ' + item.roadAddress);
       }
@@ -40,6 +31,15 @@ function searchAddressToCoordinate(infoWindow, searchInputRef, map, setSelectedG
       if (item.englishAddress) {
         htmlAddresses.push('[영문명 주소] ' + item.englishAddress);
       }
+
+      // item.y === lat / item.x === long
+      setSelectedGeoData({
+        address: {
+          jibunAddress: htmlAddresses[1]?.substring(8),
+          roadAddress: htmlAddresses[0]?.substring(9)
+        },
+        coord: { lat: Number(item.y), long: Number(item.x) }
+      });
 
       infoWindow.setContent(
         [

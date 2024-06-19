@@ -136,7 +136,7 @@ function useMap({ searchInputRef, searchButtonRef }) {
         if (selectedGeoData) {
           console.log(selectedGeoData);
         } else {
-          console.log({ lat: gps.lat, long: gps.long });
+          // console.log({ lat: gps.lat, long: gps.long });
           searchCoordinateToAddress(
             infoWindow,
             mapRef.current,

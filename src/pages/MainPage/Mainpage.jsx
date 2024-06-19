@@ -1,4 +1,5 @@
 import usePlaces from '@/hooks/usePlaces';
+import checkForMarkersRendering from '@/utils/navermap/checkForMarkersRendering';
 import useMapStore from '@/zustand/map.store';
 import { useEffect, useRef } from 'react';
 import useMap from '../../hooks/useMap';
@@ -57,6 +58,20 @@ function Mainpage() {
           if (basicMarker) basicMarker.setMap(null);
           infoWindows[idx].open(naverMap, marker);
         });
+      });
+
+      // 지도 줌 인/아웃 시 마커 업데이트 이벤트 핸들러
+      window.naver.maps.Event.addListener(naverMap, 'zoom_changed', () => {
+        if (naverMap !== null) {
+          checkForMarkersRendering(naverMap, markers);
+        }
+      });
+
+      // 지도 드래그 시 마커 업데이트 이벤트 핸들러
+      window.naver.maps.Event.addListener(naverMap, 'dragend', () => {
+        if (naverMap !== null) {
+          checkForMarkersRendering(naverMap, markers);
+        }
       });
     }
   }, [places, naverMap, basicMarker]);

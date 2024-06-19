@@ -37,10 +37,12 @@ function searchCoordinateToAddress(infoWindow, map, latlng, setSelectButtonDom, 
 
       infoWindow.open(map, latlng);
 
+      //11 ,12
+
       setSelectedGeoData({
         address: {
-          jibunAddress: htmlAddresses[0],
-          roadAddress: htmlAddresses[1]
+          jibunAddress: htmlAddresses[0]?.substring(11),
+          roadAddress: htmlAddresses[1]?.substring(12)
         },
         coord: { lat: latlng.y, long: latlng.x }
       });
