@@ -9,7 +9,8 @@ import {
   RiHome2Line,
   RiLogoutBoxRLine,
   RiSearchLine,
-  RiUser3Line
+  RiUser3Line,
+  RiInformationFill
 } from 'react-icons/ri';
 import Modal from 'react-modal';
 import { Link, useNavigate } from 'react-router-dom';
@@ -27,8 +28,24 @@ export default function Sidebar() {
   const [previousCount, setPreviousCount] = useState(0);
   //이전카운터값이랑 새로운값비교하기위해
   const { placesCount, startFetching, stopFetching } = usePlacesCount((state) => state);
+  // console.log(placesCount);
+  // console.log(previousCount)
+  // const [user, setUser] = useState(null);
 
-  console.log(placesCount);
+  // useEffect(() => {
+  //   const fetchUserInfo = async () => {
+  //     const { data, error } = await supabase.auth.getUser();
+  //     if (error) {
+  //       console.error('Error fetching user:', error);
+  //     } else {
+  //       setUser(data.user);
+  //       console.log(data.user);
+  //     }
+  //   };
+
+  //   // 비동기 함수 호출
+  //   fetchUserInfo();
+  // }, []);
 
   useEffect(() => {
     startFetching();
@@ -139,8 +156,11 @@ export default function Sidebar() {
               <SidebarItem
                 icon={RiGroupLine}
                 text="모임"
+                placesCount={placesCount}
+                previousCount={previousCount}
                 onClick={() => {
                   navigate('/gathering');
+                  setPreviousCount(placesCount)
                 }}
               />
               <SidebarItem
@@ -286,8 +306,11 @@ export default function Sidebar() {
   );
 }
 
-const SidebarItem = ({ icon: Icon, text, onClick, isActive }) => (
-  <li className="cursor-pointer text-center" onClick={onClick}>
+const SidebarItem = ({ icon: Icon, text, onClick, isActive, placesCount, previousCount }) => (
+  <li className="cursor-pointer text-center relative" onClick={onClick}>
+    {text === '모임' && placesCount !== previousCount && (
+      <RiInformationFill className="absolute right-[-5px] top-[-5px] w-[15px] h-[15px] text-red-500" />
+    )}
     <Icon className={`mx-auto w-iconwidth transition-all h-iconheight ${isActive ? 'text-customLoginButton' : ''}`} />
     <p className={`mt-1.5 transition-all ${isActive ? 'text-[#82C0F9]' : ''}`}>{text}</p>
   </li>
