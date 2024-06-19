@@ -1,5 +1,5 @@
-import { create } from 'zustand';
 import supabase from '@/supabase/supabaseClient';
+import { create } from 'zustand';
 
 const fetchPlacesCount = async () => {
   const { data, error } = await supabase
