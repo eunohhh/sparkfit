@@ -1,25 +1,27 @@
+
 import React, { useCallback, useEffect, useState } from 'react';
+import supabase from '@/supabase/supabaseClient';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   RiArrowGoBackLine,
+  RiCloseFill,
   RiGroupLine,
   RiHome2Line,
   RiLogoutBoxRLine,
   RiSearchLine,
-  RiUser3Line,
-  RiCloseFill
+  RiUser3Line
 } from 'react-icons/ri';
 import Modal from 'react-modal';
-import supabase from '@/supabase';
-import { Link, useNavigate } from 'react-router-dom';
-import logo from './../assets/logo.png';
-import { useSignOutStore } from '@/zustand/auth.store';
+import { useUserStore } from '@/zustand/auth.store';
 import Swal from 'sweetalert2';
 import { usePlacesCount } from '@/zustand/placescount.store';
+import logo from './../assets/logo.png';
+
 
 export default function Sidebar() {
   const navigate = useNavigate();
   const [activeItem, setActiveItem] = useState('');
-  const signOut = useSignOutStore((state) => state.signOut);
+  const signOut = useUserStore((state) => state.signOut);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState('');
   const [searchResults, setSearchResults] = useState([]);
@@ -203,7 +205,7 @@ export default function Sidebar() {
           onClick={handleSignOut}
         />
       </ul>
-      <div className="sm:hidden absolute bottom-28 right-5  cursor-pointer w-14 h-14 bg-slate-300 rounded-full flex justify-center items-center z-10">
+      <div className="sm:hidden fixed bottom-20 right-5  cursor-pointer p-4 bg-slate-300 rounded-full flex justify-center items-center z-10">
         <RiArrowGoBackLine
           className="w-5 h-5"
           text="뒤로가기"

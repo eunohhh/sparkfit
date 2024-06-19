@@ -1,11 +1,12 @@
-const AddressInfoWindow = ({ searchedValue, htmlAddresses, infoWindow }) => {
+const CoordInfoWindow = ({ htmlAddresses, infoWindow }) => {
   const handleCloseButton = () => {
     infoWindow.close();
   };
+
   return (
     <>
       <div className="flex flex-row justify-between">
-        <h4>검색 주소 : {searchedValue}</h4>
+        <h4>선택된 주소</h4>
         <div className="flex flex-row gap-1">
           <button id="selectCoord" className="bg-btn-blue hover:bg-blue-400 text-white font-bold py-0.5 px-2 rounded">
             모임만들기
@@ -27,4 +28,4 @@ const AddressInfoWindow = ({ searchedValue, htmlAddresses, infoWindow }) => {
   );
 };
 
-export default AddressInfoWindow;
+export default CoordInfoWindow;
