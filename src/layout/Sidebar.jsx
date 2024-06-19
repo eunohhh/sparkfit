@@ -1,7 +1,7 @@
-
-import React, { useCallback, useEffect, useState } from 'react';
 import supabase from '@/supabase/supabaseClient';
-import { Link, useNavigate } from 'react-router-dom';
+import { useUserStore } from '@/zustand/auth.store';
+import { usePlacesCount } from '@/zustand/placescount.store';
+import { useCallback, useEffect, useState } from 'react';
 import {
   RiArrowGoBackLine,
   RiCloseFill,
@@ -12,11 +12,9 @@ import {
   RiUser3Line
 } from 'react-icons/ri';
 import Modal from 'react-modal';
-import { useUserStore } from '@/zustand/auth.store';
+import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { usePlacesCount } from '@/zustand/placescount.store';
 import logo from './../assets/logo.png';
-
 
 export default function Sidebar() {
   const navigate = useNavigate();
@@ -26,7 +24,7 @@ export default function Sidebar() {
   const [searchKeyword, setSearchKeyword] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const currentDate = new Date().toISOString().split('T')[0];
-  const [previousCount, setPreviousCount] = useState(0) 
+  const [previousCount, setPreviousCount] = useState(0);
   //이전카운터값이랑 새로운값비교하기위해
   const { placesCount, startFetching, stopFetching } = usePlacesCount((state) => state);
 
@@ -268,7 +266,7 @@ export default function Sidebar() {
                       <button
                         className="bg-customLoginButton text-white px-2 py-1 rounded box-border"
                         onClick={() => {
-                          navigate(`/detail/${item.id}}`);
+                          navigate(`/detail/${item.id}`);
                           closeModal();
                         }}
                       >
