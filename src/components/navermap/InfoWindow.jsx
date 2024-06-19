@@ -38,7 +38,7 @@ function InfoWindow({ place, infoWindow, navigate }) {
           </button>
         </div>
       </div>
-      <div className="w-full pt-2 text-sm">${place.texts}</div>
+      <div className="w-full pt-2 text-sm">{place.texts}</div>
     </>
   );
 }

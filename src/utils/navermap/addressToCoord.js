@@ -4,6 +4,11 @@ import swal from '../sweetalert/swal';
 function searchAddressToCoordinate(infoWindow, searchInputRef, map, setSelectedGeoData, setSelectButtonDom, marker) {
   const searchedValue = searchInputRef.value;
 
+  if (!searchedValue) {
+    swal('error', '검색어를 입력해주세요');
+    return;
+  }
+
   window.naver.maps.Service.geocode(
     {
       query: searchedValue
