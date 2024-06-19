@@ -6,7 +6,6 @@ export default function DefaultLayout() {
     <>
       <Sidebar />
       <Outlet />
-      {/* <Footer /> */}
     </>
   );
 }
