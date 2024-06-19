@@ -16,11 +16,11 @@ const PlaceItem = ({ place }) => {
             <ul className="flex gap-2.5">
               <li className="rounded-full bg-[#efefef] px-5 py-1.5 line-height-none text-xs">{place.sports_name}</li>
               <li className="py-1.5 line-height-none text-xs">{place.region}</li>
-              <li className="py-1.5 line-height-none text-xs">멤버 50</li>
+              {/* <li className="py-1.5 line-height-none text-xs">멤버 50</li> */}
             </ul>
           </div>
           <div className="md:block sm:hidden">
-            <button className="transition-all duration-300 ease-in-out bg-[#efefef] rounded-lg px-8 py-3 text-sm text-[#2e2e2e] hover:bg-[#dddddd]">
+            <button className="min-[320px]:hidden transition-all duration-300 ease-in-out bg-[#efefef] rounded-lg px-8 py-3 text-sm text-[#2e2e2e] hover:bg-[#dddddd]">
               상세보기
             </button>
           </div>
