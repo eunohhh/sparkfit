@@ -20,7 +20,7 @@ function InfoWindow({ place, infoWindow, navigate }) {
   return (
     <>
       <div className="flex flex-row justify-between text-sm">
-        <h4>{place.sports_name}</h4>
+        <h4 className="flex items-center">{place.sports_name}</h4>
         <div className="flex flex-row gap-1">
           <button
             onClick={handleJoinButton}
