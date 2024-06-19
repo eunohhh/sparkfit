@@ -23,7 +23,7 @@ const MyPageModal = ({ close, nickname }) => {
   const handleProfileImage = async (event) => {
     event.preventDefault();
     const file = event.target.files[0];
-    const fileName = `image_${userID}`;
+    const fileName = `image_${userID}_${Date.now()}`;
 
     // 이미지를 미리보기는 다 끝나고 시간 남으면... 추가...
 
