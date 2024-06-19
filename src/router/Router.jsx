@@ -13,11 +13,11 @@ export default function Router() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/home" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
         <Route element={<DefaultLayout />}>
-          <Route path="/home" element={<HomePage />} />
           <Route path="/" element={<NavermapScriptComponent />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/gathering" element={<GatheringList />} />
           <Route path="/detail/:id" element={<DetailedPost />} />

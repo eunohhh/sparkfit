@@ -32,11 +32,19 @@ const LoginPage = () => {
       });
       navigate('/');
     } catch (error) {
-      Swal.fire({
-        icon: 'error',
-        title: '로그인 실패',
-        text: `오류가 발생했습니다: ${error.message}`
-      });
+      if (error.message.includes('Invalid login credentials')) {
+        Swal.fire({
+          icon: 'error',
+          title: '로그인 실패',
+          text: '잘못된 이메일과 비밀번호를 입력했습니다.'
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: '로그인 실패',
+          text: '알 수 없는 에러입니다. 다시 시도해주세요.'
+        });
+      }
     }
   };
 

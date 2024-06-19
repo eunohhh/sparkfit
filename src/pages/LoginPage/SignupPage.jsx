@@ -11,6 +11,7 @@ const SignupPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [pwError, setPwError] = useState('');
+  const [emailError, setEmailError] = useState('');
   const signUp = useUserStore((state) => state.signUp);
   const navigate = useNavigate();
 
@@ -23,7 +24,6 @@ const SignupPage = () => {
     }
     return isValid;
   };
-
   const handleChangePassword = (e) => {
     const { value } = e.target;
     setPassword(value);
@@ -31,6 +31,26 @@ const SignupPage = () => {
       validatePassword(value);
     } else if (!value) {
       setPwError('');
+    }
+  };
+
+  const validateEmail = (email) => {
+    const isValid = /^([0-9a-zA-Z_.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z]+){1,2}$/.test(email);
+    if (!isValid) {
+      setEmailError('이메일 형식을 맞춰 작성해주세요.');
+    } else {
+      setEmailError('');
+    }
+    return isValid;
+  };
+
+  const handleChangeEmail = (e) => {
+    const { value } = e.target;
+    setEmail(value);
+    if (value) {
+      validateEmail(value);
+    } else if (!value) {
+      setEmailError('');
     }
   };
 
@@ -59,10 +79,25 @@ const SignupPage = () => {
       });
       navigate('/login'); // 회원가입 후 로그인 페이지로 이동
     } catch (error) {
-      Swal.fire({
-        icon: 'error',
-        text: { error }
-      });
+      if (error.message.includes('User already registered')) {
+        Swal.fire({
+          icon: 'error',
+          title: '로그인 실패',
+          text: '중복된 이메일입니다.'
+        });
+      } else if (error.message.includes('duplicate key value violates unique constraint "unique_nickname"')) {
+        Swal.fire({
+          icon: 'error',
+          title: '로그인 실패',
+          text: '중복된 닉네임입니다.'
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: '로그인 실패',
+          text: '알 수 없는 에러입니다. 다시 시도해주세요.'
+        });
+      }
     }
   };
 
@@ -91,9 +126,10 @@ const SignupPage = () => {
             type="email"
             placeholder="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={handleChangeEmail}
           />
         </div>
+        {emailError && <p className="text-gray-400 text-sm">{emailError}</p>}
         <div className="w-full items-center border bg-white rounded-full flex gap-3 p-2 px-6">
           <RiLockPasswordLine className="text-3xl" />
           <input
