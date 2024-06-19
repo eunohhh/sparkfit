@@ -1,15 +1,52 @@
 import usePlaces from '@/hooks/usePlaces';
 import checkForMarkersRendering from '@/utils/navermap/checkForMarkersRendering';
+import getDate from '@/utils/navermap/getDate';
+import swal from '@/utils/sweetalert/swal';
 import useMapStore from '@/zustand/map.store';
-import { useEffect, useRef } from 'react';
+import { useEffect, useLayoutEffect, useRef } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import useMap from '../../hooks/useMap';
 
 function Mainpage() {
   const searchInputRef = useRef();
   const searchButtonRef = useRef();
   const { gps, naverMap, basicMarker } = useMap({ searchInputRef, searchButtonRef });
-  const { selectedGeoData } = useMapStore((state) => ({ selectedGeoData: state.selectedGeoData }));
+  const { selectedGeoData, setUserGps: setGps } = useMapStore(
+    useShallow((state) => ({ selectedGeoData: state.selectedGeoData, setUserGps: state.setUserGps }))
+  );
   const { places } = usePlaces();
+
+  // 초기에 사용자의 위치 정보를 가져옴
+  useLayoutEffect(() => {
+    const success = ({ coords, timestamp }) => {
+      const date = getDate(timestamp);
+      const gpsData = {
+        lat: coords.latitude,
+        long: coords.longitude,
+        date: date
+      };
+      setGps(gpsData);
+    };
+
+    const error = (err) => {
+      if (err.code === err.PERMISSION_DENIED) {
+        swal('warning', '위치 정보를 제공하지 않으면 일부 기능을 사용할 수 없습니다.');
+        return;
+      } else {
+        swal('error', '위치 정보를 가져오는 중 오류가 발생했습니다.');
+        return;
+      }
+    };
+    const getUserLocation = () => {
+      if (!navigator.geolocation) {
+        swal('error', '위치정보가 지원되지 않습니다');
+        return;
+      } else {
+        navigator.geolocation.getCurrentPosition(success, error);
+      }
+    };
+    getUserLocation();
+  }, [setGps]);
 
   useEffect(() => {
     console.log(`현재 위도, 경도는 => ${gps && gps.lat}, ${gps && gps.long}`);

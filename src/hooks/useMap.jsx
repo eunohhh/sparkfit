@@ -1,14 +1,11 @@
 import searchCoordinateToAddress from '@/utils/navermap/coordToAddress';
 import initGeocoder from '@/utils/navermap/initGeocoder';
-import swal from '@/utils/sweetalert/swal';
 import useMapStore from '@/zustand/map.store';
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { INITIAL_CENTER, INITIAL_ZOOM } from '../constants/navermap';
-import getDate from '../utils/navermap/getDate';
 
 function useMap({ searchInputRef, searchButtonRef }) {
-  const [gps, setGps] = useState(null);
   const [basicMarker, setBasicMarker] = useState(null);
   const [infoWindow, setInfoWindow] = useState(() =>
     !window.naver
@@ -18,10 +15,15 @@ function useMap({ searchInputRef, searchButtonRef }) {
         })
   );
   const [selectButtonDom, setSelectButtonDom] = useState(null);
-  const { selectedGeoData, setSelectedGeoData } = useMapStore(
+  const {
+    selectedGeoData,
+    setSelectedGeoData,
+    userGps: gps
+  } = useMapStore(
     useShallow((state) => ({
       selectedGeoData: state.selectedGeoData,
-      setSelectedGeoData: state.setSelectedGeoData
+      setSelectedGeoData: state.setSelectedGeoData,
+      userGps: state.userGps
     }))
   );
 
@@ -60,38 +62,6 @@ function useMap({ searchInputRef, searchButtonRef }) {
       map: map
     });
     setBasicMarker(marker);
-  }, []);
-
-  // 초기에 사용자의 위치 정보를 가져옴
-  useLayoutEffect(() => {
-    const success = ({ coords, timestamp }) => {
-      const date = getDate(timestamp);
-      const gpsData = {
-        lat: coords.latitude,
-        long: coords.longitude,
-        date: date
-      };
-      setGps(gpsData);
-    };
-
-    const error = (err) => {
-      if (err.code === err.PERMISSION_DENIED) {
-        swal('warning', '위치 정보를 제공하지 않으면 일부 기능을 사용할 수 없습니다.');
-        return;
-      } else {
-        swal('error', '위치 정보를 가져오는 중 오류가 발생했습니다.');
-        return;
-      }
-    };
-    const getUserLocation = () => {
-      if (!navigator.geolocation) {
-        swal('error', '위치정보가 지원되지 않습니다');
-        return;
-      } else {
-        navigator.geolocation.getCurrentPosition(success, error);
-      }
-    };
-    getUserLocation();
   }, []);
 
   // 최초 실행
