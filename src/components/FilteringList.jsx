@@ -1,26 +1,22 @@
 import React, { useState } from 'react';
+import useFilterStore from '@/zustand/filter.list';
 
 const FilteringList = () => {
-  const [selectedDistrict, setSelectedDistrict] = useState('');
-  const districts = ['강남구', '강동구', '강서구', '강북구', '광진구', '구로구', '도봉구', '성동구', '용산구'];
-  const districtCoords = {
-    성동구: { lat: 37.551, lng: 127.0436 }
-  };
-  const handleDistrictSelect = (idx) => {
-    setSelectedDistrict(idx);
-  };
+  const { selectedButton, handleButtonSelect } = useFilterStore();
+  const SortButton = ['현재 사용자 위치', '마감기한'];
+
   return (
     <div className="flex justify-between py-10">
       <ul className="flex gap-3">
-        {districts.map((district, idx) => (
+        {SortButton.map((sort, idx) => (
           <li
             key={idx}
-            onClick={() => handleDistrictSelect(idx)}
+            onClick={() => handleButtonSelect(idx)}
             className={`cursor-pointer lg:py-2 lg:px-3.5 lg:text-sm sm:text-[12px] sm:px-2.5 sm:py-2 rounded-md ${
-              selectedDistrict === idx ? 'bg-[#82C0F9] text-[#ffffff]' : 'bg-[#ffffff]'
+              selectedButton === idx ? 'bg-[#82C0F9] text-[#ffffff]' : 'bg-[#ffffff]'
             }`}
           >
-            {district}
+            {sort}
           </li>
         ))}
       </ul>

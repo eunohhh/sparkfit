@@ -1,12 +1,12 @@
+import MyPage from '@/components/myPage/MyPage';
+import GatheringList from '@/pages/GatheringList';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import DefaultLayout from '../layout/DefaultLayout';
-import GatheringList from '../pages/GatheringList';
+import DetailedPost from '../pages/DetailedPost';
+import HomePage from '../pages/LoginPage/HomePage';
 import LoginPage from '../pages/LoginPage/LoginPage';
 import SignupPage from '../pages/LoginPage/SignupPage';
-import HomePage from '../pages/LoginPage/HomePage';
 import NavermapScriptComponent from '../pages/MainPage/NavermapScriptComponent';
-import MyPage from '@/components/myPage/MyPage';
-import DetailedPost from '../pages/DetailedPost';
 
 export default function Router() {
   return (
