@@ -1,27 +1,31 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Ellipse1 from '../../styles/image/Ellipse1.png';
 import { RiUser3Line } from 'react-icons/ri';
 import { STSection } from './MyPage';
 import { HiPencilSquare } from 'react-icons/hi2';
 import supabase from '@/supabase';
 import { useQuery } from '@tanstack/react-query';
+import MyPageModal from './MyPageModal';
 
 const UserInfo = () => {
   const [image, setImage] = useState(Ellipse1);
+  const [myPageModal, setMyPageModal] = useState(false);
 
-  //세션 트루인 사람으로 가져오기 (임시)
+  //TODO: users 값 전부 가져오는데 특정 값만 가져오는 것으로 바꾸기
   const getUser = async () => {
-    const { data } = await supabase.from('Users').select('*').eq('session', true);
-
+    const { data, error } = await supabase.from('Users').select('*');
     if (error) {
       console.log(error);
     }
-    return data[0];
+    return data;
   };
 
-  // 유저도 쥬스탠드로 관리하기 차후 수정
-  const { data, isPending, error } = useQuery({
-    queryKey: ['users'],
+  const {
+    data: users,
+    isPending,
+    error: usersError
+  } = useQuery({
+    queryKey: ['Users'],
     queryFn: getUser
   });
 
@@ -29,9 +33,11 @@ const UserInfo = () => {
     return <div>loading...</div>;
   }
 
-  if (error) {
+  if (usersError) {
     return <div>error!</div>;
   }
+
+  // console.log(users);
 
   return (
     <STSection>
@@ -40,26 +46,32 @@ const UserInfo = () => {
       </h3>
       <div className="flex rounded-2xl p-4 mr-4 mb-4 ml-4 gap-12 bg-customBackground w-[600px] ">
         <div className="relative flex items-center">
+          {/* TODO: 임시값 */}
           <img
-            src={image}
+            src={users[0] && users[0].profile_image === null ? Ellipse1 : users[0].profile_image}
             alt="profile-img"
             className="relative rounded-full overflow-hidden max-w-[95px] max-h-[95px]"
           />
-          <label htmlFor="profile_image" className="absolute bottom-1 right-2">
-            <HiPencilSquare className="w-6 h-6" />
-          </label>
-          <input
-            type="file"
-            className="hidden"
-            accept="image/*"
-            id="profile_image"
-            // value={image}
-            // onChange={(event) => setImage(event.target.value)}
-          />
         </div>
         <div>
-          <div className="flex mt-5">{data && data.username} 님 반갑습니다.</div>
-          <div className="flex mt-2 text-slate-400 text-sm"> ID : {data && data.id}</div>
+          {/* TODO: 로그인된 유저만 가져오게 바꾸기 임시값 */}
+          <div className="flex mt-5">{users && users[0].nickname} 님 반갑습니다.</div>
+          <div className="flex mt-2 text-slate-400 text-sm"> email : {users && users[0].email}</div>
+        </div>
+        <div>
+          <HiPencilSquare
+            className="w-6 h-6"
+            onClick={() => {
+              setMyPageModal(true);
+            }}
+          />
+          {myPageModal && (
+            <MyPageModal
+              close={() => {
+                setMyPageModal(false);
+              }}
+            />
+          )}
         </div>
       </div>
     </STSection>
