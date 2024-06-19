@@ -1,9 +1,11 @@
 import swal from '../sweetalert/swal';
 
 function searchAddressToCoordinate(infoWindow, searchInputRef, map, setSelectedGeoData, setSelectButtonDom, marker) {
+  const searchedValue = searchInputRef.value;
+
   window.naver.maps.Service.geocode(
     {
-      query: searchInputRef.value
+      query: searchedValue
     },
     function (status, response) {
       if (status === window.naver.maps.Service.Status.ERROR) {
@@ -45,7 +47,7 @@ function searchAddressToCoordinate(infoWindow, searchInputRef, map, setSelectedG
         [
           '<div style="padding: 10px; box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 16px 0px;">',
           '<div class="flex flex-row justify-between"><h4 style="margin-top:5px;">검색 주소 : ' +
-            searchInputRef +
+            searchedValue +
             '</h4><button id="selectCoord" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-0.5 px-2 rounded">선택</button></div>',
           htmlAddresses.join('<br />'),
           '</div>'
