@@ -1,4 +1,4 @@
-import supabase from '@/supabase';
+import supabase from '@/supabase/supabaseClient';
 
 export const getPost = async (id) => {
   const { data, error } = await supabase.from('Places').select('*').eq('id', id).single();
