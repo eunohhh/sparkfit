@@ -1,49 +1,63 @@
-import React from 'react';
+import supabase from '@/supabase';
+import useFilterStore from '@/zustand/filter.list';
+import React, { useEffect, useState } from 'react';
+import PlaceItem from './PlaceItem';
 
 const GatheringItem = () => {
+  const [places, setPlaces] = useState([]);
+  const { selectedButton } = useFilterStore();
+
+  useEffect(() => {
+    const fetchPlace = async () => {
+      const { data: placeData, error } = await supabase.from('Places').select('*');
+
+      if (placeData) {
+        navigator.geolocation.getCurrentPosition(async (position) => {
+          const userLatitude = position.coords.latitude;
+          const userLongitude = position.coords.longitude;
+
+          const sortedPlace = placeData
+            .map((place) => ({
+              ...place,
+              distance: calculateDistance(userLatitude, userLongitude, place.lat, place.long)
+            }))
+            .sort((a, b) => a.distance - b.distance);
+
+          setPlaces(sortedPlace);
+
+          if (selectedButton === 1) {
+            //마감기한순 정렬
+            return sortedPlace.sort((a, b) => a.deadline.localeCompare(b.deadline));
+          }
+        });
+      } else {
+        console.error('모임 데이터를 가지고오지 못했습니다.', error);
+      }
+    };
+    fetchPlace();
+  }, [selectedButton]);
+
+  function calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // 지구 반지름 (km)
+    const dLat = toRadians(lat2 - lat1);
+    const dLon = toRadians(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  }
+
+  function toRadians(degrees) {
+    return (degrees * Math.PI) / 180;
+  }
+
   return (
-    <>
-      <div className="flex gap-8 bg-[#ffffff] p-8 shadow-lg rounded-xl relative">
-        <svg className="absolute w-[25%] h-[25%] left-[-14%] top-[33%] fill-[#ffffff] rotate-90" viewBox="0 0 100 100">
-          <polygon points="0,0 100,0 50,100" />
-        </svg>
-        {/* 모임 이미지 */}
-        <div>
-          <img src="http://via.placeholder.com/300x200" alt="모임이미지" />
-        </div>
-        {/* 모임 설명 */}
-        <div className="w-full flex flex-col gap-5">
-          {/* 모임 제목/해시태그/버튼 */}
-          <div className="flex justify-between items-center">
-            <div>
-              <h2 className="text-xl mb-3 font-semibold">클라이밍하우스</h2>
-              <ul className="flex gap-2.5">
-                <li className="rounded-full bg-default px-5 py-1.5 line-height-none text-xs">운동/스포츠</li>
-                <li className="py-1.5 line-height-none text-xs">의정부</li>
-                <li className="py-1.5 line-height-none text-xs">멤버 50</li>
-              </ul>
-            </div>
-            <div>
-              <button className="transition-all duration-300 ease-in-out bg-default rounded-lg px-8 py-3 text-sm text-[#2e2e2e] hover:bg-[#dddddd]">
-                상세보기
-              </button>
-            </div>
-          </div>
-
-          <p className="text-sm w-[80%] overflow-hidden text-ellipsis line-clamp-2 ">
-            자연에서 이루어지는 암벽등반에서 출발한 스포츠 클라이밍은 건물 벽이나 암벽을 연상케하는 벽에 달린 인공
-            홀드를 이용해 높이 오르는 스포츠이다. 일상 생활에서 흔히 느끼지 못한 수직벽을 오르기 위해서는 전신 근력을
-            쓰는 동시에 집중력을 지속적으로 발휘해야 하는 스포츠이다.
-          </p>
-
-          <div className="sm:hidden">
-            <button className="transition-all duration-300 ease-in-out bg-default rounded-lg px-8 py-3 text-sm text-[#2e2e2e] hover:bg-[#dddddd]">
-              상세보기
-            </button>
-          </div>
-        </div>
-      </div>
-    </>
+    <div className="flex flex-col gap-8 mb-20">
+      {places.map((place) => {
+        return <PlaceItem key={place.id} place={place} />;
+      })}
+    </div>
   );
 };
 
