@@ -1,6 +1,7 @@
 import MyPage from '@/components/myPage/MyPage';
 import GatheringList from '@/pages/GatheringList';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+
 import DefaultLayout from '../layout/DefaultLayout';
 import DetailedPost from '../pages/DetailedPost';
 import HomePage from '../pages/LoginPage/HomePage';
