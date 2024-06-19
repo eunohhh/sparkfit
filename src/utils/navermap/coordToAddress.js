@@ -1,3 +1,4 @@
+import SetInfoWindowContent from '@/components/navermap/SetInfoWindow';
 import swal from '../sweetalert/swal';
 import makeAddress from './makeAddress';
 
@@ -26,19 +27,6 @@ function searchCoordinateToAddress(infoWindow, map, latlng, setSelectButtonDom, 
         htmlAddresses.push(i + 1 + '. ' + addrType + ' ' + address);
       }
 
-      infoWindow.setContent(
-        [
-          '<div style="padding: 10px; box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 16px 0px;">',
-          '<div class="flex flex-row justify-between"><h4 style="margin-top:5px;">검색좌표</h4><button id="selectCoord" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-0.5 px-2 rounded">선택</button></div>',
-          htmlAddresses.join('<br />'),
-          '</div>'
-        ].join('\n')
-      );
-
-      infoWindow.open(map, latlng);
-
-      //11 ,12
-
       setSelectedGeoData({
         address: {
           jibunAddress: htmlAddresses[0]?.substring(11),
@@ -47,23 +35,42 @@ function searchCoordinateToAddress(infoWindow, map, latlng, setSelectButtonDom, 
         coord: { lat: latlng.y, long: latlng.x }
       });
 
+      // setInfoWindowContent 함수 호출
+      const container = SetInfoWindowContent('address', '', htmlAddresses);
+
+      infoWindow.setContent(container);
+
       infoWindow.setOptions({
         anchorSkew: true,
         borderColor: '#cecdc7',
         anchorSize: {
           width: 10,
           height: 12
-        }
+        },
+        maxWidth: 300
       });
 
-      const infoWindowInnerContent = infoWindow.getContentElement();
+      infoWindow.open(map, latlng);
 
-      const infoWindowOuterContent = infoWindowInnerContent.parentNode.parentNode;
+      setTimeout(() => {
+        const infoWindowInnerContent = infoWindow.getContentElement();
+        console.log(infoWindowInnerContent);
 
-      infoWindowOuterContent.style.top = '-32px';
-      infoWindowOuterContent.style.left = '-1px';
+        const infoWindowOuterContent = infoWindowInnerContent.parentNode.parentNode;
 
-      setSelectButtonDom(infoWindowInnerContent.querySelector('#selectCoord'));
+        infoWindowInnerContent.parentNode.style.width = 'fit-content';
+        infoWindowInnerContent.parentNode.style.height = 'fit-content';
+        infoWindowInnerContent.parentNode.style.minWidth = '370px';
+        // infoWindowInnerContent.parentNode.style.minHeight = '80px';
+        infoWindowInnerContent.parentNode.style.fontSize = '12px';
+
+        console.log(infoWindowInnerContent.getBoundingClientRect().height);
+
+        infoWindowOuterContent.style.top =
+          infoWindowInnerContent.getBoundingClientRect().height < 79 ? '-75px' : '-95px';
+
+        setSelectButtonDom(infoWindowInnerContent.querySelector('#selectCoord'));
+      }, 0);
     }
   );
 }

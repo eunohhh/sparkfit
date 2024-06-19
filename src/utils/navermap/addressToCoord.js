@@ -1,3 +1,4 @@
+import SetInfoWindowContent from '@/components/navermap/SetInfoWindow';
 import swal from '../sweetalert/swal';
 
 function searchAddressToCoordinate(infoWindow, searchInputRef, map, setSelectedGeoData, setSelectButtonDom, marker) {
@@ -43,16 +44,10 @@ function searchAddressToCoordinate(infoWindow, searchInputRef, map, setSelectedG
         coord: { lat: Number(item.y), long: Number(item.x) }
       });
 
-      infoWindow.setContent(
-        [
-          '<div style="padding: 10px; box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 16px 0px;">',
-          '<div class="flex flex-row justify-between"><h4 style="margin-top:5px;">검색 주소 : ' +
-            searchedValue +
-            '</h4><button id="selectCoord" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-0.5 px-2 rounded">선택</button></div>',
-          htmlAddresses.join('<br />'),
-          '</div>'
-        ].join('\n')
-      );
+      // setInfoWindowContent 함수 호출
+      const container = SetInfoWindowContent('address', searchedValue, htmlAddresses);
+
+      infoWindow.setContent(container);
 
       infoWindow.setOptions({
         anchorSkew: true,
@@ -60,7 +55,8 @@ function searchAddressToCoordinate(infoWindow, searchInputRef, map, setSelectedG
         anchorSize: {
           width: 10,
           height: 12
-        }
+        },
+        maxWidth: 300
       });
 
       marker.setMap(map);
@@ -73,8 +69,12 @@ function searchAddressToCoordinate(infoWindow, searchInputRef, map, setSelectedG
 
       const infoWindowOuterContent = infoWindowInnerContent.parentNode.parentNode;
 
-      infoWindowOuterContent.style.top = '-32px';
-      infoWindowOuterContent.style.left = '-1px';
+      infoWindowInnerContent.parentNode.style.width = 'fit-content';
+      infoWindowInnerContent.parentNode.style.height = 'fit-content';
+      infoWindowInnerContent.parentNode.style.minWidth = '300px';
+      infoWindowInnerContent.parentNode.style.fontSize = '12px';
+
+      infoWindowOuterContent.style.top = '-130px';
 
       setSelectButtonDom(infoWindowInnerContent.querySelector('#selectCoord'));
 
