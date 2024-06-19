@@ -1,4 +1,7 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import logo from './../assets/logo.png';
+
 import {
   RiArrowGoBackLine,
   RiGroupLine,
@@ -10,8 +13,6 @@ import {
 } from 'react-icons/ri';
 import Modal from 'react-modal';
 import supabase from '@/supabase';
-import { Link, useNavigate } from 'react-router-dom';
-import logo from './../assets/logo.png';
 import { useUserStore } from '@/zustand/auth.store';
 import Swal from 'sweetalert2';
 

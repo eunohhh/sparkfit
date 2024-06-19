@@ -27,6 +27,7 @@ export const useUserStore = create((set) => ({
       if (userError) {
         throw new Error(userError.message);
       }
+      console.log(userData);
       // 회원가입, 추가 정보 저장이 성공하면 데이터 상태 저장, 로딩 상태 해제
       set({ userData: signUpData, loading: false });
       console.log(signUpData);
