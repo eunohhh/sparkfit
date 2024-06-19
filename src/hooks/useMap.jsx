@@ -1,15 +1,12 @@
 import searchCoordinateToAddress from '@/utils/navermap/coordToAddress';
 import initGeocoder from '@/utils/navermap/initGeocoder';
 import useMapStore from '@/zustand/map.store';
-import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
-import Swal from 'sweetalert2';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { INITIAL_CENTER, INITIAL_ZOOM } from '../constants/navermap';
-import getDate from '../utils/navermap/getDate';
 
 function useMap({ searchInputRef, searchButtonRef }) {
-  const [gps, setGps] = useState(null);
-  const [naverMap, setNaverMap] = useState(null);
-  const [marker, setMarker] = useState(null);
+  const [basicMarker, setBasicMarker] = useState(null);
   const [infoWindow, setInfoWindow] = useState(() =>
     !window.naver
       ? null
@@ -17,8 +14,20 @@ function useMap({ searchInputRef, searchButtonRef }) {
           anchorSkew: true
         })
   );
-  const { selectedCoord, setSelectedCoord } = useMapStore();
   const [selectButtonDom, setSelectButtonDom] = useState(null);
+  const {
+    selectedGeoData,
+    setSelectedGeoData,
+    userGps: gps
+  } = useMapStore(
+    useShallow((state) => ({
+      selectedGeoData: state.selectedGeoData,
+      setSelectedGeoData: state.setSelectedGeoData,
+      userGps: state.userGps
+    }))
+  );
+
+  const mapRef = useRef(null);
 
   const initializeMap = useCallback((gps) => {
     const mapOptions = {
@@ -45,80 +54,41 @@ function useMap({ searchInputRef, searchButtonRef }) {
     };
 
     const map = new window.naver.maps.Map('map01', mapOptions);
-    setNaverMap(map);
+    // setNaverMap(map);
+    mapRef.current = map;
 
     const marker = new window.naver.maps.Marker({
       position: new window.naver.maps.LatLng(...gps),
       map: map
     });
-    setMarker(marker);
+    setBasicMarker(marker);
   }, []);
 
-  useLayoutEffect(() => {
-    function getUserLocation() {
-      if (!navigator.geolocation) {
-        Swal.fire({
-          title: '에러',
-          text: '위치정보가 지원되지 않습니다',
-          icon: 'error'
-        });
-        return;
-      } else {
-        navigator.geolocation.getCurrentPosition(
-          async ({ coords, timestamp }) => {
-            const date = getDate(timestamp);
-            const gpsData = {
-              lat: coords.latitude,
-              long: coords.longitude,
-              date: date
-            };
-            setGps(gpsData);
-          },
-          (err) => {
-            if (err.code === err.PERMISSION_DENIED) {
-              Swal.fire({
-                title: '위치 정보 제공 거부',
-                text: '위치 정보를 제공하지 않으면 일부 기능을 사용할 수 없습니다.',
-                icon: 'warning'
-              });
-            } else {
-              Swal.fire({
-                title: '에러',
-                text: '위치 정보를 가져오는 중 오류가 발생했습니다.',
-                icon: 'error'
-              });
-            }
-          }
-        );
-      }
-    }
-    getUserLocation();
-  }, []);
-
-  useEffect(() => {
-    if (gps && marker && naverMap) {
-      naverMap.setCenter(new window.naver.maps.LatLng(gps.lat, gps.long));
-      marker.setPosition(new window.naver.maps.LatLng(gps.lat, gps.long));
-    }
-  }, [gps, marker, naverMap]);
-
+  // 최초 실행
   useEffect(() => {
     initializeMap(INITIAL_CENTER);
   }, [initializeMap]);
 
+  // 사용자 gps 값 저장 성공시 실행
+  useEffect(() => {
+    if (gps && basicMarker && mapRef.current) {
+      mapRef.current.setCenter(new window.naver.maps.LatLng(gps.lat, gps.long));
+      basicMarker.setPosition(new window.naver.maps.LatLng(gps.lat, gps.long));
+    }
+  }, [gps, basicMarker, mapRef]);
+
+  // 기본 정보창 객체 생성
   useEffect(() => {
     if (!infoWindow) {
-      const infoWindow = new window.naver.maps.InfoWindow({
-        anchorSkew: true
-      });
+      const infoWindow = new window.naver.maps.InfoWindow();
       setInfoWindow(infoWindow);
     }
   }, [infoWindow]);
 
+  // 선택 버튼 클릭시 동작 여기에
   useEffect(() => {
     const handleSelectButtonDom = () => {
-      // 선택 버튼 클릭시 동작 여기에
-      console.log(selectedCoord);
+      console.log(selectedGeoData);
     };
 
     if (selectButtonDom) selectButtonDom.addEventListener('click', handleSelectButtonDom);
@@ -126,44 +96,51 @@ function useMap({ searchInputRef, searchButtonRef }) {
     return () => {
       if (selectButtonDom) selectButtonDom.removeEventListener('click', handleSelectButtonDom);
     };
-  }, [selectButtonDom, selectedCoord]);
+  }, [selectButtonDom, selectedGeoData]);
 
+  // 마커 클릭시 동작 여기에
   useEffect(() => {
     let listener = null;
-    if (marker && gps && infoWindow && naverMap && setSelectButtonDom) {
-      listener = window.naver.maps.Event.addListener(marker, 'click', () => {
-        // 마커 클릭시 동작 여기에
-        if (selectedCoord) {
-          console.log(selectedCoord);
+    if (basicMarker && gps && infoWindow && mapRef.current && setSelectButtonDom) {
+      listener = window.naver.maps.Event.addListener(basicMarker, 'click', () => {
+        if (selectedGeoData) {
+          console.log(selectedGeoData);
         } else {
-          console.log({ lat: gps.lat, long: gps.long });
-          searchCoordinateToAddress(infoWindow, naverMap, { y: gps.lat, x: gps.long }, setSelectButtonDom);
+          // console.log({ lat: gps.lat, long: gps.long });
+          searchCoordinateToAddress(
+            infoWindow,
+            mapRef.current,
+            { y: gps.lat, x: gps.long },
+            setSelectButtonDom,
+            setSelectedGeoData
+          );
         }
       });
     }
-
     return () => {
-      if (listener) {
-        window.naver.maps.Event.removeListener(listener);
-      }
+      if (listener) window.naver.maps.Event.removeListener(listener);
     };
-  }, [marker, selectedCoord, gps, infoWindow, naverMap, setSelectButtonDom]);
+  }, [basicMarker, selectedGeoData, gps, infoWindow, mapRef, setSelectButtonDom, setSelectedGeoData]);
 
+  // 정보창객체와 맵 객체가 설정되면 initGeocoder 실행
   useEffect(() => {
-    if (infoWindow && naverMap)
-      window.naver.maps.onJSContentLoaded = () =>
+    // 처음에는 onsJsContentLoaded 에 등록하고 실행하고 다음부터는 등록하지 않고 실행하는 방법도 있음
+    if (infoWindow && mapRef.current && basicMarker)
+      window.naver.maps.onJSContentLoaded = () => {
+        console.log('이게 한번만??');
         initGeocoder(
           infoWindow,
-          naverMap,
+          mapRef.current,
           searchInputRef.current,
           searchButtonRef.current,
-          marker,
-          setSelectedCoord,
+          basicMarker,
+          setSelectedGeoData,
           setSelectButtonDom
         );
-  }, [infoWindow, naverMap, searchInputRef, searchButtonRef, marker, setSelectedCoord, setSelectButtonDom]);
+      };
+  }, [infoWindow, mapRef, searchInputRef, searchButtonRef, basicMarker, setSelectedGeoData, setSelectButtonDom]);
 
-  return { gps, naverMap, infoWindow, initializeMap };
+  return { gps, naverMap: mapRef.current, infoWindow, basicMarker, initializeMap };
 }
 
 export default useMap;
