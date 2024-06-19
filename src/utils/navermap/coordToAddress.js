@@ -1,6 +1,8 @@
+import SetInfoWindowContent from '@/components/navermap/SetInfoWindow';
+import swal from '../sweetalert/swal';
 import makeAddress from './makeAddress';
 
-function searchCoordinateToAddress(infoWindow, map, latlng, setSelectButtonDom) {
+function searchCoordinateToAddress(infoWindow, map, latlng, setSelectButtonDom, setSelectedGeoData) {
   infoWindow.close();
   window.naver.maps.Service.reverseGeocode(
     {
@@ -9,7 +11,8 @@ function searchCoordinateToAddress(infoWindow, map, latlng, setSelectButtonDom) 
     },
     function (status, response) {
       if (status === window.naver.maps.Service.Status.ERROR) {
-        return alert('Something Wrong!');
+        swal('error', 'Something Wrong!');
+        return;
       }
 
       let items = response.v2.results,
@@ -24,29 +27,46 @@ function searchCoordinateToAddress(infoWindow, map, latlng, setSelectButtonDom) 
         htmlAddresses.push(i + 1 + '. ' + addrType + ' ' + address);
       }
 
-      infoWindow.setContent(
-        [
-          '<div style="padding:10px;min-width:200px;line-height:150%;">',
-          '<div class="flex flex-row justify-between"><h4 style="margin-top:5px;">검색좌표</h4><button id="selectCoord" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-0.5 px-2 rounded">선택</button></div>',
-          htmlAddresses.join('<br />'),
-          '</div>'
-        ].join('\n')
-      );
+      setSelectedGeoData({
+        address: {
+          jibunAddress: htmlAddresses[0]?.substring(11),
+          roadAddress: htmlAddresses[1]?.substring(12)
+        },
+        coord: { lat: latlng.y, long: latlng.x }
+      });
+
+      // setInfoWindowContent 함수 호출
+      const container = SetInfoWindowContent('address', '', htmlAddresses, infoWindow);
+
+      infoWindow.setContent(container);
+
+      infoWindow.setOptions({
+        anchorSkew: true,
+        borderColor: '#cecdc7',
+        anchorSize: {
+          width: 10,
+          height: 12
+        },
+        maxWidth: 300
+      });
 
       infoWindow.open(map, latlng);
 
-      infoWindow.setOptions({
-        anchorSize: { width: 10, height: 12 }
-      });
+      setTimeout(() => {
+        const infoWindowInnerContent = infoWindow.getContentElement();
 
-      const infoWindowInnerContent = infoWindow.getContentElement();
+        const infoWindowOuterContent = infoWindowInnerContent.parentNode.parentNode;
 
-      const infoWindowOuterContent = infoWindowInnerContent.parentNode.parentNode;
+        infoWindowInnerContent.parentNode.style.width = 'fit-content';
+        infoWindowInnerContent.parentNode.style.height = 'fit-content';
+        infoWindowInnerContent.parentNode.style.minWidth = '370px';
+        infoWindowInnerContent.parentNode.style.fontSize = '14px';
 
-      infoWindowOuterContent.style.top = '-32px';
-      infoWindowOuterContent.style.left = '-1px';
+        infoWindowOuterContent.style.top =
+          infoWindowInnerContent.getBoundingClientRect().height < 79 ? '-75px' : '-95px';
 
-      setSelectButtonDom(infoWindowInnerContent.querySelector('#selectCoord'));
+        setSelectButtonDom(infoWindowInnerContent.querySelector('#selectCoord'));
+      }, 0);
     }
   );
 }
