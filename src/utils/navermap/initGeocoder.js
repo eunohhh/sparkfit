@@ -11,7 +11,7 @@ function initGeocoder(
   setSelectButtonDom
 ) {
   map.addListener('click', (e) => {
-    searchCoordinateToAddress(infoWindow, map, e.coord, setSelectButtonDom, setSelectedGeoData);
+    searchCoordinateToAddress(infoWindow, map, e.coord, setSelectButtonDom, setSelectedGeoData, marker);
     marker.setMap(map);
     marker.setPosition(e.coord);
   });

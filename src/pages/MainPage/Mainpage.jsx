@@ -40,6 +40,7 @@ function Mainpage() {
           position: new window.naver.maps.LatLng(place.lat, place.long),
           // 마커를 표시할 Map 객체
           map: naverMap
+          // animation: window.naver.maps.Animation.BOUNCE
         });
 
         // 정보창 객체
@@ -74,6 +75,7 @@ function Mainpage() {
         marker.addListener('click', () => {
           if (basicMarker) basicMarker.setMap(null);
           infoWindows[idx].open(naverMap, marker);
+          naverMap.panTo(new window.naver.maps.LatLng(marker.position._lat, marker.position._lng), { duration: 200 });
         });
       });
 

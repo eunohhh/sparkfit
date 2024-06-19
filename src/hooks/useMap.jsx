@@ -99,7 +99,8 @@ function useMap({ searchInputRef, searchButtonRef }) {
             mapRef.current,
             { y: gps.lat, x: gps.long },
             setMakeGatherButtonDom,
-            setSelectedGeoData
+            setSelectedGeoData,
+            basicMarker
           );
         }
       });

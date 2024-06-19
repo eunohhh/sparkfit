@@ -50,7 +50,7 @@ function searchAddressToCoordinate(infoWindow, searchInputRef, map, setSelectedG
       });
 
       // setInfoWindowContent 함수 호출
-      const container = SetInfoWindowContent('address', searchedValue, htmlAddresses, infoWindow);
+      const container = SetInfoWindowContent('address', searchedValue, htmlAddresses, infoWindow, marker);
 
       infoWindow.setContent(container);
 

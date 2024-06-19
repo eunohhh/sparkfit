@@ -2,7 +2,7 @@ import SetInfoWindowContent from '@/components/navermap/SetInfoWindow';
 import swal from '../sweetalert/swal';
 import makeAddress from './makeAddress';
 
-function searchCoordinateToAddress(infoWindow, map, latlng, setSelectButtonDom, setSelectedGeoData) {
+function searchCoordinateToAddress(infoWindow, map, latlng, setSelectButtonDom, setSelectedGeoData, marker) {
   infoWindow.close();
   window.naver.maps.Service.reverseGeocode(
     {
@@ -36,7 +36,7 @@ function searchCoordinateToAddress(infoWindow, map, latlng, setSelectButtonDom, 
       });
 
       // setInfoWindowContent 함수 호출
-      const container = SetInfoWindowContent('address', '', htmlAddresses, infoWindow);
+      const container = SetInfoWindowContent('address', '', htmlAddresses, infoWindow, null, null, marker);
 
       infoWindow.setContent(container);
 
@@ -63,7 +63,7 @@ function searchCoordinateToAddress(infoWindow, map, latlng, setSelectButtonDom, 
         infoWindowInnerContent.parentNode.style.fontSize = '14px';
 
         infoWindowOuterContent.style.top =
-          infoWindowInnerContent.getBoundingClientRect().height < 79 ? '-75px' : '-95px';
+          infoWindowInnerContent.getBoundingClientRect().height < 81 ? '-88px' : '-110px';
 
         setSelectButtonDom(infoWindowInnerContent.querySelector('#selectCoord'));
       }, 0);
