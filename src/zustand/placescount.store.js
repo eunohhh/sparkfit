@@ -1,5 +1,5 @@
+import supabase from '@/supabase/supabaseClient';
 import { create } from 'zustand';
-import supabase from '../../supabaseClient';
 
 const fetchPlacesCount = async () => {
   const { data, error } = await supabase
@@ -39,11 +39,11 @@ export const usePlacesCount = create((set, get) => ({
       }
     }, 30000); // 30 초 간격으로 모집인원 체크
 
-    set({ intervalId: interval }); 
+    set({ intervalId: interval });
   },
   stopFetching: () => {
     const state = get();
-    clearInterval(state.intervalId); 
+    clearInterval(state.intervalId);
     set({ intervalId: null });
   }
 }));

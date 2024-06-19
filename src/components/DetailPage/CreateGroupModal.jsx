@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import useOutsideClick from './useOutsideClick';
-import supabase from '@/supabase';
 import { v4 as uuidv4 } from 'uuid';
+import supabase from '@/supabase/supabaseClient';
 
 const CreateGroupModal = ({ close }) => {
   // const [name, setName] = useState('');
