@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react';
-import useOutsideClick from '../useOutsideClick';
 import Ellipse1 from '../../styles/image/Ellipse1.png';
 import { useQuery } from '@tanstack/react-query';
 import { useUserStore } from '@/zustand/auth.store';
 import supabase from '@/supabase/supabaseClient';
+import useOutsideClick from '../DetailPage/useOutsideClick';
 
 const MyPageModal = ({ close, nickname }) => {
   const [profileImage, setProfileImage] = useState(Ellipse1);

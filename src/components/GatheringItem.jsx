@@ -1,7 +1,6 @@
 import useFilterStore from '@/zustand/filter.list';
 import React, { useEffect, useState } from 'react';
 import PlaceItem from './PlaceItem';
-import supabase from '@/supabase/supabaseClient';
 import usePlaces from '@/hooks/usePlaces';
 
 const GatheringItem = () => {
@@ -12,32 +11,29 @@ const GatheringItem = () => {
   console.log(places);
 
   useEffect(() => {
-    const fetchPlace = async () => {
-      if (places) {
-        navigator.geolocation.getCurrentPosition(async (position) => {
-          const userLatitude = position.coords.latitude;
-          const userLongitude = position.coords.longitude;
+    if (places) {
+      navigator.geolocation.getCurrentPosition(async (position) => {
+        const userLatitude = position.coords.latitude;
+        const userLongitude = position.coords.longitude;
 
-          const sortedPlace = places
-            .map((place) => ({
-              ...place,
-              distance: calculateDistance(userLatitude, userLongitude, place.lat, place.long)
-            }))
-            .sort((a, b) => a.distance - b.distance);
+        const sortedPlace = places
+          .map((place) => ({
+            ...place,
+            distance: calculateDistance(userLatitude, userLongitude, place.lat, place.long)
+          }))
+          .sort((a, b) => a.distance - b.distance);
 
-          console.log('sortedPlace', sortedPlace);
+        console.log('sortedPlace', sortedPlace);
 
-          if (selectedButton === 1) {
-            //마감기한순 정렬
-            sortedPlace.sort((a, b) => a.deadline.localeCompare(b.deadline));
-          }
-        });
-      } else {
-        console.error('모임 데이터를 가지고오지 못했습니다.', error);
-      }
-    };
-    fetchPlace();
-  }, [selectedButton]);
+        if (selectedButton === 1) {
+          //마감기한순 정렬
+          sortedPlace.sort((a, b) => a.deadline.localeCompare(b.deadline));
+        }
+      });
+    } else {
+      console.error('모임 데이터를 가지고오지 못했습니다.', error);
+    }
+  }, [places, selectedButton]);
 
   function calculateDistance(lat1, lon1, lat2, lon2) {
     const R = 6371; // 지구 반지름 (km)
