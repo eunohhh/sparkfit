@@ -1,7 +1,12 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import useOutsideClick from '../useOutsideClick';
+import Ellipse1 from '../../styles/image/Ellipse1.png';
+import { useQuery } from '@tanstack/react-query';
+import { useUserStore } from '@/zustand/auth.store';
 
-const MyPageModal = ({ close }) => {
+const MyPageModal = ({ close, nickname }) => {
+  const [profileImage, setProfileImage] = useState(Ellipse1);
+  const { userData } = useUserStore();
   const myModalRef = useRef(null);
 
   const handleCloseModal = () => {
@@ -10,43 +15,52 @@ const MyPageModal = ({ close }) => {
 
   useOutsideClick(myModalRef, handleCloseModal);
 
-  // const handleProfileImage = async (event) => {
-  //   const file = event.target.files[0];
-  //   console.log(file);
-  // 이미지를 미리보기하는 방법 (선택 사항)
-  //     const reader = new FileReader();
-  //     reader.onload = (e) => {
-  //         const imgElement = document.getElementById('profile-image-preview');
-  //         imgElement.src = e.target.result;
-  //     };
-  //     reader.readAsDataURL(file);
-  // }
-  // `image/user_${userId}.png`, file, { upsert: true };
+  //TODO: 로그인한 유저의 값
 
-  // 수파베이스 업로드
-  // const { data, error } = await supabase.storage.from('profile').upload('file_path', file)
-  // if (error) {
-  //   // Handle error
-  // } else {
-  //   // Handle success
-  // }
-  // };
+  const handleProfile = async (event) => {
+    event.preventDefault();
+    const file = event.target.files[0];
+
+    // 이미지를 미리보기는 다 끝나고 시간 남으면... 추가...
+
+    if (file) {
+      // 수파베이스 파일 업로드
+      const { data: profileImage, error } = await supabase.storage
+        .from('profile')
+        .upload(`image/${Date.now()}.png`, file);
+
+      if (error) {
+        console.log(error);
+      }
+
+      //업로드한 거 가져오기
+      const { publicUrl } = supabase.storage.from('avatars').getPublicUrl(data.path).data;
+      setUserPic(`${publicUrl}?t=${new Date().getTime()}`);
+    }
+  };
+
+  // const { data } = useQueries({});
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-10 z-50">
-      <div className="h-auto rounded-lg w-[700px] bg-white absolute" ref={myModalRef}>
+      <div className="h-auto rounded-lg w-[500px] bg-white absolute" ref={myModalRef}>
         <div className="m-2 flex justify-center items-center">
           <h3>내 정보</h3>
         </div>
-        {/* 사진 미리보기로 이미지 띄워주기? */}
-        <div>이미지 태그 classname mw150px mh150px rounded</div>
-        <form>
+        {/* 사진 미리보기로 이미지 띄워주기? 시간 남으면~~!
+        <img src={profileImage} className="mw-[150px] mh-[150px] rounded flex justify-center" /> */}
+        <form onSubmit={handleProfile}>
           <div className="my-3 mx-3">
             <div className="flex flex-col">
               <label htmlFor="name" className="ml-1">
                 닉네임
               </label>
-              <input className="px-5 py-2.5 rounded-md m-1.5 font-semibold border" type="text" autoFocus />
+              {/* TODO: 디폴트밸류에 해당 유저 원래 닉네임 넣어주기 */}
+              <input
+                className="px-5 py-2.5 rounded-md m-1.5 font-semibold border"
+                type="text"
+                defaultValue={nickname}
+              />
               <label htmlFor="profile" className="ml-1">
                 프로필 사진
               </label>
