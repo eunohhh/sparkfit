@@ -1,10 +1,10 @@
 import { useRef, useState } from 'react';
 import useOutsideClick from './useOutsideClick';
 import AlertModal from './AlertModal';
-import supabase from '@/supabase';
 import { getPost } from '@/api/postsListApi';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
+import supabase from '@/supabase/supabaseClient';
 // import { useUserStore } from '@/zustand/auth.store';
 
 const JoinModal = ({ close }) => {
