@@ -5,6 +5,7 @@ import supabase from '@/supabase';
 import { getPost } from '@/api/postsListApi';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
+// import { useUserStore } from '@/zustand/auth.store';
 
 const JoinModal = ({ close }) => {
   // const [name, setName] = useState('');
@@ -12,6 +13,7 @@ const JoinModal = ({ close }) => {
   const modalRef = useRef(null);
   const [openAlertModal, setOpenAlertModal] = useState(false);
   const { data: posts } = useQuery({ queryKey: ['posts', id], queryFn: () => getPost(id) });
+  // const { userData } = useUserStore();
 
   const test = async () => {
     setOpenAlertModal(true);
@@ -25,7 +27,6 @@ const JoinModal = ({ close }) => {
       console.log(data);
     }
   };
-
   const handleClose = () => {
     close?.();
   };
