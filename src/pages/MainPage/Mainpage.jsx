@@ -22,8 +22,6 @@ function Mainpage({ user = null }) {
   const allInfoWindowsRef = useRef(null);
   const allMarkersRef = useRef(null);
 
-  console.log(allMarkersRef.current);
-
   const handleModalClose = async () => {
     setCreateGroupModal((prev) => !prev);
     await queryClient.invalidateQueries({ queryKey: ['places'] });
