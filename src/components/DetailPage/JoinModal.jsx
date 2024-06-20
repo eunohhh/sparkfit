@@ -20,17 +20,31 @@ const JoinModal = ({ close }) => {
 
   useOutsideClick(modalRef, handleClose);
 
-  const test = async () => {
-    setOpenAlertModal(true);
+  const joinGroup = async () => {
+    if (posts.created_by === user.user_id) {
+      alert('본인이 만든 모임에 참가 신청 할 수 없습니다');
+      close();
+      return;
+    }
+
+    if (posts.created_by) {
+      alert('두 번 신청할 수 없습니다');
+      close();
+      return;
+    }
+
     const { data, error } = await supabase
       .from('Contracts')
       .insert([{ gather_name: posts.gather_name, place_id: posts.id, user_id: user.id }])
       .select();
+
     if (error) {
       console.error(error.message);
     } else {
       console.log(data);
     }
+    setOpenAlertModal(false);
+    close();
   };
 
   return (
@@ -49,7 +63,7 @@ const JoinModal = ({ close }) => {
             <button
               className=" text-base px-5 py-2.5 border-none bg-btn-blue rounded-md text-white m-1.5 font-semibold cursor-pointer "
               type="button"
-              onClick={test}
+              onClick={joinGroup}
             >
               신청
             </button>
