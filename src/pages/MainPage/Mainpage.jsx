@@ -9,7 +9,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useMap from '../../hooks/useMap';
 
-function Mainpage({ user = null }) {
+function Mainpage({ user = null, contracts = [] }) {
   const navigate = useNavigate();
   const searchInputRef = useRef();
   const searchButtonRef = useRef();
@@ -73,7 +73,7 @@ function Mainpage({ user = null }) {
         });
 
         // setInfoWindowContent 함수 호출
-        const container = SetInfoWindowContent('place', '', '', infoWindow, place, navigate, marker, user);
+        const container = SetInfoWindowContent('place', '', '', infoWindow, place, navigate, marker, user, contracts);
 
         infoWindow.setContent(container);
 
@@ -82,8 +82,9 @@ function Mainpage({ user = null }) {
 
           infoWindowInnerContent.parentNode.style.width = 'fit-content';
           infoWindowInnerContent.parentNode.style.height = 'fit-content';
-          infoWindowInnerContent.parentNode.style.minWidth = isMobile() ? '250px' : '370px';
-          infoWindowInnerContent.parentNode.style.maxWidth = isMobile() ? '250px' : '370px';
+          // infoWindowInnerContent.parentNode.style.maxHeight = '100px';
+          infoWindowInnerContent.parentNode.style.minWidth = isMobile() ? '250px' : '440px';
+          infoWindowInnerContent.parentNode.style.maxWidth = isMobile() ? '250px' : '440px';
           infoWindowInnerContent.parentNode.style.fontSize = isMobile() ? '9px' : '14px';
         }, 0);
 
