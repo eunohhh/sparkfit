@@ -5,12 +5,12 @@ import { STSection } from './MyPage';
 import { HiPencilSquare } from 'react-icons/hi2';
 import { useQuery } from '@tanstack/react-query';
 import MyPageModal from './MyPageModal';
-import { useUserStore } from '@/zustand/auth.store';
+import { useSignInStore } from '@/zustand/auth.store';
 import supabase from '@/supabase/supabaseClient';
 
 const UserInfo = () => {
   const [myPageModal, setMyPageModal] = useState(false);
-  const { userData } = useUserStore();
+  const { userData } = useSignInStore();
 
   const getUser = async () => {
     const { data, error } = await supabase
