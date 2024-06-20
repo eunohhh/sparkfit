@@ -19,6 +19,7 @@ const STMyPageContainer = styled.section`
   height: 100vh;
   display: flex;
   flex-direction: column;
+  margin: 1rem auto;
 `;
 
 export const STSection = styled.section`

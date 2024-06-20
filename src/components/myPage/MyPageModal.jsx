@@ -1,13 +1,13 @@
 import React, { useRef, useState } from 'react';
 import Ellipse1 from '../../styles/image/Ellipse1.png';
-import { useUserStore } from '@/zustand/auth.store';
+import { useSignInStore, useUserStore } from '@/zustand/auth.store';
 import supabase from '@/supabase/supabaseClient';
 import useOutsideClick from '../DetailPage/useOutsideClick';
 
 const MyPageModal = ({ close, nickname, setNickname, setImage }) => {
   const [newNickname, setNewNickname] = useState(nickname);
   const [file, setFile] = useState(null);
-  const { userData } = useUserStore();
+  const { userData } = useSignInStore();
   const myModalRef = useRef(null);
 
   const handleCloseModal = () => {

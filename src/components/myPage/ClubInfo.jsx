@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import ImagePlaceholder from '../../styles/image/ImagePlaceholder.png';
 import { useQuery } from '@tanstack/react-query';
 import supabase from '@/supabase/supabaseClient';
+import styled from 'styled-components';
 
 const ClubInfo = ({ placeID }) => {
   const MyClubLists = async () => {
@@ -14,12 +15,8 @@ const ClubInfo = ({ placeID }) => {
       console.log('클났다 안 된다');
     }
 
-    console.log(mylist);
-    console.log('아닌디 되는디');
     return mylist;
   };
-
-  console.log(placeID);
 
   const {
     data: theClubs,
@@ -40,7 +37,30 @@ const ClubInfo = ({ placeID }) => {
     return <div>loading..</div>;
   }
 
-  console.log(theClubs);
+  console.log(theClubs[0].deadline);
+
+  const TODAY = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = ('0' + (today.getMonth() + 1)).slice(-2);
+    const day = ('0' + today.getDate()).slice(-2);
+
+    return `${year}-${month}-${day}`;
+  };
+
+  const deadlineStatus = () => {
+    const todayDate = TODAY();
+    const deadline = theClubs[0].deadline;
+
+    if (todayDate < deadline) {
+      console.log('아직 남았어 즐겨');
+    } else if (todayDate === deadline) {
+      console.log('오늘이다!!!!');
+    } else {
+      console.log('이미 끝낫다');
+    }
+  };
+  deadlineStatus();
 
   return (
     <div className="pl-4 pb-4">
@@ -58,12 +78,14 @@ const ClubInfo = ({ placeID }) => {
         </div>
         {/* 데드라인 기재하고 현재 날짜에 맞춰 변경! */}
         <div className="flex md:text-balance sm: text-nowrap">
-          <span>{theClubs[0].region}</span>
-          <span>{theClubs[0].deadline}</span>
+          <div>{theClubs[0].region}</div>
+          <div>{theClubs[0].deadline}</div>
         </div>
       </div>
     </div>
   );
 };
+
+const STDeadline = styled.div``;
 
 export default ClubInfo;

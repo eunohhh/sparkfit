@@ -16,34 +16,7 @@ const UserInfo = () => {
   const [nickname, setNickname] = useState('');
   const [image, setImage] = useState(Ellipse1);
 
-  //로그인 유저 정보.... 로컬 스토리지에서 엑세스 토큰을 사용해서 가져오는 매서드를 이용하기.....리렌더링이 되는 이유 : 상태 변환!auth.getUser
-  // 쥬스탠드 써서 하니까 새로고침하면 날아가버림~~~
-
-  // const accessToken = localStorage.getItem('accessToken');
-  // useEffect(() => {
-  //   const getUserData = async (accessToken) => {
-  //     try {
-  //       const {
-  //         data: { user },
-  //         error
-  //       } = await supabase.auth.getUser(accessToken);
-
-  //       if (error) {
-  //         console.log('뭔가 큰 일 남');
-  //       }
-
-  //       if (user) {
-  //         console.log(user.id);
-  //       }
-  //     } catch (error) {
-  //       console.error('뭔가 에러가 남', error);
-  //     }
-  //   };
-
-  //   getUserData(accessToken);
-  // }, [accessToken]);
-
-  // console.log(user.id);
+  console.log(userData);
 
   const getUserInfo = async () => {
     const { data, error } = await supabase
@@ -92,11 +65,10 @@ const UserInfo = () => {
           />
         </div>
         <div>
-          {/* TODO: 로그인된 유저만 가져오게 바꾸기 */}
           <div className="flex mt-5">{nickname} 님 반갑습니다.</div>
           <div className="flex mt-2 text-slate-400 text-sm">email : {theUser && theUser[0].email}</div>
         </div>
-        <div>
+        <div className="relative left-40">
           <HiPencilSquare
             className="w-6 h-6"
             onClick={() => {

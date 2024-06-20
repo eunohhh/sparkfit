@@ -4,10 +4,11 @@ import { RiGroupLine } from 'react-icons/ri';
 import { STSection } from './MyPage';
 import supabase from '@/supabase/supabaseClient';
 import { useQuery } from '@tanstack/react-query';
-import { useUserStore } from '@/zustand/auth.store';
+import { useSignInStore, useUserStore } from '@/zustand/auth.store';
+import { AiOutlineThunderbolt } from 'react-icons/ai';
 
 const ClubList = () => {
-  const { userData } = useUserStore();
+  const { userData } = useSignInStore();
 
   const getMyGathering = async () => {
     const { data, error } = await supabase.from('Contracts').select('place_id').eq('user_id', userData.user.id);
@@ -35,7 +36,10 @@ const ClubList = () => {
       {theGatherings && theGatherings.length > 0 ? (
         theGatherings.map(({ place_id }, index) => <ClubInfo key={index + 1} placeID={place_id} />)
       ) : (
-        <div> 신청한 번개가 없습니다! </div>
+        <div>
+          신청한 번개
+          <AiOutlineThunderbolt />가 없습니다!{' '}
+        </div>
       )}
     </STSection>
   );
