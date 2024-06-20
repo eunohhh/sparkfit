@@ -2,11 +2,12 @@ import supabase from '@/supabase/supabaseClient';
 import { create } from 'zustand';
 
 const fetchPlacesCount = async () => {
-  const { data, error } = await supabase
-    .from('Places')
-    .select('id', { count: 'exact' })
-    .in('id', supabase.from('Contracts').select('place_id'));
+  //   const { data, error } = await supabase
+  //     .from('Places')
+  //     .select('id', { count: 'exact' })
+  //     .in('id', supabase.from('Contracts').select('place_id'));
 
+  const { data, error } = await supabase.from('Places').select('id', { count: 'exact' });
   if (error) {
     throw new Error(error.message);
   }
@@ -37,7 +38,7 @@ export const usePlacesCount = create((set, get) => ({
       } catch (error) {
         set({ error: error.message, isPending: false });
       }
-    }, 30000); // 30 초 간격으로 모집인원 체크
+    }, 10000); // 30 초 간격으로 모집인원 체크
 
     set({ intervalId: interval });
   },

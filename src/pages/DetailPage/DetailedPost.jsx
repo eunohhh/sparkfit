@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import JoinModal from '../../components/DetailPage/JoinModal';
-import CreateGroupModal from '../../components/DetailPage/CreateGroupModal';
-import { useQuery } from '@tanstack/react-query';
 import { getPost } from '@/api/postsListApi';
+import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import CreateGroupModal from '../../components/DetailPage/CreateGroupModal';
+import JoinModal from '../../components/DetailPage/JoinModal';
 // import { profileApi } from '@/api/profileApi';
 
 const DetailedPost = () => {
@@ -26,7 +26,7 @@ const DetailedPost = () => {
     <>
       <div className="w-[1280px] mx-auto">
         <div className="flex justify-between items-center w-full">
-          <div className="text-5xl font-bold my-11 ">{posts.gather_name}</div>
+          <div className="text-5xl font-bold my-11 ">{posts?.gather_name}</div>
           <button
             onClick={() => {
               setOpenJoinModal(true);
