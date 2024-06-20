@@ -38,7 +38,7 @@ export const usePlacesCount = create((set, get) => ({
       } catch (error) {
         set({ error: error.message, isPending: false });
       }
-    }, 10000); // 30 초 간격으로 모집인원 체크
+    }, 30000); // 30 초 간격으로 모집인원 체크
 
     set({ intervalId: interval });
   },
