@@ -46,13 +46,13 @@ const DetailedPost = () => {
         </div>
 
         <div className="flex gap-3 items-center my-4 mb-6">
-          <span className="bg-gray-200 rounded-md px-3 py-1 ">{posts.region}</span>
-          <span className="bg-gray-200 rounded-md px-3 py-1 ">{posts.sports_name}</span>
-          <span className="bg-gray-200 rounded-md px-3 py-1">{posts.deadline}</span>
+          <span className="bg-gray-200 rounded-md px-3 py-1 ">{posts?.region}</span>
+          <span className="bg-gray-200 rounded-md px-3 py-1 ">{posts?.sports_name}</span>
+          <span className="bg-gray-200 rounded-md px-3 py-1">{posts?.deadline}</span>
         </div>
 
         <div className=" rounded-full border-none flex flex-row items-center mb-6">
-          <img src="/Ellipse1.png" alt="기본" className="w-[80px] h-[80px]" />
+          <img src={user?.profile_image || '/Ellipse1.png'} alt="기본" className="w-[80px] h-[80px]" />
           <div className="flex flex-row mx-2 items-center">
             <div className="text-1xl mr-2">모임장</div>
             <div className="text-2xl">{user?.nickname}</div>

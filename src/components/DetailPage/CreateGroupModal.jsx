@@ -29,7 +29,7 @@ const CreateGroupModal = ({ close }) => {
     }
   }, [selectedGeoData]);
 
-  const { data: user } = useQuery({ queryKey: ['user'], queryFn: loginUser, enabled: !!user });
+  const { data: user } = useQuery({ queryKey: ['user'], queryFn: loginUser });
 
   const createGroupForm = async (e) => {
     e.preventDefault();
@@ -44,7 +44,9 @@ const CreateGroupModal = ({ close }) => {
           deadline: deadline,
           region: address,
           texts: contents,
-          created_by: user?.id
+          created_by: user?.id,
+          lat: selectedGeoData.coord.lat,
+          long: selectedGeoData.coord.long
         }
       ])
       .select();
