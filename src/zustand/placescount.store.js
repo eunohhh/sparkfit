@@ -2,11 +2,12 @@ import supabase from '@/supabase/supabaseClient';
 import { create } from 'zustand';
 
 const fetchPlacesCount = async () => {
-  const { data, error } = await supabase
-    .from('Places')
-    .select('id', { count: 'exact' })
-    .in('id', supabase.from('Contracts').select('place_id'));
+  //   const { data, error } = await supabase
+  //     .from('Places')
+  //     .select('id', { count: 'exact' })
+  //     .in('id', supabase.from('Contracts').select('place_id'));
 
+  const { data, error } = await supabase.from('Places').select('id', { count: 'exact' });
   if (error) {
     throw new Error(error.message);
   }

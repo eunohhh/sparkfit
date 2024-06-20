@@ -1,9 +1,11 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import useOutsideClick from './useOutsideClick';
 import { v4 as uuidv4 } from 'uuid';
 import supabase from '@/supabase/supabaseClient';
 import { loginUser } from '@/api/profileApi';
 import { useQuery } from '@tanstack/react-query';
+import useMapStore from '@/zustand/map.store';
+import { useShallow } from 'zustand/react/shallow';
 
 const CreateGroupModal = ({ close }) => {
   const modalRef = useRef(null);
@@ -11,10 +13,23 @@ const CreateGroupModal = ({ close }) => {
   const [groupName, setGroupName] = useState('');
   const [sportsName, setSportsName] = useState('');
   const [deadline, setDeadLine] = useState('');
-  const [address, setAdderess] = useState('');
   const [contents, setContents] = useState('');
 
-  const { data: user } = useQuery({ queryKey: ['user'], queryFn: loginUser });
+  const { selectedGeoData } = useMapStore(
+    useShallow((state) => ({ selectedGeoData: state.selectedGeoData, setUserGps: state.setUserGps }))
+  );
+
+  const [address, setAdderess] = useState('');
+
+  useEffect(() => {
+    if (selectedGeoData) {
+      setAdderess(selectedGeoData.address.jibunAddress);
+    } else {
+      setAdderess('');
+    }
+  }, [selectedGeoData]);
+
+  const { data: user } = useQuery({ queryKey: ['user'], queryFn: loginUser, enabled: !!user });
 
   const createGroupForm = async (e) => {
     e.preventDefault();
@@ -106,7 +121,7 @@ const CreateGroupModal = ({ close }) => {
 
             <div className="flex flex-col">
               <label htmlFor="address" className="ml-1">
-                지역
+                주소
               </label>
               <input
                 className="px-5 py-2.5 rounded-md m-1.5 font-semibold border"

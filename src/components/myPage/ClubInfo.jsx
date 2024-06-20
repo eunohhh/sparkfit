@@ -1,5 +1,5 @@
 import React from 'react';
-import ImagePlaceholder from '../../styles/image/ImagePlaceholder.png';
+import ImagePlaceholder from '/ImagePlaceholder.png';
 
 const ClubInfo = () => {
   return (

@@ -1,4 +1,3 @@
-import React from 'react';
 import GatheringItem from '../components/GatheringItem';
 import FilteringList from '../components/FilteringList';
 
