@@ -1,16 +1,19 @@
-import useFilterStore from '@/zustand/filter.list';
-import React, { useEffect, useState, useCallback } from 'react';
-import usePlaces from '@/hooks/usePlaces';
-import PlaceItem from './GatheringPage/PlaceItem';
-import Loading from './GatheringPage/Loading';
 import useMap from '@/hooks/useMap';
+import usePlaces from '@/hooks/usePlaces';
+import useFilterStore from '@/zustand/filter.list';
+import { useCallback, useEffect, useState } from 'react';
+import Loading from './GatheringPage/Loading';
+import PlaceItem from './GatheringPage/PlaceItem';
 
 const GatheringItem = () => {
   const { selectedButton } = useFilterStore();
   const { places, placesLoading } = usePlaces();
   const [sortedPlace, setSortedPlace] = useState([]);
   const [userLocation, setUserLocation] = useState(null);
-  const { gps } = useMap(); //사용자 위치
+  const [loading, setLoading] = useState(true);
+  const { gps } = useMap();
+
+  console.log(gps);
 
   useEffect(() => {
     if (gps) {
@@ -33,12 +36,9 @@ const GatheringItem = () => {
         placeList = placeList.sort((a, b) => b.created_at.localeCompare(a.created_at));
       }
       setSortedPlace(placeList);
+      setLoading(false);
     }
-  }, [userLocation, placesLoading, selectedButton]);
-
-  if (placesLoading) {
-    return <Loading />;
-  }
+  }, [userLocation, placesLoading, selectedButton, places]);
 
   const sortPlaces = useCallback((places, userLocation) => {
     const placesWithDistance = places.map((place) => ({
@@ -69,9 +69,13 @@ const GatheringItem = () => {
 
   return (
     <div className="flex flex-col gap-8 mb-20">
-      {sortedPlace.map((place) => {
-        return <PlaceItem key={place.id} place={place} />;
-      })}
+      {loading ? (
+        <Loading />
+      ) : (
+        sortedPlace.map((place) => {
+          return <PlaceItem key={place.id} place={place} />;
+        })
+      )}
     </div>
   );
 };
