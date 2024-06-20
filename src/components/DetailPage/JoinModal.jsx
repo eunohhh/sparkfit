@@ -21,13 +21,13 @@ const JoinModal = ({ close }) => {
   useOutsideClick(modalRef, handleClose);
 
   const joinGroup = async () => {
-    if (posts.user_id === user.user_id) {
+    if (posts.created_by === user.user_id) {
       alert('본인이 만든 모임에 참가 신청 할 수 없습니다');
       close();
       return;
     }
 
-    if (posts.user_id) {
+    if (posts.created_by) {
       alert('두 번 신청할 수 없습니다');
       close();
       return;
