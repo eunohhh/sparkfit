@@ -1,7 +1,6 @@
 import React from 'react';
 import ClubInfo, { STDeadline } from './ClubInfo';
 import { RiGroupLine } from 'react-icons/ri';
-import { STSection } from './MyPage';
 import supabase from '@/supabase/supabaseClient';
 import { useQuery } from '@tanstack/react-query';
 import { useSignInStore } from '@/zustand/auth.store';
@@ -84,7 +83,7 @@ const ClubList = () => {
 
   return (
     <>
-      <STSection>
+      <section className="flex flex-col p-2 gap-4 w-full sm:p-1 mx-auto md:p-4 ml-4 lg:ml-6">
         <h3 className="flex gap-2 border-b-2 border-slate-300 mt-2 ml-4 mr-4 w-[600px]">
           <RiGroupLine />내 번개 모임
         </h3>
@@ -109,7 +108,7 @@ const ClubList = () => {
                   <AiFillThunderbolt />
                   내가 가입한 번개
                 </span>
-                <div className="flex mx-auto">
+                <div className="flex mx-auto text-slate-400">
                   가입한 번개 <AiFillThunderbolt /> 모임이 없어요!
                 </div>
               </div>
@@ -148,14 +147,14 @@ const ClubList = () => {
                   <AiOutlineThunderbolt />
                   내가 만든 번개
                 </span>
-                <div className="flex mx-auto">
+                <div className="flex mx-auto text-slate-400">
                   만든 번개 <AiOutlineThunderbolt /> 모임이 없어요!
                 </div>
               </div>
             )}
           </div>
         </div>
-      </STSection>
+      </section>
     </>
   );
 };

@@ -4,9 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { HiPencilSquare } from 'react-icons/hi2';
 import { RiUser3Line } from 'react-icons/ri';
-import { STSection } from './MyPage';
 import MyPageModal from './MyPageModal';
-import Swal from 'sweetalert2';
 
 const UserInfo = () => {
   const [myPageModal, setMyPageModal] = useState(false);
@@ -40,14 +38,6 @@ const UserInfo = () => {
 
   if (isPending) {
     return <div>로딩 중...</div>;
-    // return Swal.fire({
-    //   title: '사용자 정보 가져오는 중',
-    //   text: '빠르게 가져오는 중...',
-    //   allowOutsideClick: false,
-    //   showLoaderOnConfirm: false,
-    //   showCancelButton: false,
-    //   showConfirmButton: false
-    // });
   }
 
   if (usersError) {
@@ -56,7 +46,7 @@ const UserInfo = () => {
   }
 
   return (
-    <STSection>
+    <section className="flex flex-col p-2 gap-4 w-full sm:p-1 mx-auto md:p-4 ml-4 lg:ml-6">
       <h3 className="flex gap-2 border-b-2 border-slate-300 mt-4 ml-4 mr-4 w-[600px]">
         <RiUser3Line />내 정보
       </h3>
@@ -91,7 +81,7 @@ const UserInfo = () => {
           )}
         </div>
       </div>
-    </STSection>
+    </section>
   );
 };
 
