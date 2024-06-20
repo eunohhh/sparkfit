@@ -32,6 +32,7 @@ const LoginPage = () => {
       });
       navigate('/');
     } catch (error) {
+      console.log(error.message);
       if (error.message.includes('Invalid login credentials')) {
         Swal.fire({
           icon: 'error',

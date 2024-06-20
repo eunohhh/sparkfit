@@ -27,10 +27,8 @@ export const useUserStore = create((set) => ({
       if (userError) {
         throw new Error(userError.message);
       }
-      console.log(userData);
       // 회원가입, 추가 정보 저장이 성공하면 데이터 상태 저장, 로딩 상태 해제
       set({ userData: signUpData, loading: false, error: null });
-      console.log(signUpData);
     } catch (error) {
       set({ loading: false, error: `Sign-up failed: ${error.message}` });
       throw error;
@@ -41,10 +39,9 @@ export const useUserStore = create((set) => ({
     try {
       const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
       if (signInError) {
-        throw new Error(signInError.message);
+        throw new Error(signInError);
       }
       set({ userData: signInData, loading: false, error: null });
-      console.log(signInData);
     } catch (error) {
       set({ loading: false, error: `Sign-in failed: ${error.message}` });
       throw error;

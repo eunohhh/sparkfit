@@ -5,25 +5,17 @@ import { RiLockPasswordLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { useUserStore } from '@/zustand/auth.store';
+import { useValidation } from '@/hooks/useValidation';
+import { getUserErrorMessage } from './getUserErrorMessage';
 
 const SignupPage = () => {
   const [nickname, setNickname] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [pwError, setPwError] = useState('');
-  const [emailError, setEmailError] = useState('');
   const signUp = useUserStore((state) => state.signUp);
   const navigate = useNavigate();
+  const { pwError, setPwError, emailError, setEmailError, validatePassword, validateEmail } = useValidation();
 
-  const validatePassword = (pwd) => {
-    const isValid = /^(?=.*[a-z])(?=.*\d)(?=.*[~!@#$%^&*()_+]).{8,}$/.test(pwd);
-    if (!isValid) {
-      setPwError('8자 이상의 소문자, 숫자, 특수문자를 사용해주세요.');
-    } else {
-      setPwError('');
-    }
-    return isValid;
-  };
   const handleChangePassword = (e) => {
     const { value } = e.target;
     setPassword(value);
@@ -32,16 +24,6 @@ const SignupPage = () => {
     } else if (!value) {
       setPwError('');
     }
-  };
-
-  const validateEmail = (email) => {
-    const isValid = /^([0-9a-zA-Z_.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z]+){1,2}$/.test(email);
-    if (!isValid) {
-      setEmailError('이메일 형식을 맞춰 작성해주세요.');
-    } else {
-      setEmailError('');
-    }
-    return isValid;
   };
 
   const handleChangeEmail = (e) => {
@@ -79,25 +61,24 @@ const SignupPage = () => {
       });
       navigate('/login'); // 회원가입 후 로그인 페이지로 이동
     } catch (error) {
-      if (error.message.includes('User already registered')) {
-        Swal.fire({
-          icon: 'error',
-          title: '로그인 실패',
-          text: '중복된 이메일입니다.'
-        });
-      } else if (error.message.includes('duplicate key value violates unique constraint "unique_nickname"')) {
-        Swal.fire({
-          icon: 'error',
-          title: '로그인 실패',
-          text: '중복된 닉네임입니다.'
-        });
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: '로그인 실패',
-          text: '알 수 없는 에러입니다. 다시 시도해주세요.'
-        });
-      }
+      Swal.fire({
+        icon: 'error',
+        title: '로그인 실패',
+        text: getUserErrorMessage(error)
+      });
+      // } else if (error.message.includes('duplicate key value violates unique constraint "unique_nickname"')) {
+      //   Swal.fire({
+      //     icon: 'error',
+      //     title: '로그인 실패',
+      //     text: '중복된 닉네임입니다.'
+      //   });
+      // } else {
+      //   Swal.fire({
+      //     icon: 'error',
+      //     title: '로그인 실패',
+      //     text: '알 수 없는 에러입니다. 다시 시도해주세요.'
+      //   });
+      // }
     }
   };
 
