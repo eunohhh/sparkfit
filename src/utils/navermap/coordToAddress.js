@@ -50,15 +50,14 @@ function searchCoordinateToAddress(infoWindow, map, latlng, setSelectButtonDom, 
         }
         // maxWidth: 370
       });
-      let centerPositon = marker.getPosition();
-      centerPositon = {
-        x: centerPositon.x + 0.001,
-        y: centerPositon.y,
-        _lat: centerPositon._lat,
-        _long: centerPositon._long + 0.001
+      let centerPosition = marker.getPosition();
+      centerPosition = {
+        x: centerPosition.x + 0.001,
+        y: centerPosition.y,
+        _lat: centerPosition._lat,
+        _long: centerPosition._long + 0.001
       };
-      console.log(centerPositon);
-      map.setCenter(isMobile() ? centerPositon : marker.getPosition());
+      map.setCenter(isMobile() ? centerPosition : marker.getPosition());
       infoWindow.open(map, marker.getPosition());
 
       setTimeout(() => {
@@ -68,9 +67,9 @@ function searchCoordinateToAddress(infoWindow, map, latlng, setSelectButtonDom, 
 
         infoWindowInnerContent.parentNode.style.width = 'fit-content';
         infoWindowInnerContent.parentNode.style.height = 'fit-content';
-        infoWindowInnerContent.parentNode.style.minWidth = isMobile() ? '220px' : '370px';
-        infoWindowInnerContent.parentNode.style.maxWidth = isMobile() ? '220px' : '370px';
-        infoWindowInnerContent.parentNode.style.fontSize = '14px';
+        infoWindowInnerContent.parentNode.style.minWidth = isMobile() ? '250px' : '370px';
+        infoWindowInnerContent.parentNode.style.maxWidth = isMobile() ? '250px' : '370px';
+        infoWindowInnerContent.parentNode.style.fontSize = isMobile() ? '9px' : '14px';
 
         infoWindowOuterContent.style.top =
           infoWindowInnerContent.getBoundingClientRect().height < 81 ? '-88px' : '-110px';

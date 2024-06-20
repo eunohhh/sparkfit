@@ -1,7 +1,7 @@
 const AddressInfoWindow = ({ searchedValue, htmlAddresses, infoWindow, marker }) => {
   const handleCloseButton = () => {
-    infoWindow.close();
     marker.setMap(null);
+    infoWindow.close();
   };
   return (
     <>

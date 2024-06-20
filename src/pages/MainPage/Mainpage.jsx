@@ -54,7 +54,7 @@ function Mainpage() {
         });
 
         // setInfoWindowContent 함수 호출
-        const container = SetInfoWindowContent('place', '', '', infoWindow, place, navigate);
+        const container = SetInfoWindowContent('place', '', '', infoWindow, place, navigate, marker);
 
         infoWindow.setContent(container);
 
