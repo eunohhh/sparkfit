@@ -37,34 +37,25 @@ const ClubInfo = ({ placeID }) => {
     return <div>loading..</div>;
   }
 
-  console.log(theClubs[0].deadline);
-
   const getDeadlineStatus = (deadlineDate) => {
     const today = new Date();
 
-    console.log(today);
-    console.log(deadlineDate);
-
     if (today < deadlineDate) {
-      console.log('아직 남았어 즐겨');
       return 'dayFuture';
     } else if (today === deadlineDate) {
-      console.log('오늘이다!!!!');
       return 'dayToday';
     } else {
-      console.log('이미 끝낫다');
       return 'dayPast';
     }
   };
 
   const deadlineDate = new Date(theClubs[0].deadline);
   const $status = getDeadlineStatus(deadlineDate);
-  console.log('Status:', $status);
 
   return (
-    <div className="pl-4 pb-4">
+    <>
       {/* 가져온 모임 정보 맵으로 뿌리기*/}
-      <div className="flex flex-row flex-1 justify-between p-4 max-h-200px border-4 border-indigo-200 rounded w-[600px] hover:shadow-xl translate-y-12">
+      <div className="flex flex-row flex-1 justify-between p-4 max-h-200px border-4 border-indigo-200 rounded w-[600px] ml-4 hover:shadow-xl hover:translate-y-1 hover:ease-in-out">
         <img src={ImagePlaceholder} alt="이미지" className="max-w-[150px] max-h-[150px]" />
         <div className="flex flex-col mt-8 mr-20 mb-6 ml-6 md:text-balance sm: text-nowrap ">
           <div>
@@ -75,18 +66,18 @@ const ClubInfo = ({ placeID }) => {
           </div>
           <div>{theClubs[0].texts}</div>
         </div>
-        {/* 데드라인 기재하고 현재 날짜에 맞춰 변경! */}
-        <div className="flex md:text-balance sm: text-nowrap">
+        <div className="flex md:text-balance sm: text-nowrap flex-col text-center">
           <div>{theClubs[0].region}</div>
           <STDeadline $status={$status}>{theClubs[0].deadline}</STDeadline>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
 const STDeadline = styled.div`
-  padding: 1rem;
+  height: min-content;
+  padding: 0.125rem;
   border-radius: 10px;
   color: white;
   font-weight: bold;
@@ -94,11 +85,11 @@ const STDeadline = styled.div`
   background-color: ${({ $status }) => {
     switch ($status) {
       case 'dayFuture':
-        return 'green';
+        return '#a4f0a9';
       case 'dayToday':
-        return 'blue';
+        return '#b1c3f2F';
       case 'dayPast':
-        return 'red';
+        return '#f7a9a9f';
       default:
         return 'gray';
     }

@@ -37,8 +37,7 @@ const ClubList = () => {
         theGatherings.map(({ place_id }, index) => <ClubInfo key={index + 1} placeID={place_id} />)
       ) : (
         <div>
-          신청한 번개
-          <AiOutlineThunderbolt />가 없습니다!{' '}
+          신청한 번개 <AiOutlineThunderbolt />가 없습니다!
         </div>
       )}
     </STSection>
