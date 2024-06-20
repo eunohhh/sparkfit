@@ -1,15 +1,11 @@
 import { getPost } from '@/api/postsListApi';
-import { loginUser } from '@/api/profileApi';
-<<<<<<< HEAD
+import { checkIfUserHasJoined, loginUser } from '@/api/profileApi';
 import supabase from '@/supabase/supabaseClient';
 import { useQuery } from '@tanstack/react-query';
 import { useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import AlertModal from './AlertModal';
 import useOutsideClick from './useOutsideClick';
-=======
-import { checkIfUserHasJoined } from '@/api/profileApi';
->>>>>>> dev
 
 const JoinModal = ({ close }) => {
   const { id } = useParams();
