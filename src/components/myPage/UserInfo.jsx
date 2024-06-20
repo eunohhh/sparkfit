@@ -8,8 +8,6 @@ import MyPageModal from './MyPageModal';
 import { useSignInStore } from '@/zustand/auth.store';
 import supabase from '@/supabase/supabaseClient';
 
-//auth.getUser 새로고침 문제
-
 const UserInfo = () => {
   const [myPageModal, setMyPageModal] = useState(false);
   const { userData } = useSignInStore();
@@ -28,7 +26,6 @@ const UserInfo = () => {
       console.log(error);
     } else {
       setNickname(data[0].nickname);
-      setImage(data[0].profile_image);
     }
     return data;
   };
@@ -55,13 +52,13 @@ const UserInfo = () => {
       <h3 className="flex gap-2 border-b-2 border-slate-300 mt-4 ml-4 mr-4 w-[600px]">
         <RiUser3Line />내 정보
       </h3>
-      <div className="flex rounded-2xl p-4 mr-4 mb-4 ml-4 gap-12 bg-customBackground w-[600px] ">
+      <div className="flex rounded-2xl p-4 mr-4 mb-4 ml-4 gap-12 bg-customBackground w-[600px] h-[130px] max-h-[130px]">
         <div className="relative flex items-center">
           {/* TODO: 사진 미리 보기? */}
           <img
             src={image}
             alt="profile-img"
-            className="relative rounded-full overflow-hidden max-w-[95px] max-h-[95px]"
+            className="relative rounded-full overflow-hidden max-w-[95px] max-h-[95px] w-[95px] h-[95px]"
           />
         </div>
         <div>
