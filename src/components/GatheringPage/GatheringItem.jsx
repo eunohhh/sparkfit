@@ -4,11 +4,17 @@ import PlaceItem from './PlaceItem';
 import usePlaces from '@/hooks/usePlaces';
 
 const GatheringItem = () => {
-  //const [places, setPlaces] = useState([]);
   const { selectedButton } = useFilterStore();
   const { places, placesLoading } = usePlaces();
+  const [sortedPlace, setSortedPlace] = useState([]);
 
-  console.log(places);
+  if (placesLoading) {
+    return Swal.fire({
+      icon: 'warning',
+      title: 'Loading',
+      text: '데이터를 가져오는 중 입니다.'
+    });
+  }
 
   useEffect(() => {
     if (places) {
@@ -23,7 +29,7 @@ const GatheringItem = () => {
           }))
           .sort((a, b) => a.distance - b.distance);
 
-        console.log('sortedPlace', sortedPlace);
+        setSortedPlace(sortedPlace);
 
         if (selectedButton === 1) {
           //마감기한순 정렬
@@ -52,7 +58,7 @@ const GatheringItem = () => {
 
   return (
     <div className="flex flex-col gap-8 mb-20">
-      {places.map((place) => {
+      {sortedPlace.map((place) => {
         return <PlaceItem key={place.id} place={place} />;
       })}
     </div>

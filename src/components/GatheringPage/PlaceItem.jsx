@@ -1,6 +1,9 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const PlaceItem = ({ place }) => {
+  const navigate = useNavigate();
+
   return (
     <div key={place.id} className="flex gap-8 bg-[#ffffff] p-8 shadow-lg rounded-xl relative">
       {/* 모임 이미지 */}
@@ -20,17 +23,25 @@ const PlaceItem = ({ place }) => {
             </ul>
           </div>
           <div className="md:block sm:hidden">
-            <button className="min-[320px]:hidden transition-all duration-300 ease-in-out bg-[#efefef] rounded-lg px-8 py-3 text-sm text-[#2e2e2e] hover:bg-[#dddddd]">
+            <button
+              onClick={() => navigate(`/detail/${place.id}`)}
+              className="min-[320px]:hidden md:block transition-all duration-300 ease-in-out bg-[#efefef] rounded-lg px-8 py-3 text-sm text-[#2e2e2e] hover:bg-[#dddddd]"
+            >
               상세보기
             </button>
           </div>
         </div>
 
-        <p className="text-sm md:w-[80%] sm:w-full overflow-hidden text-ellipsis line-clamp-2 ">{place.texts}</p>
+        <p className="text-sm lg:w-[80%] md:w-[100%] sm:w-full overflow-hidden text-ellipsis line-clamp-2 ">
+          {place.texts}
+        </p>
         <p className="text-[#cccccc] text-xs">{`* 모집기간 ${place.deadline}`}</p>
 
         <div className="sm:block md:hidden">
-          <button className="w-full transition-all duration-300 ease-in-out bg-[#efefef] rounded-lg px-8 py-3 text-sm text-[#2e2e2e] hover:bg-[#dddddd]">
+          <button
+            onClick={() => navigate(`/detail/${place.id}`)}
+            className="w-full transition-all duration-300 ease-in-out bg-[#efefef] rounded-lg px-8 py-3 text-sm text-[#2e2e2e] hover:bg-[#dddddd]"
+          >
             상세보기
           </button>
         </div>

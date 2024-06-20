@@ -1,6 +1,6 @@
 import React from 'react';
-import GatheringItem from '../components/GatheringItem';
-import FilteringList from '../components/FilteringList';
+import GatheringItem from '../../components/GatheringPage/GatheringItem';
+import FilteringList from '../../components/GatheringPage/FilteringList';
 
 const GatheringList = () => {
   return (
