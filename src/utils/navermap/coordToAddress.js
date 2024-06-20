@@ -3,7 +3,7 @@ import swal from '../sweetalert/swal';
 import isMobile from './isMobile';
 import makeAddress from './makeAddress';
 
-function searchCoordinateToAddress(infoWindow, map, latlng, setSelectButtonDom, setSelectedGeoData, marker) {
+function searchCoordinateToAddress(infoWindow, map, latlng, setSelectButtonDom, setSelectedGeoData, marker, user) {
   infoWindow.close();
   window.naver.maps.Service.reverseGeocode(
     {
@@ -37,7 +37,7 @@ function searchCoordinateToAddress(infoWindow, map, latlng, setSelectButtonDom, 
       });
 
       // setInfoWindowContent 함수 호출
-      const container = SetInfoWindowContent('address', '', htmlAddresses, infoWindow, null, null, marker);
+      const container = SetInfoWindowContent('address', '', htmlAddresses, infoWindow, null, null, marker, user);
 
       infoWindow.setContent(container);
 

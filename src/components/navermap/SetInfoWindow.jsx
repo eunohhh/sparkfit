@@ -10,7 +10,8 @@ function SetInfoWindowContent(
   infoWindow,
   place = null,
   navigate = null,
-  marker = null
+  marker = null,
+  user = null
 ) {
   // 임시 컨테이너 생성
   const container = document.createElement('div');
@@ -34,7 +35,7 @@ function SetInfoWindowContent(
   } else if (type === 'coord') {
     root.render(<CoordInfoWindow htmlAddresses={htmlAddresses} infoWindow={infoWindow} marker={marker} />);
   } else if (type === 'place') {
-    root.render(<InfoWindow place={place} infoWindow={infoWindow} navigate={navigate} />);
+    root.render(<InfoWindow place={place} infoWindow={infoWindow} navigate={navigate} user={user} />);
   }
 
   return container;
