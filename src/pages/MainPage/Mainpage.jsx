@@ -14,7 +14,7 @@ function Mainpage() {
   const searchButtonRef = useRef();
   const [openCreateGroupModal, setCreateGroupModal] = useState(false);
 
-  const { gps, naverMap, basicMarker, makeGatherButtonDom } = useMap({ searchInputRef, searchButtonRef });
+  const { gps, naverMap, basicMarker, makeGatherButtonDom } = useMap();
   const { selectedGeoData } = useMapStore(
     useShallow((state) => ({ selectedGeoData: state.selectedGeoData, setUserGps: state.setUserGps }))
   );
@@ -113,12 +113,14 @@ function Mainpage() {
         <form className="md:left-20 absolute z-10 flex items-center gap-1 rounded-lg bg-white p-1 border border-gray-300 box-border left-1 ml-1">
           <input
             type="text"
+            id="search-input"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 py-[3px] px-2"
             ref={searchInputRef}
           />
           <button
             type="submit"
-            className="bg-btn-blue hover:bg-blue-400 text-white font-bold py-0.5 px-2 rounded"
+            id="search-button"
+            className="bg-btn-blue hover:bg-blue-4000 text-white font-bold py-0.5 px-2 rounded"
             ref={searchButtonRef}
           >
             위치검색
