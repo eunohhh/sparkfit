@@ -68,7 +68,8 @@ function useMap() {
 
   // 최초 실행
   useEffect(() => {
-    initializeMap(INITIAL_CENTER);
+    const mapDiv = document.getElementById('map01');
+    if (mapDiv) initializeMap(INITIAL_CENTER);
 
     const searchInput = document.getElementById('search-input');
     const searchButton = document.getElementById('search-button');
