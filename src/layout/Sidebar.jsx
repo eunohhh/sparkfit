@@ -25,37 +25,35 @@ export default function Sidebar() {
   const [searchKeyword, setSearchKeyword] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const currentDate = new Date().toISOString().split('T')[0];
-  const [previousCount, setPreviousCount] = useState(0);
+  // const [previousCount, setPreviousCount] = useState();
   //이전카운터값이랑 새로운값비교하기위해
-  const { placesCount, startFetching, stopFetching } = usePlacesCount((state) => state);
+  const { placesCount, startFetching, stopFetching, getPreviousCount, previousCount, updateApplicant, setpreviousCount } =
+    usePlacesCount((state) => state);
   const clearUserIdStorage = useSignInStore.persist.clearStorage;
-  // console.log(placesCount);
-  // console.log(previousCount)
-  // const [user, setUser] = useState(null);
 
-  // useEffect(() => {
-  //   const fetchUserInfo = async () => {
-  //     const { data, error } = await supabase.auth.getUser();
-  //     if (error) {
-  //       console.error('Error fetching user:', error);
-  //     } else {
-  //       setUser(data.user);
-  //       console.log(data.user);
-  //     }
-  //   };
+  const [user, setUser] = useState(null);
 
-  //   // 비동기 함수 호출
-  //   fetchUserInfo();
-  // }, []);
+  // console.log(userInfo[0].total_applicant)
+  // getUserInfo()
 
   useEffect(() => {
-    startFetching();
+    const fetchUserInfo = async () => {
+      const { data, error } = await supabase.auth.getUser();
+      if (error) {
+        console.error('Error:', error);
+      } else {
+        setUser(data.user.id);
+
+        getPreviousCount(data.user.id);
+        startFetching(data.user.id);
+      }
+    };
+    fetchUserInfo();
 
     return () => {
       stopFetching();
     };
   }, [startFetching, stopFetching]);
-
   const openModal = () => {
     setActiveItem('검색');
     setIsModalOpen(true);
@@ -142,6 +140,9 @@ export default function Sidebar() {
     }
   };
 
+  console.log('이전 지원자', previousCount);
+  console.log('현재 지원자', placesCount);
+
   return (
     <>
       <div className="bg-white shadow-sidebarshaow fixed top-0 left-0 h-lvh w-20 justify-center items-center h-screen sm:flex hidden text-sm z-10">
@@ -160,9 +161,13 @@ export default function Sidebar() {
                 text="모임"
                 placesCount={placesCount}
                 previousCount={previousCount}
-                onClick={() => {
-                  navigate('/gathering');
-                  setPreviousCount(placesCount);
+                onClick={async () => {
+                  try {
+                    await updateApplicant(user, placesCount);
+                    navigate('/gathering');
+                  } catch (error) {
+                    console.error('Error', error);
+                  }
                 }}
               />
               <SidebarItem
@@ -319,6 +324,7 @@ const SidebarItem = ({ icon: Icon, text, onClick, isActive, placesCount, previou
     {text === '모임' && placesCount !== previousCount && (
       <RiInformationFill className="absolute right-[-5px] top-[-5px] w-[15px] h-[15px] text-red-500" />
     )}
+    {/* {console.log(placesCount,previousCount)} */}
     <Icon className={`mx-auto w-iconwidth transition-all h-iconheight ${isActive ? 'text-customLoginButton' : ''}`} />
     <p className={`mt-1.5 transition-all ${isActive ? 'text-[#82C0F9]' : ''}`}>{text}</p>
   </li>
