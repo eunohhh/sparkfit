@@ -67,12 +67,12 @@ const ClubInfo = ({ placeID }) => {
   return (
     <>
       {/* 가져온 모임 정보 맵으로 뿌리기*/}
-      <div className="flex flex-row flex-1 justify-between p-4 min-h-44 border-4 border-indigo-200 rounded-lg w-[285px] ml-4 mb-2 relative hover:shadow-xl hover:translate-y-1 hover:ease-in-out">
-        <div className="flex flex-col md:text-balance sm:text-nowrap ">
-          <div className="bg-gray-200 rounded-md px-3 mb-2 w-[75px] h-[25px] text-center">
+      <div className="flex flex-row flex-1 justify-between p-4 min-h-44 border-4 border-indigo-200 rounded-lg w-[285px] ml-4 mb-2 relative truncate hover:shadow-xl hover:translate-y-1 hover:ease-in-out">
+        <div className="flex flex-col md:text-balance sm:text-nowrap truncate">
+          <div className="bg-gray-200 rounded-md px-3 mb-2 w-[75px] h-[25px] text-center truncate">
             {theClubs[0].sports_name}
           </div>
-          <div className="absolute bottom-0 pb-7 text-xl font-black truncate">{theClubs[0].gather_name}</div>
+          <div className="flex absolute bottom-0 pb-7 text-xl font-black truncate">{theClubs[0].gather_name}</div>
         </div>
         <div className="flex md:text-balance sm: text-nowrap flex-col text-center items-end">
           <STDeadline $status={$status}>{theClubs[0].deadline}</STDeadline>

@@ -92,13 +92,13 @@ const ClubList = () => {
           {/* 내가 가입한 모임 */}
           <div className="flex flex-col gap-4">
             {theGatherings && theGatherings.length > 0 ? (
-              <ul>
+              <ul className="truncate">
                 <span className="flex border-b-2 border-slate-300 w-[290px] mb-4 ml-4">
                   <AiFillThunderbolt />
                   내가 가입한 번개
                 </span>
                 {theGatherings.map(({ place_id }, index) => (
-                  <li key={index + 1} onClick={() => handleMoveToDetail(place_id)} className="cursor-pointer">
+                  <li key={index + 1} onClick={() => handleMoveToDetail(place_id)} className="cursor-pointer truncate">
                     <ClubInfo placeID={place_id} />
                   </li>
                 ))}
@@ -126,13 +126,13 @@ const ClubList = () => {
                 {MyCreateGathering.map(({ region, sports_name, gather_name, deadline, id }, index) => (
                   <li key={index + 1} onClick={() => handleMoveToDetail(id)} className="cursor-pointer">
                     <div className="flex flex-row flex-1 justify-between p-4 min-h-44 border-4 border-indigo-400 rounded-lg w-[285px] ml-4 mb-2 relative hover:shadow-xl hover:translate-y-1 hover:ease-in-out">
-                      <div className="flex flex-col md:text-balance sm:text-nowrap">
-                        <div className="bg-gray-200 rounded-md px-3 mb-2 w-[75px] h-[25px] text-center">
+                      <div className="flex flex-col md:text-balance sm:text-nowrap truncate">
+                        <div className="bg-gray-200 rounded-md px-3 mb-2 w-[75px] h-[25px] text-center truncate">
                           {sports_name}
                         </div>
                         <div className="absolute bottom-0 pb-7 text-xl font-black truncate">{gather_name}</div>
                       </div>
-                      <div className="flex md:text-balance sm:text-nowrap flex-col text-center items-end">
+                      <div className="flex md:text-balance sm:text-nowrap flex-col text-center items-end truncate">
                         <STDeadline $status={$status}>{deadline}</STDeadline>
                         <div className="bg-gray-200 rounded-md px-3 py-1 mt-2 max-w-[90px] max-h-[55px] truncate">
                           {region}
