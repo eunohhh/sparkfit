@@ -1,5 +1,3 @@
-import React from 'react';
-
 const PlaceItem = ({ place }) => {
   return (
     <div key={place.id} className="flex gap-8 bg-[#ffffff] p-8 shadow-lg rounded-xl relative">
