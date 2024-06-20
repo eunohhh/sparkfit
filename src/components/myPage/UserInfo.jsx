@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import Ellipse1 from '/Ellipse1.png';
+import supabase from '@/supabase/supabaseClient';
+import { useSignInStore } from '@/zustand/auth.store';
+import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
+import { HiPencilSquare } from 'react-icons/hi2';
 import { RiUser3Line } from 'react-icons/ri';
 import { STSection } from './MyPage';
-import { HiPencilSquare } from 'react-icons/hi2';
-import { useQuery } from '@tanstack/react-query';
 import MyPageModal from './MyPageModal';
-import { useSignInStore } from '@/zustand/auth.store';
-import supabase from '@/supabase/supabaseClient';
 
 const UserInfo = () => {
   const [myPageModal, setMyPageModal] = useState(false);
   const { userData } = useSignInStore();
   const [nickname, setNickname] = useState('');
-  const [image, setImage] = useState(Ellipse1);
+  const [image, setImage] = useState('/Ellipse1.png');
 
   console.log(userData);
 
@@ -44,6 +43,7 @@ const UserInfo = () => {
   }
 
   if (usersError) {
+    console.log(usersError);
     return <div>error!</div>;
   }
 

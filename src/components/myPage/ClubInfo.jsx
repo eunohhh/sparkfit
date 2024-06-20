@@ -1,6 +1,6 @@
-import React from 'react';
-import { useQuery } from '@tanstack/react-query';
+// import ImagePlaceholder from '../../../public/ImagePlaceholder.png';
 import supabase from '@/supabase/supabaseClient';
+import { useQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
 
 const ClubInfo = ({ placeID }) => {

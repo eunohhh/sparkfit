@@ -1,41 +1,56 @@
-import supabase from '@/supabase/supabaseClient';
+import useMap from '@/hooks/useMap';
+import usePlaces from '@/hooks/usePlaces';
 import useFilterStore from '@/zustand/filter.list';
-import { useEffect, useState } from 'react';
-import PlaceItem from './PlaceItem';
+import { useCallback, useEffect, useState } from 'react';
+import Loading from './GatheringPage/Loading';
+import PlaceItem from './GatheringPage/PlaceItem';
 
 const GatheringItem = () => {
-  const [places, setPlaces] = useState([]);
   const { selectedButton } = useFilterStore();
+  const { places, placesLoading } = usePlaces();
+  const [sortedPlace, setSortedPlace] = useState([]);
+  const [userLocation, setUserLocation] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const { gps } = useMap();
+
+  console.log(gps);
 
   useEffect(() => {
-    const fetchPlace = async () => {
-      const { data: placeData, error } = await supabase.from('Places').select('*');
+    if (gps) {
+      setUserLocation({
+        latitude: gps.lat,
+        longitude: gps.long
+      });
+    }
+  }, []);
 
-      if (placeData) {
-        navigator.geolocation.getCurrentPosition(async (position) => {
-          const userLatitude = position.coords.latitude;
-          const userLongitude = position.coords.longitude;
+  useEffect(() => {
+    if (userLocation && places) {
+      let placeList = sortPlaces(places, userLocation);
 
-          const sortedPlace = placeData
-            .map((place) => ({
-              ...place,
-              distance: calculateDistance(userLatitude, userLongitude, place.lat, place.long)
-            }))
-            .sort((a, b) => a.distance - b.distance);
-
-          setPlaces(sortedPlace);
-
-          if (selectedButton === 1) {
-            //마감기한순 정렬
-            return sortedPlace.sort((a, b) => a.deadline.localeCompare(b.deadline));
-          }
-        });
-      } else {
-        console.error('모임 데이터를 가지고오지 못했습니다.', error);
+      if (selectedButton === 1) {
+        // 마감기한순 정렬
+        placeList = placeList.sort((a, b) => a.deadline.localeCompare(b.deadline));
+      } else if (selectedButton === 2) {
+        // 최신등록순 정렬
+        placeList = placeList.sort((a, b) => b.created_at.localeCompare(a.created_at));
       }
-    };
-    fetchPlace();
-  }, [selectedButton]);
+      setSortedPlace(placeList);
+      setLoading(false);
+    }
+  }, [userLocation, placesLoading, selectedButton]);
+
+  const sortPlaces = useCallback((places, userLocation) => {
+    const placesWithDistance = places.map((place) => ({
+      ...place,
+      distance: calculateDistance(userLocation.latitude, userLocation.longitude, place.lat, place.long)
+    }));
+
+    // 거리 계산된 값 오름차순
+    placesWithDistance.sort((a, b) => a.distance - b.distance);
+
+    return placesWithDistance;
+  }, []);
 
   function calculateDistance(lat1, lon1, lat2, lon2) {
     const R = 6371; // 지구 반지름 (km)
@@ -54,9 +69,13 @@ const GatheringItem = () => {
 
   return (
     <div className="flex flex-col gap-8 mb-20">
-      {places.map((place) => {
-        return <PlaceItem key={place.id} place={place} />;
-      })}
+      {loading ? (
+        <Loading />
+      ) : (
+        sortedPlace.map((place) => {
+          return <PlaceItem key={place.id} place={place} />;
+        })
+      )}
     </div>
   );
 };
