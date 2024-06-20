@@ -1,11 +1,15 @@
 import { getPost } from '@/api/postsListApi';
 import { loginUser } from '@/api/profileApi';
+<<<<<<< HEAD
 import supabase from '@/supabase/supabaseClient';
 import { useQuery } from '@tanstack/react-query';
 import { useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import AlertModal from './AlertModal';
 import useOutsideClick from './useOutsideClick';
+=======
+import { checkIfUserHasJoined } from '@/api/profileApi';
+>>>>>>> dev
 
 const JoinModal = ({ close }) => {
   const { id } = useParams();
@@ -13,6 +17,11 @@ const JoinModal = ({ close }) => {
   const [openAlertModal, setOpenAlertModal] = useState(false);
   const { data: posts } = useQuery({ queryKey: ['posts', id], queryFn: () => getPost(id) });
   const { data: user } = useQuery({ queryKey: ['user'], queryFn: loginUser });
+  const { data: hasJoined } = useQuery({
+    queryKey: ['checkUser', id, user?.id],
+    queryFn: () => checkIfUserHasJoined(id, user?.id),
+    enabled: !!user && !!id
+  });
 
   const handleClose = () => {
     close?.();
@@ -20,14 +29,17 @@ const JoinModal = ({ close }) => {
 
   useOutsideClick(modalRef, handleClose);
 
+  console.log(posts.created_by);
+  console.log(user);
+
   const joinGroup = async () => {
-    if (posts.created_by === user.user_id) {
+    if (posts.created_by === user.id) {
       alert('본인이 만든 모임에 참가 신청 할 수 없습니다');
       close();
       return;
     }
 
-    if (posts.created_by) {
+    if (hasJoined) {
       alert('두 번 신청할 수 없습니다');
       close();
       return;
