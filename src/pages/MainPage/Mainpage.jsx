@@ -2,10 +2,8 @@ import CreateGroupModal from '@/components/DetailPage/CreateGroupModal';
 import SetInfoWindowContent from '@/components/navermap/SetInfoWindow';
 import usePlaces from '@/hooks/usePlaces';
 import checkForMarkersRendering from '@/utils/navermap/checkForMarkersRendering';
-import useMapStore from '@/zustand/map.store';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useShallow } from 'zustand/react/shallow';
 import useMap from '../../hooks/useMap';
 
 function Mainpage() {
@@ -14,10 +12,7 @@ function Mainpage() {
   const searchButtonRef = useRef();
   const [openCreateGroupModal, setCreateGroupModal] = useState(false);
 
-  const { gps, naverMap, basicMarker, makeGatherButtonDom } = useMap();
-  const { selectedGeoData } = useMapStore(
-    useShallow((state) => ({ selectedGeoData: state.selectedGeoData, setUserGps: state.setUserGps }))
-  );
+  const { gps, naverMap, basicMarker, makeGatherButtonDom, selectedGeoData } = useMap();
   const { places } = usePlaces();
 
   useEffect(() => {

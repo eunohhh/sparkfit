@@ -135,7 +135,15 @@ function useMap() {
     }
   }, [infoWindow, mapRef, searchInput, searchButton, basicMarker, setSelectedGeoData, setMakeGatherButtonDom]);
 
-  return { gps, naverMap: mapRef.current, infoWindow, basicMarker, makeGatherButtonDom, initializeMap };
+  return {
+    gps,
+    naverMap: mapRef.current,
+    infoWindow,
+    basicMarker,
+    makeGatherButtonDom,
+    selectedGeoData,
+    initializeMap
+  };
 }
 
 export default useMap;
