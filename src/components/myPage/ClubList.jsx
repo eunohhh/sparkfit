@@ -4,36 +4,26 @@ import { RiGroupLine } from 'react-icons/ri';
 import { STSection } from './MyPage';
 import supabase from '@/supabase/supabaseClient';
 import { useQuery } from '@tanstack/react-query';
+import { useUserStore } from '@/zustand/auth.store';
 
 const ClubList = () => {
-  // const getG = async () => {
-  //   const { data, error } = await supabase
-  //     .from('Users')
-  //     .select('email, profile_image, nickname')
-  //     .eq('user_id', userData.user.id);
+  const { userData } = useUserStore();
 
-  //   if (error) {
-  //     console.log(error);
-  //   }
-  //   return data;
-  // };
+  const getMyGathering = async () => {
+    const { data, error } = await supabase.from('Contracts').select('place_id').eq('user_id', userData.user.id);
 
-  // const {
-  //   data: theUser,
-  //   isPending,
-  //   error: usersError
-  // } = useQuery({
-  //   queryKey: ['Users'],
-  //   queryFn: getUser
-  // });
+    if (error) {
+      console.log(error);
+    }
+    return data;
+  };
 
-  // if (isPending) {
-  //   return <div>loading...</div>;
-  // }
+  const { data: theGatherings } = useQuery({
+    queryKey: ['myGathering'],
+    queryFn: getMyGathering
+  });
 
-  // if (usersError) {
-  //   return <div>error!</div>;
-  // }
+  console.log(theGatherings);
 
   return (
     <STSection>
@@ -41,8 +31,8 @@ const ClubList = () => {
         <RiGroupLine />
         신청한 모임
       </h3>
-      {/* 가져온 모임 정보 맵으로 뿌리기_컴포넌트 분리*/}
-      <ClubInfo />
+      {/* 가져온 모임 정보 맵으로 뿌리기 */}
+      {theGatherings && theGatherings.map(({ place_id }, index) => <ClubInfo key={index + 1} placeID={place_id} />)}
     </STSection>
   );
 };
