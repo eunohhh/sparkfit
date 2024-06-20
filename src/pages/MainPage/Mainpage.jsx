@@ -1,30 +1,56 @@
 import CreateGroupModal from '@/components/DetailPage/CreateGroupModal';
+
 import SetInfoWindowContent from '@/components/navermap/SetInfoWindow';
 import usePlaces from '@/hooks/usePlaces';
 import checkForMarkersRendering from '@/utils/navermap/checkForMarkersRendering';
+import isMobile from '@/utils/navermap/isMobile';
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useMap from '../../hooks/useMap';
 
-function Mainpage() {
+function Mainpage({ user = null }) {
   const navigate = useNavigate();
   const searchInputRef = useRef();
   const searchButtonRef = useRef();
   const [openCreateGroupModal, setCreateGroupModal] = useState(false);
-
-  const { gps, naverMap, basicMarker, makeGatherButtonDom, selectedGeoData } = useMap();
+  const { naverMap, basicMarker, infoWindow, makeGatherButtonDom, selectedGeoData } = useMap();
   const { places } = usePlaces();
+  const queryClient = useQueryClient();
+
+  const prevPlacesRef = useRef(null);
+  const allInfoWindowsRef = useRef(null);
+  const allMarkersRef = useRef(null);
+
+  console.log(allMarkersRef.current);
+
+  const handleModalClose = async () => {
+    setCreateGroupModal((prev) => !prev);
+    await queryClient.invalidateQueries({ queryKey: ['places'] });
+    if (infoWindow) infoWindow.close();
+    setTimeout(() => {
+      if (prevPlacesRef.current.length !== places.length) {
+        allInfoWindowsRef.current[0].open(naverMap, allMarkersRef.current[0]);
+        allMarkersRef.current[0].setMap(naverMap);
+
+        const infoWindowInnerContent = allInfoWindowsRef.current[0].getContentElement();
+        const infoWindowOuterContent = infoWindowInnerContent.parentNode.parentNode;
+
+        infoWindowInnerContent.parentNode.style.width = 'fit-content';
+        infoWindowInnerContent.parentNode.style.height = 'fit-content';
+        infoWindowInnerContent.parentNode.style.minWidth = isMobile() ? '250px' : '370px';
+        infoWindowInnerContent.parentNode.style.maxWidth = isMobile() ? '250px' : '370px';
+        infoWindowInnerContent.parentNode.style.fontSize = isMobile() ? '9px' : '14px';
+
+        infoWindowOuterContent.style.top =
+          infoWindowInnerContent.getBoundingClientRect().height < 81 ? '-96px' : '-110px';
+      }
+    }, 0);
+  };
 
   useEffect(() => {
-    console.log(`현재 위도, 경도는 => ${gps && gps.lat}, ${gps && gps.long}`);
-  }, [gps]);
-
-  useEffect(() => {
-    console.log(selectedGeoData);
-  }, [selectedGeoData]);
-
-  useEffect(() => {
-    if (places && naverMap) {
+    if (places && naverMap && user) {
+      prevPlacesRef.current = places;
       // 마커 리스트와 정보창 리스트 선언
       const markers = [];
       const infoWindows = [];
@@ -49,21 +75,28 @@ function Mainpage() {
         });
 
         // setInfoWindowContent 함수 호출
-        const container = SetInfoWindowContent('place', '', '', infoWindow, place, navigate, marker);
+        const container = SetInfoWindowContent('place', '', '', infoWindow, place, navigate, marker, user);
 
         infoWindow.setContent(container);
 
         setTimeout(() => {
           const infoWindowInnerContent = infoWindow.getContentElement();
+
           infoWindowInnerContent.parentNode.style.width = 'fit-content';
           infoWindowInnerContent.parentNode.style.height = 'fit-content';
-          infoWindowInnerContent.parentNode.style.minWidth = '300px';
-          infoWindowInnerContent.parentNode.style.fontSize = '14px';
+          infoWindowInnerContent.parentNode.style.minWidth = isMobile() ? '250px' : '370px';
+          infoWindowInnerContent.parentNode.style.maxWidth = isMobile() ? '250px' : '370px';
+          infoWindowInnerContent.parentNode.style.fontSize = isMobile() ? '9px' : '14px';
         }, 0);
+
+        marker.place = place;
 
         markers.push(marker);
         infoWindows.push(infoWindow);
       });
+
+      allMarkersRef.current = markers;
+      allInfoWindowsRef.current = infoWindows;
 
       // 마커 리스트와 정보창 리스트 추가
       markers.forEach((marker, idx) => {
@@ -88,7 +121,7 @@ function Mainpage() {
         }
       });
     }
-  }, [places, naverMap, basicMarker, navigate]);
+  }, [places, naverMap, basicMarker, navigate, user]);
 
   // 모임만들기 버튼 클릭시 동작 여기에
   useEffect(() => {
@@ -103,7 +136,7 @@ function Mainpage() {
 
   return (
     <>
-      {openCreateGroupModal && <CreateGroupModal close={() => setCreateGroupModal(false)} />}
+      {openCreateGroupModal && <CreateGroupModal close={handleModalClose} />}
       <section className="relative flex w-dvw h-dvh">
         <form className="md:left-20 absolute z-10 flex items-center gap-1 rounded-lg bg-white p-1 border border-gray-300 box-border left-1 ml-1">
           <input

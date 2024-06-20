@@ -1,7 +1,11 @@
+import { loginUser } from '@/api/profileApi';
 import searchCoordinateToAddress from '@/utils/navermap/coordToAddress';
 import initGeocoder from '@/utils/navermap/initGeocoder';
+import swal from '@/utils/sweetalert/swal';
 import useMapStore from '@/zustand/map.store';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import Swal from 'sweetalert2';
 import { useShallow } from 'zustand/react/shallow';
 import { INITIAL_CENTER, INITIAL_ZOOM } from '../constants/navermap';
 
@@ -20,14 +24,18 @@ function useMap() {
   const {
     selectedGeoData,
     setSelectedGeoData,
-    userGps: gps
+    userGps: gps,
+    setUserGps: setGps
   } = useMapStore(
     useShallow((state) => ({
       selectedGeoData: state.selectedGeoData,
       setSelectedGeoData: state.setSelectedGeoData,
-      userGps: state.userGps
+      userGps: state.userGps,
+      setUserGps: state.setUserGps
     }))
   );
+
+  const { data: user } = useQuery({ queryKey: ['user'], queryFn: loginUser });
 
   const mapRef = useRef(null);
 
@@ -65,6 +73,47 @@ function useMap() {
     });
     setBasicMarker(marker);
   }, []);
+
+  // 초기에 사용자의 위치 정보를 가져옴
+  useLayoutEffect(() => {
+    // console.log('초기 gps =>', userGps);
+    if (gps) return;
+    const success = ({ coords }) => {
+      const gpsData = {
+        lat: coords.latitude,
+        long: coords.longitude
+      };
+      setGps(gpsData);
+      Swal.close(); // 위치정보 세팅 후 모달 닫기
+    };
+
+    const error = (err) => {
+      if (err.code === err.PERMISSION_DENIED) {
+        swal('warning', '위치 정보를 제공하지 않으면 일부 기능을 사용할 수 없습니다.');
+        return;
+      } else {
+        swal('error', '위치 정보를 가져오는 중 오류가 발생했습니다.');
+        return;
+      }
+    };
+    const getUserLocation = () => {
+      if (!navigator.geolocation) {
+        swal('error', '위치정보가 지원되지 않습니다');
+        return;
+      } else {
+        Swal.fire({
+          title: '위치 정보 가져오는 중',
+          text: '당신의 위치로 이동중...',
+          allowOutsideClick: false,
+          showLoaderOnConfirm: false,
+          showCancelButton: false,
+          showConfirmButton: false
+        });
+        navigator.geolocation.getCurrentPosition(success, error);
+      }
+    };
+    getUserLocation();
+  }, [setGps, gps]);
 
   // 최초 실행
   useEffect(() => {
@@ -123,7 +172,7 @@ function useMap() {
   // 정보창객체와 맵 객체가 설정되면 initGeocoder 실행
   useEffect(() => {
     // 처음에는 onsJsContentLoaded 에 등록하고 실행하고 다음부터는 등록하지 않고 실행하는 방법도 있음
-    if (infoWindow && mapRef.current && basicMarker) {
+    if (infoWindow && mapRef.current && basicMarker && user) {
       initGeocoder(
         infoWindow,
         mapRef.current,
@@ -131,10 +180,21 @@ function useMap() {
         searchButton,
         basicMarker,
         setSelectedGeoData,
-        setMakeGatherButtonDom
+        setMakeGatherButtonDom,
+        user
       );
     }
-  }, [infoWindow, mapRef, searchInput, searchButton, basicMarker, setSelectedGeoData, setMakeGatherButtonDom]);
+  }, [
+    infoWindow,
+    mapRef,
+    searchInput,
+    searchButton,
+    gps,
+    basicMarker,
+    setSelectedGeoData,
+    setMakeGatherButtonDom,
+    user
+  ]);
 
   return {
     gps,

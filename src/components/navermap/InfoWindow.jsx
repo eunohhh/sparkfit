@@ -1,6 +1,6 @@
 import useMapStore from '@/zustand/map.store';
 
-function InfoWindow({ place, infoWindow, navigate }) {
+function InfoWindow({ place, infoWindow, navigate, user }) {
   const { setUserGps: setGps } = useMapStore((state) => ({ setUserGps: state.setUserGps }));
 
   const handleCloseButton = () => {
@@ -22,13 +22,16 @@ function InfoWindow({ place, infoWindow, navigate }) {
       <div className="flex flex-row justify-between text-sm">
         <h4 className="flex items-center">{place.sports_name}</h4>
         <div className="flex flex-row gap-1">
-          <button
-            onClick={handleJoinButton}
-            id="makeGathering"
-            className="bg-btn-blue hover:bg-blue-400 text-white font-bold py-0.5 px-2 rounded"
-          >
-            모임참여하기
-          </button>
+          {place.created_by === user.id ? null : (
+            <button
+              onClick={handleJoinButton}
+              id="makeGathering"
+              className="bg-btn-blue hover:bg-blue-400 text-white font-bold py-0.5 px-2 rounded"
+            >
+              모임참여하기
+            </button>
+          )}
+
           <button
             id="closeCoord"
             className="bg-red-400 hover:bg-red-500 text-white font-bold py-0.5 px-2 rounded"
