@@ -44,7 +44,6 @@ export const useUserStore = create((set) => ({
         throw new Error(signInError.message);
       }
       set({ userData: signInData, loading: false, error: null });
-      console.log(signInData);
     } catch (error) {
       set({ loading: false, error: `Sign-in failed: ${error.message}` });
       throw error;

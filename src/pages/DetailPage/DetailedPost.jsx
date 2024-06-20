@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import CreateGroupModal from '../../components/DetailPage/CreateGroupModal';
 import JoinModal from '../../components/DetailPage/JoinModal';
-// import { profileApi } from '@/api/profileApi';
+// import { fetchUser } from '@/api/profileApi';
+import { getUser } from '@/api/profileApi';
 
 const DetailedPost = () => {
   const { id } = useParams();
@@ -12,7 +13,8 @@ const DetailedPost = () => {
   const [openCreateGroupModal, setCreateGroupModal] = useState(false);
 
   const { data: posts, isLoading, isError } = useQuery({ queryKey: ['posts', id], queryFn: () => getPost(id) });
-  // const { data: profiles, loading, error } = useQuery({ queryKey: ['profiles', id], queryFn: () => profileApi(id) });
+  const userId = posts?.created_by;
+  const { data: user } = useQuery({ queryKey: ['user', userId], queryFn: () => getUser(userId), enabled: !!userId });
 
   if (isLoading) {
     return <div>로딩중</div>;
@@ -53,8 +55,8 @@ const DetailedPost = () => {
         <div className=" rounded-full border-none flex flex-row items-center">
           <img src="/default-user-profile.png" alt="기본" className="w-[80px] h-[80px]" />
           <div className="flex flex-row mx-2 items-center">
-            {/* <div className="text-2xl">{profiles.nickname}</div> */}
-            <div className="text-1xl ml-2">모임장</div>
+            <div className="text-1xl mr-2">모임장</div>
+            <div className="text-2xl">{user?.nickname}</div>
           </div>
         </div>
 

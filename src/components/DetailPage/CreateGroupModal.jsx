@@ -2,9 +2,10 @@ import { useRef, useState } from 'react';
 import useOutsideClick from './useOutsideClick';
 import { v4 as uuidv4 } from 'uuid';
 import supabase from '@/supabase/supabaseClient';
+import { loginUser } from '@/api/profileApi';
+import { useQuery } from '@tanstack/react-query';
 
 const CreateGroupModal = ({ close }) => {
-  // const [name, setName] = useState('');
   const modalRef = useRef(null);
 
   const [groupName, setGroupName] = useState('');
@@ -13,7 +14,7 @@ const CreateGroupModal = ({ close }) => {
   const [address, setAdderess] = useState('');
   const [contents, setContents] = useState('');
 
-  // const { data: users } = useQuery({ queryKey: ['users', id], queryFn: () => profileApi(id) });
+  const { data: user } = useQuery({ queryKey: ['user'], queryFn: loginUser });
 
   const createGroupForm = async (e) => {
     e.preventDefault();
@@ -27,7 +28,8 @@ const CreateGroupModal = ({ close }) => {
           gather_name: groupName,
           deadline: deadline,
           region: address,
-          texts: contents
+          texts: contents,
+          created_by: user?.id
         }
       ])
       .select();
@@ -122,7 +124,7 @@ const CreateGroupModal = ({ close }) => {
               </label>
               <input
                 className="px-5 py-2.5 rounded-md m-1.5 font-semibold border h-[300px]"
-                type="textarea"
+                type="text"
                 onChange={(e) => {
                   setContents(e.target.value);
                 }}
