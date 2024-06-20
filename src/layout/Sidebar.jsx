@@ -9,7 +9,8 @@ import {
   RiHome2Line,
   RiLogoutBoxRLine,
   RiSearchLine,
-  RiUser3Line
+  RiUser3Line,
+  RiInformationFill
 } from 'react-icons/ri';
 import Modal from 'react-modal';
 import { Link, useNavigate } from 'react-router-dom';
@@ -27,8 +28,24 @@ export default function Sidebar() {
   const [previousCount, setPreviousCount] = useState(0);
   //이전카운터값이랑 새로운값비교하기위해
   const { placesCount, startFetching, stopFetching } = usePlacesCount((state) => state);
+  // console.log(placesCount);
+  // console.log(previousCount)
+  // const [user, setUser] = useState(null);
 
-  console.log(placesCount);
+  // useEffect(() => {
+  //   const fetchUserInfo = async () => {
+  //     const { data, error } = await supabase.auth.getUser();
+  //     if (error) {
+  //       console.error('Error fetching user:', error);
+  //     } else {
+  //       setUser(data.user);
+  //       console.log(data.user);
+  //     }
+  //   };
+
+  //   // 비동기 함수 호출
+  //   fetchUserInfo();
+  // }, []);
 
   useEffect(() => {
     startFetching();
@@ -41,6 +58,7 @@ export default function Sidebar() {
   const openModal = () => {
     setActiveItem('검색');
     setIsModalOpen(true);
+    setSearchKeyword("")
     document.body.style.overflow = 'hidden';
   };
 
@@ -66,8 +84,7 @@ export default function Sidebar() {
           .from('Places')
           .select()
           .or(`region.ilike.%${searchKeyword}%,sports_name.ilike.%${searchKeyword}%`)
-          .lte('created_at', currentDate)
-          .gte('deadline', currentDate)
+          .gt('deadline', currentDate)
           .order('deadline', { ascending: true });
         if (error) {
           console.log('error =>', error);
@@ -139,8 +156,11 @@ export default function Sidebar() {
               <SidebarItem
                 icon={RiGroupLine}
                 text="모임"
+                placesCount={placesCount}
+                previousCount={previousCount}
                 onClick={() => {
                   navigate('/gathering');
+                  setPreviousCount(placesCount);
                 }}
               />
               <SidebarItem
@@ -180,10 +200,13 @@ export default function Sidebar() {
         <SidebarItem
           icon={RiGroupLine}
           text="모임"
+          placesCount={placesCount}
+          previousCount={previousCount}
           isActive={activeItem === '모임'}
           onClick={() => {
             setActiveItem('모임');
             navigate('/gathering');
+            setPreviousCount(placesCount);
           }}
         />
         <SidebarItem icon={RiSearchLine} text="검색" isActive={activeItem === '검색'} onClick={openModal} />
@@ -216,46 +239,49 @@ export default function Sidebar() {
         isOpen={isModalOpen}
         onRequestClose={closeModal}
         contentLabel="번개 검색 모달"
-        className="modal  inset-0 w-full h-full  items-center   z-50 "
+        className="modal inset-0 w-full h-full items-center z-50 "
         overlayClassName="overlay fixed inset-0 bg-black bg-opacity-50 absolute z-40"
         shouldCloseOnOverlayClick={false}
       >
-        <div className="bg-white p-6 rounded-lg w-2/3 h-3/4 absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/3 sm:top-1/2 sm:left-2/3 sm:transform sm:-translate-x-2/3 sm:-translate-y-1/2 ">
+        <div className="bg-white p-6 rounded-lg w-2/3 absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/3 sm:top-1/2 sm:left-2/3 sm:transform sm:-translate-x-2/3 sm:-translate-y-1/2 ">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-bold w-fit">
+            <h2 className="sm:text-2xl font-bold text-xl">
               Spark Fit 검색{' '}
               <span className="text-xs text-gray-500">
                 결과 : {searchResults.length > 99 ? '99+' : searchResults.length}
               </span>
             </h2>
 
-            <button onClick={closeModal} className="w-iconwidth h-iconheight">
+            <button onClick={closeModal} className="w-logowidth h-logoheight">
               <RiCloseFill className="w-full h-full" />
             </button>
           </div>
           <form onSubmit={searchPlace}>
-            <div className="mb-4">
+            <div className="mb-4 flex gap-4 flex-wrap">
               <input
                 type="text"
                 value={searchKeyword}
                 onChange={(e) => setSearchKeyword(e.target.value)}
                 placeholder="지역 또는 스포츠명을 입력하세요"
-                className="px-3 py-2 border rounded w-full box-border"
+                className="px-3 py-2 border rounded sm:w-4/5 box-border w-full"
                 maxLength={20}
               />
+              <button
+                type="submit"
+                className="bg-customLoginButton text-white px-8 py-1 rounded box-border font-bold text-lg"
+              >
+                검색
+              </button>
             </div>
-            <button type="submit" className="bg-customLoginButton text-white px-4 py-1 rounded box-border">
-              검색
-            </button>
           </form>
-          <div className="mt-4 max-h-72 overflow-y-scroll text-xs">
+          <div className="mt-4 h-[15rem] overflow-y-scroll text-xs">
             {searchResults.length > 0 ? (
               <ul className="divide-y divide-gray-200">
                 {searchResults.map((item) => (
                   <li key={item.id} className="py-4 box-border">
-                    <p className="text-base font-semibold">모임: {item.gather_name}</p>
-                    <p className="text-gray-500 mt-2 mb-2">모집기한: {item.deadline}</p>
-                    <p className="text-gray-700">
+                    <p className="text-base font-bold sm:text-xl text-lg">모임: {item.gather_name}</p>
+                    <p className="text-gray-500 mt-2 mb-2 sm:text-sm">모집기한: {item.deadline}</p>
+                    <p className="text-gray-700 sm:text-xl text-lg">
                       {item.texts.length > 100 ? `${item.texts.slice(0, 100)}...` : item.texts}
                     </p>
                     <div className="flex justify-between items-center mt-2">
@@ -277,7 +303,7 @@ export default function Sidebar() {
                 ))}
               </ul>
             ) : (
-              <p className="text-center text-gray-500">검색 결과가 없습니다.</p>
+              <p className="text-center text-gray-500 mt-2 sm:text-2xl text-xl">검색 결과가 없습니다.</p>
             )}
           </div>
         </div>
@@ -286,8 +312,11 @@ export default function Sidebar() {
   );
 }
 
-const SidebarItem = ({ icon: Icon, text, onClick, isActive }) => (
-  <li className="cursor-pointer text-center" onClick={onClick}>
+const SidebarItem = ({ icon: Icon, text, onClick, isActive, placesCount, previousCount }) => (
+  <li className="cursor-pointer text-center relative" onClick={onClick}>
+    {text === '모임' && placesCount !== previousCount && (
+      <RiInformationFill className="absolute right-[-5px] top-[-5px] w-[15px] h-[15px] text-red-500" />
+    )}
     <Icon className={`mx-auto w-iconwidth transition-all h-iconheight ${isActive ? 'text-customLoginButton' : ''}`} />
     <p className={`mt-1.5 transition-all ${isActive ? 'text-[#82C0F9]' : ''}`}>{text}</p>
   </li>
