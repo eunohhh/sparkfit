@@ -11,14 +11,15 @@ function SetInfoWindowContent(
   place = null,
   navigate = null,
   marker = null,
-  user = null
+  user = null,
+  contracts = []
 ) {
   // 임시 컨테이너 생성
   const container = document.createElement('div');
 
   container.style.padding = '10px';
   container.style.width = '100%';
-  container.style.height = 'auto';
+  container.style.height = '100%';
   container.style.boxShadow = 'rgba(0, 0, 0, 0.1) 0px 4px 16px 0px';
 
   // React 컴포넌트를 임시 컨테이너에 렌더링
@@ -35,7 +36,9 @@ function SetInfoWindowContent(
   } else if (type === 'coord') {
     root.render(<CoordInfoWindow htmlAddresses={htmlAddresses} infoWindow={infoWindow} marker={marker} />);
   } else if (type === 'place') {
-    root.render(<InfoWindow place={place} infoWindow={infoWindow} navigate={navigate} user={user} />);
+    root.render(
+      <InfoWindow place={place} infoWindow={infoWindow} navigate={navigate} user={user} contracts={contracts} />
+    );
   }
 
   return container;
