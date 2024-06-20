@@ -69,15 +69,11 @@ const CreateGroupModal = ({ close }) => {
   useOutsideClick(modalRef, handleClose);
 
   return (
-    <div className="fixed inset-0 w-full h-full bg-black bg-opacity-10 z-50">
-      <div
-        className="h-auto rounded-lg w-[700px] bg-white absolute top-[-35%] left-1/2 transform -translate-x-1/2 - translate-y-1/2"
-        ref={modalRef}
-      >
+    <div className="fixed inset-0 w-full h-full bg-black bg-opacity-10 z-50 flex justify-center items-center">
+      <div className=" sm:w-[50%] md:w-[50%] lg:w-[50%] xl:w-[35%]   bg-white p-6" ref={modalRef}>
         <div className="m-2 flex justify-center items-center">
           <h3>모임 생성</h3>
         </div>
-
         <form onSubmit={createGroupForm}>
           <div className="my-3 mx-3">
             <div className="flex flex-col">
@@ -140,7 +136,7 @@ const CreateGroupModal = ({ close }) => {
                 모임 설명
               </label>
               <input
-                className="px-5 py-2.5 rounded-md m-1.5 font-semibold border h-[300px]"
+                className="px-5 py-2.5 rounded-md m-1.5 font-semibold border"
                 type="text"
                 onChange={(e) => {
                   setContents(e.target.value);
