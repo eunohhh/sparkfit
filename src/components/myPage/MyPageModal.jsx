@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import Ellipse1 from '../../styles/image/Ellipse1.png';
+import Ellipse1 from '/Ellipse1.png';
 import { useQuery } from '@tanstack/react-query';
 import { useUserStore } from '@/zustand/auth.store';
 import supabase from '@/supabase/supabaseClient';

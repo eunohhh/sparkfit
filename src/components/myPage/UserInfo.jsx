@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Ellipse1 from '../../styles/image/Ellipse1.png';
+import Ellipse1 from '/Ellipse1.png';
 import { RiUser3Line } from 'react-icons/ri';
 import { STSection } from './MyPage';
 import { HiPencilSquare } from 'react-icons/hi2';
