@@ -39,28 +39,27 @@ const ClubInfo = ({ placeID }) => {
 
   console.log(theClubs[0].deadline);
 
-  const TODAY = () => {
+  const getDeadlineStatus = (deadlineDate) => {
     const today = new Date();
-    const year = today.getFullYear();
-    const month = ('0' + (today.getMonth() + 1)).slice(-2);
-    const day = ('0' + today.getDate()).slice(-2);
 
-    return `${year}-${month}-${day}`;
-  };
+    console.log(today);
+    console.log(deadlineDate);
 
-  const deadlineStatus = () => {
-    const todayDate = TODAY();
-    const deadline = theClubs[0].deadline;
-
-    if (todayDate < deadline) {
+    if (today < deadlineDate) {
       console.log('아직 남았어 즐겨');
-    } else if (todayDate === deadline) {
+      return 'dayFuture';
+    } else if (today === deadlineDate) {
       console.log('오늘이다!!!!');
+      return 'dayToday';
     } else {
       console.log('이미 끝낫다');
+      return 'dayPast';
     }
   };
-  deadlineStatus();
+
+  const deadlineDate = new Date(theClubs[0].deadline);
+  const $status = getDeadlineStatus(deadlineDate);
+  console.log('Status:', $status);
 
   return (
     <div className="pl-4 pb-4">
@@ -79,13 +78,31 @@ const ClubInfo = ({ placeID }) => {
         {/* 데드라인 기재하고 현재 날짜에 맞춰 변경! */}
         <div className="flex md:text-balance sm: text-nowrap">
           <div>{theClubs[0].region}</div>
-          <div>{theClubs[0].deadline}</div>
+          <STDeadline $status={$status}>{theClubs[0].deadline}</STDeadline>
         </div>
       </div>
     </div>
   );
 };
 
-const STDeadline = styled.div``;
+const STDeadline = styled.div`
+  padding: 1rem;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  background-color: ${({ $status }) => {
+    switch ($status) {
+      case 'dayFuture':
+        return 'green';
+      case 'dayToday':
+        return 'blue';
+      case 'dayPast':
+        return 'red';
+      default:
+        return 'gray';
+    }
+  }};
+`;
 
 export default ClubInfo;

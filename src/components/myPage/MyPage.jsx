@@ -40,7 +40,7 @@ export const STSection = styled.section`
   }
 
   @media (max-width: 1024px) {
-    margin-left: 4rem;
+    margin-left: 2rem;
   }
 `;
 
