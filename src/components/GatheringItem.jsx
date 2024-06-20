@@ -12,7 +12,7 @@ const GatheringItem = () => {
   const [userLocation, setUserLocation] = useState(null);
   const { gps } = useMap();
 
-  console.log(gps.latitude);
+  console.log(gps);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(

@@ -2,8 +2,10 @@ import useFilterStore from '@/zustand/filter.list';
 import { useState } from 'react';
 import { RiPencilLine } from 'react-icons/ri';
 import CreateGroupModal from '../DetailPage/CreateGroupModal';
+import { useNavigate } from 'react-router-dom';
 
 const FilteringList = () => {
+  const navigate = useNavigate();
   const [openCreateGroupModal, setCreateGroupModal] = useState(false);
   const { selectedButton, handleButtonSelect } = useFilterStore();
   const SortButton = ['현재 사용자 위치', '마감기한', '최신순'];
@@ -34,20 +36,13 @@ const FilteringList = () => {
 
       <button
         className="min-[320px]:hidden bg-[#82C0F9] text-[#ffffff] lg:text-sm lg:px-4 lg:py-2 sm:text-[12px] sm:px-3 sm:hidden md:block rounded-md hover:bg-[#6FA3D4] transition-all duration-300 ease-in-out"
-        onClick={() => setCreateGroupModal(true)}
+        onClick={() => navigate('/')}
       >
         + 새로운 모임 만들기
       </button>
       <button className="sm:hidden min-[320px]:block rounded-[100%] bg-[#82C0F9] text-[#fff] text-xl p-4 fixed z-50 bottom-[25%] right-5">
         <RiPencilLine />
       </button>
-      {openCreateGroupModal && (
-        <CreateGroupModal
-          close={() => {
-            setCreateGroupModal(false);
-          }}
-        />
-      )}
     </div>
   );
 };
