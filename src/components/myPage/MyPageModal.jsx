@@ -4,8 +4,7 @@ import { useUserStore } from '@/zustand/auth.store';
 import supabase from '@/supabase/supabaseClient';
 import useOutsideClick from '../DetailPage/useOutsideClick';
 
-const MyPageModal = ({ close, nickname }) => {
-  // const [profileImage, setProfileImage] = useState(Ellipse1); 미리보기에 쓰기?
+const MyPageModal = ({ close, nickname, setNickname, setImage }) => {
   const [newNickname, setNewNickname] = useState(nickname);
   const [file, setFile] = useState(null);
   const { userData } = useUserStore();
@@ -17,11 +16,11 @@ const MyPageModal = ({ close, nickname }) => {
 
   useOutsideClick(myModalRef, handleCloseModal);
 
-  const userID = userData.user.id;
-
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
   };
+
+  const userID = userData.user.id;
 
   const handleProfile = async () => {
     try {
@@ -36,7 +35,6 @@ const MyPageModal = ({ close, nickname }) => {
 
         //스토리지에서 가져와서 url로 바꾸고
         const { data: publicUrlData } = await supabase.storage.from('imageFile').getPublicUrl(fileName);
-
         const publicUrl = publicUrlData.publicUrl;
 
         // users 테이블에 넣고
@@ -47,7 +45,12 @@ const MyPageModal = ({ close, nickname }) => {
           })
           .eq('user_id', userID);
 
-        // setProfileImage(publicUrl); // 프로필 사진 변경 적용
+        if (updateError) {
+          console.log('updateError : ', updateError);
+        } else {
+          console.log('됨!');
+          setImage(publicUrl);
+        }
       }
 
       // 닉네임 변경
@@ -57,6 +60,13 @@ const MyPageModal = ({ close, nickname }) => {
           nickname: newNickname
         })
         .eq('user_id', userID);
+
+      if (userNameError) {
+        console.log('username error : ', userNameError);
+      } else {
+        console.log('됐다!');
+        setNickname(newNickname);
+      }
     } catch (error) {
       console.log('비상~~비상~~ 문제 발생~~~');
     }
