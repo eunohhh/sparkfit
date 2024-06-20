@@ -5,7 +5,7 @@ import ClubList from './ClubList';
 
 const MyPage = () => {
   return (
-    <section className="max-w-[1280px] h-[100vh] flex flex-col mt-4 mx-auto">
+    <section className="max-w-[1280px] flex flex-col mt-4 mx-auto">
       <section className="flex flex-col p-2 gap-4 w-full sm:p-1 mx-auto md:p-4 ml-4 lg:ml-6">
         <UserInfo />
         <ClubList />
