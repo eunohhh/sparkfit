@@ -1,9 +1,12 @@
 import useFilterStore from '@/zustand/filter.list';
+import { useState } from 'react';
 import { RiPencilLine } from 'react-icons/ri';
+import CreateGroupModal from '../DetailPage/CreateGroupModal';
 
 const FilteringList = () => {
   const { selectedButton, handleButtonSelect } = useFilterStore();
-  const SortButton = ['현재 사용자 위치', '마감기한'];
+  const [openCreateGroupModal, setopenCreateGroupModal] = useState(false);
+  const SortButton = ['현재 사용자 위치', '마감기한', '최신순'];
 
   return (
     <div className="flex justify-between py-10">
@@ -20,7 +23,19 @@ const FilteringList = () => {
           </li>
         ))}
       </ul>
-      <button className="min-[320px]:hidden bg-[#82C0F9] text-[#ffffff] lg:text-sm lg:px-4 lg:py-2 sm:text-[12px] sm:px-3 sm:hidden md:block rounded-md hover:bg-[#6FA3D4] transition-all duration-300 ease-in-out">
+
+      {openCreateGroupModal && (
+        <CreateGroupModal
+          close={() => {
+            setopenCreateGroupModal(false);
+          }}
+        />
+      )}
+
+      <button
+        onClick={() => setopenCreateGroupModal(!openCreateGroupModal)}
+        className="min-[320px]:hidden bg-[#82C0F9] text-[#ffffff] lg:text-sm lg:px-4 lg:py-2 sm:text-[12px] sm:px-3 sm:hidden md:block rounded-md hover:bg-[#6FA3D4] transition-all duration-300 ease-in-out"
+      >
         + 새로운 모임 만들기
       </button>
       <button className="sm:hidden min-[320px]:block rounded-[100%] bg-[#82C0F9] text-[#fff] text-xl p-4 fixed z-50 bottom-[25%] right-5">

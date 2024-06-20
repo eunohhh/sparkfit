@@ -14,7 +14,7 @@ function useMap({ searchInputRef, searchButtonRef }) {
           anchorSkew: true
         })
   );
-  const [selectButtonDom, setSelectButtonDom] = useState(null);
+  const [makeGatherButtonDom, setMakeGatherButtonDom] = useState(null);
   const {
     selectedGeoData,
     setSelectedGeoData,
@@ -85,23 +85,10 @@ function useMap({ searchInputRef, searchButtonRef }) {
     }
   }, [infoWindow]);
 
-  // 선택 버튼 클릭시 동작 여기에
-  useEffect(() => {
-    const handleSelectButtonDom = () => {
-      console.log(selectedGeoData);
-    };
-
-    if (selectButtonDom) selectButtonDom.addEventListener('click', handleSelectButtonDom);
-
-    return () => {
-      if (selectButtonDom) selectButtonDom.removeEventListener('click', handleSelectButtonDom);
-    };
-  }, [selectButtonDom, selectedGeoData]);
-
   // 마커 클릭시 동작 여기에
   useEffect(() => {
     let listener = null;
-    if (basicMarker && gps && infoWindow && mapRef.current && setSelectButtonDom) {
+    if (basicMarker && gps && infoWindow && mapRef.current && setMakeGatherButtonDom) {
       listener = window.naver.maps.Event.addListener(basicMarker, 'click', () => {
         if (selectedGeoData) {
           console.log(selectedGeoData);
@@ -111,7 +98,7 @@ function useMap({ searchInputRef, searchButtonRef }) {
             infoWindow,
             mapRef.current,
             { y: gps.lat, x: gps.long },
-            setSelectButtonDom,
+            setMakeGatherButtonDom,
             setSelectedGeoData
           );
         }
@@ -120,27 +107,25 @@ function useMap({ searchInputRef, searchButtonRef }) {
     return () => {
       if (listener) window.naver.maps.Event.removeListener(listener);
     };
-  }, [basicMarker, selectedGeoData, gps, infoWindow, mapRef, setSelectButtonDom, setSelectedGeoData]);
+  }, [basicMarker, selectedGeoData, gps, infoWindow, mapRef, setMakeGatherButtonDom, setSelectedGeoData]);
 
   // 정보창객체와 맵 객체가 설정되면 initGeocoder 실행
   useEffect(() => {
     // 처음에는 onsJsContentLoaded 에 등록하고 실행하고 다음부터는 등록하지 않고 실행하는 방법도 있음
-    if (infoWindow && mapRef.current && basicMarker)
-      window.naver.maps.onJSContentLoaded = () => {
-        console.log('이게 한번만??');
-        initGeocoder(
-          infoWindow,
-          mapRef.current,
-          searchInputRef.current,
-          searchButtonRef.current,
-          basicMarker,
-          setSelectedGeoData,
-          setSelectButtonDom
-        );
-      };
-  }, [infoWindow, mapRef, searchInputRef, searchButtonRef, basicMarker, setSelectedGeoData, setSelectButtonDom]);
+    if (infoWindow && mapRef.current && basicMarker) {
+      initGeocoder(
+        infoWindow,
+        mapRef.current,
+        searchInputRef.current,
+        searchButtonRef.current,
+        basicMarker,
+        setSelectedGeoData,
+        setMakeGatherButtonDom
+      );
+    }
+  }, [infoWindow, mapRef, searchInputRef, searchButtonRef, basicMarker, setSelectedGeoData, setMakeGatherButtonDom]);
 
-  return { gps, naverMap: mapRef.current, infoWindow, basicMarker, initializeMap };
+  return { gps, naverMap: mapRef.current, infoWindow, basicMarker, makeGatherButtonDom, initializeMap };
 }
 
 export default useMap;

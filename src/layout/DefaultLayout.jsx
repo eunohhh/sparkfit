@@ -3,7 +3,7 @@ import Sidebar from './Sidebar';
 
 export default function DefaultLayout() {
   return (
-    <main>
+    <main className="flex justify-center items-center">
       <Sidebar />
       <Outlet />
       {/* <Footer /> */}
