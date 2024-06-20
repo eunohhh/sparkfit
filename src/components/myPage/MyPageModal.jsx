@@ -21,7 +21,6 @@ const MyPageModal = ({ close, nickname, setNickname, setImage }) => {
   };
 
   const userID = userData.user.id;
-
   const handleProfile = async () => {
     try {
       if (file) {

@@ -32,7 +32,11 @@ const ClubList = () => {
         신청한 모임
       </h3>
       {/* 가져온 모임 정보 맵으로 뿌리기 */}
-      {theGatherings && theGatherings.map(({ place_id }, index) => <ClubInfo key={index + 1} placeID={place_id} />)}
+      {theGatherings && theGatherings.length > 0 ? (
+        theGatherings.map(({ place_id }, index) => <ClubInfo key={index + 1} placeID={place_id} />)
+      ) : (
+        <div> 신청한 번개가 없습니다! </div>
+      )}
     </STSection>
   );
 };

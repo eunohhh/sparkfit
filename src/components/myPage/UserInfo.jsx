@@ -12,14 +12,40 @@ import supabase from '@/supabase/supabaseClient';
 
 const UserInfo = () => {
   const [myPageModal, setMyPageModal] = useState(false);
-  const { userData } = useUserStore();
   const [nickname, setNickname] = useState('');
   const [image, setImage] = useState(Ellipse1);
+  const { userData } = useUserStore();
 
   //로그인 유저 정보.... 로컬 스토리지에서 엑세스 토큰을 사용해서 가져오는 매서드를 이용하기.....리렌더링이 되는 이유 : 상태 변환!auth.getUser
-  // 새로고침
+  // 쥬스탠드 써서 하니까 새로고침하면 날아가버림~~~
 
-  const getUser = async () => {
+  // const accessToken = localStorage.getItem('accessToken');
+  // useEffect(() => {
+  //   const getUserData = async (accessToken) => {
+  //     try {
+  //       const {
+  //         data: { user },
+  //         error
+  //       } = await supabase.auth.getUser(accessToken);
+
+  //       if (error) {
+  //         console.log('뭔가 큰 일 남');
+  //       }
+
+  //       if (user) {
+  //         console.log(user.id);
+  //       }
+  //     } catch (error) {
+  //       console.error('뭔가 에러가 남', error);
+  //     }
+  //   };
+
+  //   getUserData(accessToken);
+  // }, [accessToken]);
+
+  // console.log(user.id);
+
+  const getUserInfo = async () => {
     const { data, error } = await supabase
       .from('Users')
       .select('email, profile_image, nickname')
@@ -40,7 +66,7 @@ const UserInfo = () => {
     error: usersError
   } = useQuery({
     queryKey: ['Users'],
-    queryFn: getUser
+    queryFn: getUserInfo
   });
 
   if (isPending) {
