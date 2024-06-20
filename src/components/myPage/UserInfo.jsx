@@ -5,16 +5,16 @@ import { STSection } from './MyPage';
 import { HiPencilSquare } from 'react-icons/hi2';
 import { useQuery } from '@tanstack/react-query';
 import MyPageModal from './MyPageModal';
-import { useUserStore } from '@/zustand/auth.store';
+import { useSignInStore } from '@/zustand/auth.store';
 import supabase from '@/supabase/supabaseClient';
 
 //auth.getUser 새로고침 문제
 
 const UserInfo = () => {
   const [myPageModal, setMyPageModal] = useState(false);
+  const { userData } = useSignInStore();
   const [nickname, setNickname] = useState('');
   const [image, setImage] = useState(Ellipse1);
-  const { userData } = useUserStore();
 
   //로그인 유저 정보.... 로컬 스토리지에서 엑세스 토큰을 사용해서 가져오는 매서드를 이용하기.....리렌더링이 되는 이유 : 상태 변환!auth.getUser
   // 쥬스탠드 써서 하니까 새로고침하면 날아가버림~~~
