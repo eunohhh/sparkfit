@@ -6,6 +6,7 @@ import { HiPencilSquare } from 'react-icons/hi2';
 import { RiUser3Line } from 'react-icons/ri';
 import { STSection } from './MyPage';
 import MyPageModal from './MyPageModal';
+import Swal from 'sweetalert2';
 
 const UserInfo = () => {
   const [myPageModal, setMyPageModal] = useState(false);
@@ -38,7 +39,15 @@ const UserInfo = () => {
   });
 
   if (isPending) {
-    return <div>loading...</div>;
+    // return <div>로딩 중...</div>;
+    return Swal.fire({
+      title: '사용자 정보 가져오는 중',
+      text: '빠르게 가져오는 중...',
+      allowOutsideClick: false,
+      showLoaderOnConfirm: false,
+      showCancelButton: false,
+      showConfirmButton: false
+    });
   }
 
   if (usersError) {
@@ -53,7 +62,6 @@ const UserInfo = () => {
       </h3>
       <div className="flex rounded-2xl p-4 mr-4 mb-4 ml-4 gap-12 bg-customBackground w-[600px] h-[130px] max-h-[130px]">
         <div className="relative flex items-center">
-          {/* TODO: 사진 미리 보기? */}
           <img
             src={image}
             alt="profile-img"

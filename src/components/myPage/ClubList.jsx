@@ -134,7 +134,9 @@ const ClubList = () => {
                       </div>
                       <div className="flex md:text-balance sm:text-nowrap flex-col text-center items-end">
                         <STDeadline $status={$status}>{deadline}</STDeadline>
-                        <div className="bg-gray-200 rounded-md px-3 py-1 mt-2">{region}</div>
+                        <div className="bg-gray-200 rounded-md px-3 py-1 mt-2 max-w-[90px] max-h-[55px] truncate">
+                          {region}
+                        </div>
                       </div>
                     </div>
                   </li>

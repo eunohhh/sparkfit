@@ -5,22 +5,14 @@ import ClubList from './ClubList';
 
 const MyPage = () => {
   return (
-    <STMyPageContainer>
-      <STSection>
+    <section className="max-w-[1280px] h-[100vh] flex flex-col mt-4 mx-auto">
+      <section className="flex flex-col p-2 gap-4 w-full sm:p-1 mx-auto md:p-4 ml-4 lg:ml-6">
         <UserInfo />
         <ClubList />
-      </STSection>
-    </STMyPageContainer>
+      </section>
+    </section>
   );
 };
-
-const STMyPageContainer = styled.section`
-  max-width: 1280px;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  margin: 1rem auto;
-`;
 
 export const STSection = styled.section`
   display: flex;
@@ -36,11 +28,12 @@ export const STSection = styled.section`
   }
   //md, lg 1024px  ,768px
   @media (max-widt: 768px) {
+    pad: 1rem;
     margin-left: 4rem;
   }
 
   @media (max-width: 1024px) {
-    margin-left: 2rem;
+    margin-left: 6rem;
   }
 `;
 
