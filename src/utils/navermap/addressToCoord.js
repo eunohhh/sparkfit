@@ -1,5 +1,6 @@
 import SetInfoWindowContent from '@/components/navermap/SetInfoWindow';
 import swal from '../sweetalert/swal';
+import isMobile from './isMobile';
 
 function searchAddressToCoordinate(infoWindow, searchInputRef, map, setSelectedGeoData, setSelectButtonDom, marker) {
   const searchedValue = searchInputRef.value;
@@ -50,26 +51,32 @@ function searchAddressToCoordinate(infoWindow, searchInputRef, map, setSelectedG
       });
 
       // setInfoWindowContent 함수 호출
-      const container = SetInfoWindowContent('address', searchedValue, htmlAddresses, infoWindow);
+      const container = SetInfoWindowContent('address', searchedValue, htmlAddresses, infoWindow, null, null, marker);
 
       infoWindow.setContent(container);
 
       infoWindow.setOptions({
-        anchorSkew: true,
+        anchorSkew: false,
         borderColor: '#cecdc7',
         anchorSize: {
           width: 10,
           height: 12
-        },
-        maxWidth: 300
+        }
+        // maxWidth: 300
       });
 
       marker.setMap(map);
       marker.setPosition(point);
 
-      map.setCenter(point);
+      let centerPosition = point;
+      centerPosition = {
+        x: centerPosition.x + 0.001,
+        y: centerPosition.y,
+        _lat: centerPosition._lat,
+        _long: centerPosition._long + 0.001
+      };
+      map.setCenter(isMobile() ? centerPosition : point);
       infoWindow.open(map, point);
-
       setTimeout(() => {
         const infoWindowInnerContent = infoWindow.getContentElement();
 
@@ -77,10 +84,12 @@ function searchAddressToCoordinate(infoWindow, searchInputRef, map, setSelectedG
 
         infoWindowInnerContent.parentNode.style.width = 'fit-content';
         infoWindowInnerContent.parentNode.style.height = 'fit-content';
-        infoWindowInnerContent.parentNode.style.minWidth = '300px';
-        infoWindowInnerContent.parentNode.style.fontSize = '14px';
+        infoWindowInnerContent.parentNode.style.minWidth = isMobile() ? '250px' : '400px';
+        infoWindowInnerContent.parentNode.style.maxWidth = isMobile() ? '250px' : '400px';
+        infoWindowInnerContent.parentNode.style.fontSize = isMobile() ? '9px' : '14px';
 
-        infoWindowOuterContent.style.top = '-130px';
+        infoWindowOuterContent.style.top =
+          infoWindowInnerContent.getBoundingClientRect().height < 100 ? '-88px' : '-130px';
 
         setSelectButtonDom(infoWindowInnerContent.querySelector('#selectCoord'));
 
