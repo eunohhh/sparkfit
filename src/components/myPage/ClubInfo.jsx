@@ -27,7 +27,7 @@ const ClubInfo = ({ placeID }) => {
     enabled: !!placeID
   });
 
-  if (error) {
+  if (theClubsError) {
     console.log('theClubsError');
   }
 

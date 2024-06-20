@@ -13,8 +13,6 @@ const UserInfo = () => {
   const [nickname, setNickname] = useState('');
   const [image, setImage] = useState('/Ellipse1.png');
 
-  console.log(userData);
-
   const getUserInfo = async () => {
     const { data, error } = await supabase
       .from('Users')
@@ -25,6 +23,7 @@ const UserInfo = () => {
       console.log(error);
     } else {
       setNickname(data[0].nickname);
+      setImage(data[0].profile_image || '/Ellipse1.png');
     }
     return data;
   };

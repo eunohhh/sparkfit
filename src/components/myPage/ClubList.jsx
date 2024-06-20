@@ -61,7 +61,10 @@ const ClubList = () => {
     }
   };
 
-  const deadlineDate = MyCreateGathering ? new Date(MyCreateGathering[0].deadline) : null;
+  const deadlineDate =
+    MyCreateGathering && MyCreateGathering[0] && MyCreateGathering[0].deadline
+      ? new Date(MyCreateGathering[0].deadline)
+      : null;
   const $status = getDeadlineStatus(deadlineDate);
 
   const handleMoveToDetail = (place_id) => {
