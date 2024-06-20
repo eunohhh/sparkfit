@@ -2,6 +2,7 @@
 import supabase from '@/supabase/supabaseClient';
 import { useQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
+import Swal from 'sweetalert2';
 
 const ClubInfo = ({ placeID }) => {
   const MyClubLists = async () => {
@@ -32,7 +33,16 @@ const ClubInfo = ({ placeID }) => {
   }
 
   if (isPending) {
-    return <div>loading..</div>;
+    return <div>로딩 중 ... </div>;
+
+    // Swal.fire({
+    //   title: '사용자 정보 가져오는 중',
+    //   text: '빠르게 가져오는 중...',
+    //   allowOutsideClick: false,
+    //   showLoaderOnConfirm: false,
+    //   showCancelButton: false,
+    //   showConfirmButton: false
+    // });
   }
 
   const getDeadlineStatus = (deadlineDate) => {
@@ -66,7 +76,9 @@ const ClubInfo = ({ placeID }) => {
         </div>
         <div className="flex md:text-balance sm: text-nowrap flex-col text-center items-end">
           <STDeadline $status={$status}>{theClubs[0].deadline}</STDeadline>
-          <div className="bg-gray-200 rounded-md px-3 py-1 mt-2">{theClubs[0].region}</div>
+          <div className="bg-gray-200 rounded-md px-3 py-1 mt-2 max-w-[90px] max-h-[55px] truncate">
+            {theClubs[0].region}
+          </div>
         </div>
       </div>
     </>

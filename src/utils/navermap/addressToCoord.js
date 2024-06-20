@@ -2,7 +2,15 @@ import SetInfoWindowContent from '@/components/navermap/SetInfoWindow';
 import swal from '../sweetalert/swal';
 import isMobile from './isMobile';
 
-function searchAddressToCoordinate(infoWindow, searchInputRef, map, setSelectedGeoData, setSelectButtonDom, marker) {
+function searchAddressToCoordinate(
+  infoWindow,
+  searchInputRef,
+  map,
+  setSelectedGeoData,
+  setSelectButtonDom,
+  marker,
+  user
+) {
   const searchedValue = searchInputRef.value;
 
   if (!searchedValue) {
@@ -51,7 +59,16 @@ function searchAddressToCoordinate(infoWindow, searchInputRef, map, setSelectedG
       });
 
       // setInfoWindowContent 함수 호출
-      const container = SetInfoWindowContent('address', searchedValue, htmlAddresses, infoWindow, null, null, marker);
+      const container = SetInfoWindowContent(
+        'address',
+        searchedValue,
+        htmlAddresses,
+        infoWindow,
+        null,
+        null,
+        marker,
+        user
+      );
 
       infoWindow.setContent(container);
 

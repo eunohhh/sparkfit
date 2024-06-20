@@ -1,42 +1,17 @@
 import useMap from '@/hooks/useMap';
 import usePlaces from '@/hooks/usePlaces';
+import { calculateDistance } from '@/utils/gathering/distance';
 import useFilterStore from '@/zustand/filter.list';
 import { useCallback, useEffect, useState } from 'react';
 import Loading from './Loading';
 import PlaceItem from './PlaceItem';
-import { calculateDistance } from '../../utils/gathering/distance';
 import { useGatheringStore } from '@/zustand/gathering.store';
 
 const GatheringItem = () => {
-  const { sortedPlace, userLocation, loading, setSortedPlace, setUserLocation, setLoading } = useGatheringStore();
+  const { sortedPlace, loading, setSortedPlace, setLoading } = useGatheringStore();
   const { selectedButton } = useFilterStore();
   const { places, placesLoading } = usePlaces();
   const { gps } = useMap();
-
-  useEffect(() => {
-    if (gps) {
-      setUserLocation({
-        latitude: gps.lat,
-        longitude: gps.long
-      });
-    }
-  }, []);
-
-  useEffect(() => {
-    if (userLocation && places) {
-      let placeList = sortPlaces(places, userLocation);
-
-      if (selectedButton === 1) {
-        // 마감기한순 정렬
-        placeList = placeList.sort((a, b) => a.deadline.localeCompare(b.deadline));
-      } else if (selectedButton === 2) {
-        // 최신등록순 정렬
-        placeList = placeList.sort((a, b) => b.created_at.localeCompare(a.created_at));
-      }
-      setSortedPlace(placeList);
-      setLoading(false);
-    }
-  }, [userLocation, placesLoading, selectedButton]);
 
   const sortPlaces = useCallback((places, userLocation) => {
     const placesWithDistance = places.map((place) => ({
@@ -49,6 +24,26 @@ const GatheringItem = () => {
 
     return placesWithDistance;
   }, []);
+
+  useEffect(() => {
+    if (gps && places) {
+      const userLocation = {
+        latitude: gps.lat,
+        longitude: gps.long
+      };
+      let placeList = sortPlaces(places, userLocation);
+
+      if (selectedButton === 1) {
+        // 마감기한순 정렬
+        placeList = placeList.sort((a, b) => a.deadline.localeCompare(b.deadline));
+      } else if (selectedButton === 2) {
+        // 최신등록순 정렬
+        placeList = placeList.sort((a, b) => b.created_at.localeCompare(a.created_at));
+      }
+      setSortedPlace(placeList);
+      setLoading(false);
+    }
+  }, [gps, placesLoading, selectedButton]);
 
   return (
     <div className="flex flex-col gap-8 mb-20">
