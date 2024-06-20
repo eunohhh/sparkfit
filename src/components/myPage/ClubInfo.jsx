@@ -11,7 +11,7 @@ const ClubInfo = ({ placeID }) => {
       .eq('id', placeID);
 
     if (error) {
-      console.log('클났다 안 된다');
+      console.log(error);
     }
 
     return mylist;
@@ -20,7 +20,7 @@ const ClubInfo = ({ placeID }) => {
   const {
     data: theClubs,
     isPending,
-    error
+    error: theClubsError
   } = useQuery({
     queryKey: ['myClubs', placeID],
     queryFn: MyClubLists,
@@ -28,11 +28,10 @@ const ClubInfo = ({ placeID }) => {
   });
 
   if (error) {
-    console.log('뭔가 잘못 됨');
+    console.log('theClubsError');
   }
 
   if (isPending) {
-    //스켈레톤 넣어야 겠다.
     return <div>loading..</div>;
   }
 
@@ -59,14 +58,13 @@ const ClubInfo = ({ placeID }) => {
     <>
       {/* 가져온 모임 정보 맵으로 뿌리기*/}
       <div className="flex flex-row flex-1 justify-between p-4 min-h-44 border-4 border-indigo-200 rounded-lg w-[285px] ml-4 mb-2 relative hover:shadow-xl hover:translate-y-1 hover:ease-in-out">
-        {/* <img src={ImagePlaceholder} alt="이미지" className="max-w-[150px] max-h-[150px]" /> */}
-        <div className="flex flex-col md:text-balance sm: text-nowrap ">
+        <div className="flex flex-col md:text-balance sm:text-nowrap ">
           <div className="bg-gray-200 rounded-md px-3 mb-2 w-[75px] h-[25px] text-center">
             {theClubs[0].sports_name}
           </div>
-          <div className="absolute bottom-0 pb-8 text-xl font-black">{theClubs[0].gather_name}</div>
+          <div className="absolute bottom-0 pb-7 text-xl font-black truncate">{theClubs[0].gather_name}</div>
         </div>
-        <div className="flex md:text-balance sm: text-nowrap flex-col text-center">
+        <div className="flex md:text-balance sm: text-nowrap flex-col text-center items-end">
           <STDeadline $status={$status}>{theClubs[0].deadline}</STDeadline>
           <div className="bg-gray-200 rounded-md px-3 py-1 mt-2">{theClubs[0].region}</div>
         </div>

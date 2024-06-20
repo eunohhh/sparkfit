@@ -27,9 +27,6 @@ const ClubList = () => {
     queryFn: getMyGathering
   });
 
-  console.log(theGatherings);
-  console.log(userData.user.id);
-
   const getMyCreateGathering = async () => {
     const { data: CreateGathering, error: CreateGatheringError } = await supabase
       .from('Places')
@@ -37,10 +34,9 @@ const ClubList = () => {
       .eq('created_by', userData.user.id);
 
     if (CreateGatheringError) {
-      console.log('머임 머가 문제임', error);
-    } else {
-      console.log('된거냐고');
+      console.log(CreateGatheringError);
     }
+
     return CreateGathering;
   };
 
@@ -48,8 +44,6 @@ const ClubList = () => {
     queryKey: ['myCreateGathering'],
     queryFn: getMyCreateGathering
   });
-
-  console.log(MyCreateGathering);
 
   const getDeadlineStatus = (deadlineDate) => {
     const today = new Date();
@@ -133,7 +127,7 @@ const ClubList = () => {
                         <div className="bg-gray-200 rounded-md px-3 mb-2 w-[75px] h-[25px] text-center">
                           {sports_name}
                         </div>
-                        <div className="absolute bottom-0 pb-8 text-xl font-black">{gather_name}</div>
+                        <div className="absolute bottom-0 pb-7 text-xl font-black truncate">{gather_name}</div>
                       </div>
                       <div className="flex md:text-balance sm:text-nowrap flex-col text-center items-end">
                         <STDeadline $status={$status}>{deadline}</STDeadline>

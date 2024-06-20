@@ -46,7 +46,6 @@ const MyPageModal = ({ close, nickname, setNickname, setImage }) => {
         if (updateError) {
           console.log('updateError : ', updateError);
         } else {
-          console.log('됨!');
           setImage(publicUrl);
         }
       }
@@ -62,13 +61,12 @@ const MyPageModal = ({ close, nickname, setNickname, setImage }) => {
       if (userNameError) {
         console.log('username error : ', userNameError);
       } else {
-        console.log('됐다!');
         setNickname(newNickname);
       }
     } catch (error) {
-      console.log('비상~~비상~~ 문제 발생~~~');
+      console.log(error);
     }
-    handleCloseModal(); // 끝나면 모달 닫기!
+    handleCloseModal();
   };
 
   return (
