@@ -14,8 +14,6 @@ const JoinModal = ({ close }) => {
   const { data: posts } = useQuery({ queryKey: ['posts', id], queryFn: () => getPost(id) });
   const { data: user } = useQuery({ queryKey: ['user'], queryFn: loginUser });
 
-  console.log(user);
-  console.log(posts);
   const handleClose = () => {
     close?.();
   };

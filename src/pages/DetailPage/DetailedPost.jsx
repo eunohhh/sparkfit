@@ -2,8 +2,8 @@ import { getPost } from '@/api/postsListApi';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import CreateGroupModal from '../components/DetailPage/CreateGroupModal';
-import JoinModal from '../components/DetailPage/JoinModal';
+import CreateGroupModal from '../../components/DetailPage/CreateGroupModal';
+import JoinModal from '../../components/DetailPage/JoinModal';
 import { getUser } from '@/api/profileApi';
 
 const DetailedPost = () => {

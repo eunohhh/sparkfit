@@ -19,13 +19,13 @@ const CreateGroupModal = ({ close }) => {
     useShallow((state) => ({ selectedGeoData: state.selectedGeoData, setUserGps: state.setUserGps }))
   );
 
-  const [address, setAdderess] = useState('');
+  const [address, setAddress] = useState('');
 
   useEffect(() => {
     if (selectedGeoData) {
-      setAdderess(selectedGeoData.address.jibunAddress);
+      setAddress(selectedGeoData.address.jibunAddress);
     } else {
-      setAdderess('');
+      setAddress('');
     }
   }, [selectedGeoData]);
 
@@ -129,7 +129,7 @@ const CreateGroupModal = ({ close }) => {
                 className="px-5 py-2.5 rounded-md m-1.5 font-semibold border"
                 type="address"
                 onChange={(e) => {
-                  setAdderess(e.target.value);
+                  setAddress(e.target.value);
                 }}
                 value={address}
               />

@@ -6,7 +6,7 @@ import HomePage from '../pages/LoginPage/HomePage';
 import NavermapScriptComponent from '../pages/MainPage/NavermapScriptComponent';
 import LoginPage from '../pages/LoginPage/LoginPage';
 import SignupPage from '../pages/LoginPage/SignupPage';
-import DetailedPost from '../pages/DetailedPost';
+import DetailedPost from '../pages/DetailPage/DetailedPost';
 import DefaultLayout from '../layout/DefaultLayout';
 import { PrivateRouter } from './PrivateRouter';
 import { PublicRouter } from './PublicRouter';
