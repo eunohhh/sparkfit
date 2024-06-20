@@ -1,15 +1,16 @@
-import useFilterStore from '@/zustand/filter.list';
-import React, { useEffect, useState, useCallback } from 'react';
-import usePlaces from '@/hooks/usePlaces';
-import PlaceItem from './GatheringPage/PlaceItem';
-import Loading from './GatheringPage/Loading';
 import useMap from '@/hooks/useMap';
+import usePlaces from '@/hooks/usePlaces';
+import useFilterStore from '@/zustand/filter.list';
+import { useCallback, useEffect, useState } from 'react';
+import Loading from './GatheringPage/Loading';
+import PlaceItem from './GatheringPage/PlaceItem';
 
 const GatheringItem = () => {
   const { selectedButton } = useFilterStore();
   const { places, placesLoading } = usePlaces();
   const [sortedPlace, setSortedPlace] = useState([]);
   const [userLocation, setUserLocation] = useState(null);
+  const [loading, setLoading] = useState(true);
   const { gps } = useMap();
 
   console.log(gps);
@@ -53,12 +54,9 @@ const GatheringItem = () => {
       }
 
       setSortedPlace(placeList);
+      setLoading(false);
     }
   }, [userLocation, placesLoading, selectedButton]);
-
-  if (placesLoading) {
-    return <Loading />;
-  }
 
   function calculateDistance(lat1, lon1, lat2, lon2) {
     const R = 6371; // 지구 반지름 (km)
@@ -75,11 +73,20 @@ const GatheringItem = () => {
     return (degrees * Math.PI) / 180;
   }
 
+  // if (placesLoading) {
+  //   return <Loading />;
+  // }
+
+  // return <Loading />;
   return (
     <div className="flex flex-col gap-8 mb-20">
-      {sortedPlace.map((place) => {
-        return <PlaceItem key={place.id} place={place} />;
-      })}
+      {loading ? (
+        <Loading />
+      ) : (
+        sortedPlace.map((place) => {
+          return <PlaceItem key={place.id} place={place} />;
+        })
+      )}
     </div>
   );
 };

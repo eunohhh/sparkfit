@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
-import ImagePlaceholder from '../../../public/ImagePlaceholder.png';
-import { useQuery } from '@tanstack/react-query';
+// import ImagePlaceholder from '../../../public/ImagePlaceholder.png';
 import supabase from '@/supabase/supabaseClient';
+import { useQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
 
 const ClubInfo = ({ placeID }) => {
@@ -56,7 +55,7 @@ const ClubInfo = ({ placeID }) => {
     <>
       {/* 가져온 모임 정보 맵으로 뿌리기*/}
       <div className="flex flex-row flex-1 justify-between p-4 max-h-200px border-4 border-indigo-200 rounded w-[600px] ml-4 hover:shadow-xl hover:translate-y-1 hover:ease-in-out">
-        <img src={ImagePlaceholder} alt="이미지" className="max-w-[150px] max-h-[150px]" />
+        {/* <img src={ImagePlaceholder} alt="이미지" className="max-w-[150px] max-h-[150px]" /> */}
         <div className="flex flex-col mt-8 mr-20 mb-6 ml-6 md:text-balance sm: text-nowrap ">
           <div>
             모임명 : <span> {theClubs[0].gather_name} </span>
