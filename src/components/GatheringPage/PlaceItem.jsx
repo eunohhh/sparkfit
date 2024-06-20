@@ -1,10 +1,11 @@
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+
 const PlaceItem = ({ place }) => {
+  const navigate = useNavigate();
+
   return (
     <div key={place.id} className="flex gap-8 bg-[#ffffff] p-8 shadow-lg rounded-xl relative">
-      {/* 모임 이미지 */}
-      <div>
-        <img src="http://via.placeholder.com/300x200" alt="모임이미지" className="h-full" />
-      </div>
       {/* 모임 설명 */}
       <div className="w-full flex flex-col gap-5">
         {/* 모임 제목/해시태그/버튼 */}
@@ -14,21 +15,31 @@ const PlaceItem = ({ place }) => {
             <ul className="flex gap-2.5">
               <li className="rounded-full bg-[#efefef] px-5 py-1.5 line-height-none text-xs">{place.sports_name}</li>
               <li className="py-1.5 line-height-none text-xs">{place.region}</li>
-              {/* <li className="py-1.5 line-height-none text-xs">멤버 50</li> */}
+              <li className="py-1.5 line-height-none text-xs text-[#82C0F9]">{`${place.distance.toFixed(
+                1
+              )} km 이내`}</li>
             </ul>
           </div>
           <div className="md:block sm:hidden">
-            <button className="min-[320px]:hidden transition-all duration-300 ease-in-out bg-[#efefef] rounded-lg px-8 py-3 text-sm text-[#2e2e2e] hover:bg-[#dddddd]">
+            <button
+              onClick={() => navigate(`/detail/${place.id}`)}
+              className="min-[320px]:hidden md:block transition-all duration-300 ease-in-out bg-[#efefef] rounded-lg px-8 py-3 text-sm text-[#2e2e2e] hover:bg-[#dddddd]"
+            >
               상세보기
             </button>
           </div>
         </div>
 
-        <p className="text-sm md:w-[80%] sm:w-full overflow-hidden text-ellipsis line-clamp-2 ">{place.texts}</p>
-        <p className="text-[#cccccc] text-xs">{`* 모집기간 ${place.deadline}`}</p>
+        <p className="text-sm lg:w-[80%] md:w-[100%] sm:w-full overflow-hidden text-ellipsis line-clamp-2 ">
+          {place.texts}
+        </p>
+        <p className="text-[#999] text-xs">{`* 모집기간 ${place.deadline}`}</p>
 
         <div className="sm:block md:hidden">
-          <button className="w-full transition-all duration-300 ease-in-out bg-[#efefef] rounded-lg px-8 py-3 text-sm text-[#2e2e2e] hover:bg-[#dddddd]">
+          <button
+            onClick={() => navigate(`/detail/${place.id}`)}
+            className="w-full transition-all duration-300 ease-in-out bg-[#efefef] rounded-lg px-8 py-3 text-sm text-[#2e2e2e] hover:bg-[#dddddd]"
+          >
             상세보기
           </button>
         </div>

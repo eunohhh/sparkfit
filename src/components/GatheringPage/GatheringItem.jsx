@@ -1,18 +1,15 @@
 import useFilterStore from '@/zustand/filter.list';
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import PlaceItem from './PlaceItem';
 import usePlaces from '@/hooks/usePlaces';
-import PlaceItem from './GatheringPage/PlaceItem';
-import Loading from './GatheringPage/Loading';
-import useMap from '@/hooks/useMap';
+import Loading from './Loading';
 
 const GatheringItem = () => {
   const { selectedButton } = useFilterStore();
   const { places, placesLoading } = usePlaces();
   const [sortedPlace, setSortedPlace] = useState([]);
   const [userLocation, setUserLocation] = useState(null);
-  const { gps } = useMap();
-
-  console.log(gps);
+  console.log('places', places);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -41,20 +38,29 @@ const GatheringItem = () => {
   }, []);
 
   useEffect(() => {
+    console.log('selectedButton', selectedButton);
     if (userLocation && places) {
-      let placeList = sortPlaces(places, userLocation);
-
-      if (selectedButton === 1) {
-        // 마감기한순 정렬
-        placeList = placeList.sort((a, b) => a.deadline.localeCompare(b.deadline));
-      } else if (selectedButton === 2) {
-        // 최신등록순 정렬
-        placeList = placeList.sort((a, b) => b.created_at.localeCompare(a.created_at));
-      }
+      const placeList = sortPlaces(places, userLocation);
 
       setSortedPlace(placeList);
     }
-  }, [userLocation, placesLoading, selectedButton]);
+  }, [userLocation, placesLoading]);
+
+  useEffect(() => {
+    const newSorted = [...sortedPlace];
+    if (selectedButton === 1) {
+      // 마감기한순 정렬
+      newSorted.sort((a, b) => a.deadline.localeCompare(b.deadline));
+      setSortedPlace(newSorted);
+    } else if (selectedButton === 2) {
+      // 최신등록순 정렬
+      newSorted.sort((a, b) => b.created_at.localeCompare(a.created_at));
+      setSortedPlace(newSorted);
+    } else if (selectedButton === 0) {
+      const newSorted = sortPlaces(places, userLocation);
+      setSortedPlace(newSorted);
+    }
+  }, [selectedButton]);
 
   if (placesLoading) {
     return <Loading />;

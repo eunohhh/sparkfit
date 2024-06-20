@@ -1,11 +1,14 @@
 import useFilterStore from '@/zustand/filter.list';
+import { useState } from 'react';
 import { RiPencilLine } from 'react-icons/ri';
+import CreateGroupModal from '../DetailPage/CreateGroupModal';
 import { useNavigate } from 'react-router-dom';
 
 const FilteringList = () => {
   const navigate = useNavigate();
+  const [openCreateGroupModal, setCreateGroupModal] = useState(false);
   const { selectedButton, handleButtonSelect } = useFilterStore();
-  const SortButton = ['현재 사용자 위치', '마감기한'];
+  const SortButton = ['현재 사용자 위치', '마감기한', '최신순'];
 
   return (
     <div className="flex justify-between py-10">
@@ -22,6 +25,15 @@ const FilteringList = () => {
           </li>
         ))}
       </ul>
+
+      {openCreateGroupModal && (
+        <CreateGroupModal
+          close={() => {
+            setCreateGroupModal(false);
+          }}
+        />
+      )}
+
       <button
         className="min-[320px]:hidden bg-[#82C0F9] text-[#ffffff] lg:text-sm lg:px-4 lg:py-2 sm:text-[12px] sm:px-3 sm:hidden md:block rounded-md hover:bg-[#6FA3D4] transition-all duration-300 ease-in-out"
         onClick={() => navigate('/')}

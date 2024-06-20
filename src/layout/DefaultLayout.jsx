@@ -6,6 +6,7 @@ export default function DefaultLayout() {
     <main className="flex justify-center items-center">
       <Sidebar />
       <Outlet />
+      {/* <Footer /> */}
     </main>
   );
 }
