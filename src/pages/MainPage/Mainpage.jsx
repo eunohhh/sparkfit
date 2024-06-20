@@ -47,7 +47,7 @@ function Mainpage({ user = null, contracts = [] }) {
   };
 
   useEffect(() => {
-    if (places && naverMap && user) {
+    if (places && naverMap && user && contracts) {
       prevPlacesRef.current = places;
       // 마커 리스트와 정보창 리스트 선언
       const markers = [];
@@ -120,7 +120,7 @@ function Mainpage({ user = null, contracts = [] }) {
         }
       });
     }
-  }, [places, naverMap, basicMarker, navigate, user]);
+  }, [places, naverMap, basicMarker, navigate, user, contracts]);
 
   // 모임만들기 버튼 클릭시 동작 여기에
   useEffect(() => {
