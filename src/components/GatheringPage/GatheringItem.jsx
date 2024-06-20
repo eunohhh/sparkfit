@@ -2,11 +2,13 @@ import useFilterStore from '@/zustand/filter.list';
 import React, { useEffect, useState } from 'react';
 import PlaceItem from './PlaceItem';
 import usePlaces from '@/hooks/usePlaces';
+import Loading from './Loading';
 
 const GatheringItem = () => {
   const { selectedButton } = useFilterStore();
   const { places, placesLoading } = usePlaces();
   const [sortedPlace, setSortedPlace] = useState([]);
+  const [isPending, setIsPending] = useState(true);
 
   function calculateDistance(lat1, lon1, lat2, lon2) {
     const R = 6371; // 지구 반지름 (km)
@@ -36,8 +38,8 @@ const GatheringItem = () => {
           }))
           .sort((a, b) => a.distance - b.distance);
 
-        console.log('sortedPlace', sortedPlace);
         setSortedPlace(sortedPlace);
+        setIsPending(false);
 
         if (selectedButton === 1) {
           //마감기한순 정렬
@@ -49,15 +51,12 @@ const GatheringItem = () => {
       });
     } else {
       console.error('모임 데이터를 가지고오지 못했습니다.', error);
+      setIsPending(false);
     }
   }, [places, selectedButton]);
 
   if (placesLoading) {
-    return (
-      <div className="text-[#92B6D7] text-xl font-bold absolute translate-x-[-50%] translate-y-[-50%] top-[50%] left-[50%]">
-        🏃🏻🏃🏻‍♀️🏃🏻‍♂️ 데이터를 가지고 오고 있어요
-      </div>
-    );
+    return <Loading />;
   }
 
   return (
