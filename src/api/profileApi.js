@@ -18,3 +18,13 @@ export const getUser = async (userId) => {
 
   return data;
 };
+
+export const checkIfUserHasJoined = async (placeId, userId) => {
+  const { data, error } = await supabase.from('Contracts').select('*').eq('place_id', placeId).eq('user_id', userId);
+  if (error) {
+    console.error(error.message);
+    return false;
+  }
+
+  return data.length > 0;
+};
