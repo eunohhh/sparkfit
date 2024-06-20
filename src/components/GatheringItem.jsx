@@ -4,16 +4,14 @@ import useFilterStore from '@/zustand/filter.list';
 import { useCallback, useEffect, useState } from 'react';
 import Loading from './GatheringPage/Loading';
 import PlaceItem from './GatheringPage/PlaceItem';
+import { calculateDistance } from '../utils/gathering/distance';
+import { useGatheringStore } from '@/zustand/gathering.store';
 
 const GatheringItem = () => {
+  const { sortedPlace, userLocation, loading, setSortedPlace, setUserLocation, setLoading } = useGatheringStore();
   const { selectedButton } = useFilterStore();
   const { places, placesLoading } = usePlaces();
-  const [sortedPlace, setSortedPlace] = useState([]);
-  const [userLocation, setUserLocation] = useState(null);
-  const [loading, setLoading] = useState(true);
   const { gps } = useMap();
-
-  console.log(gps);
 
   useEffect(() => {
     if (gps) {
@@ -51,21 +49,6 @@ const GatheringItem = () => {
 
     return placesWithDistance;
   }, []);
-
-  function calculateDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371; // 지구 반지름 (km)
-    const dLat = toRadians(lat2 - lat1);
-    const dLon = toRadians(lon2 - lon1);
-    const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c;
-  }
-
-  function toRadians(degrees) {
-    return (degrees * Math.PI) / 180;
-  }
 
   return (
     <div className="flex flex-col gap-8 mb-20">
