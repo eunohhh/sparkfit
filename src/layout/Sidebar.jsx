@@ -1,5 +1,5 @@
 import supabase from '@/supabase/supabaseClient';
-import { useUserStore } from '@/zustand/auth.store';
+import { useSignInStore, useUserStore } from '@/zustand/auth.store';
 import { usePlacesCount } from '@/zustand/placescount.store';
 import { useCallback, useEffect, useState } from 'react';
 import {
@@ -28,6 +28,7 @@ export default function Sidebar() {
   const [previousCount, setPreviousCount] = useState(0);
   //이전카운터값이랑 새로운값비교하기위해
   const { placesCount, startFetching, stopFetching } = usePlacesCount((state) => state);
+  const clearUserIdStorage = useSignInStore.persist.clearStorage;
   // console.log(placesCount);
   // console.log(previousCount)
   // const [user, setUser] = useState(null);
@@ -58,7 +59,7 @@ export default function Sidebar() {
   const openModal = () => {
     setActiveItem('검색');
     setIsModalOpen(true);
-    setSearchKeyword("")
+    setSearchKeyword('');
     document.body.style.overflow = 'hidden';
   };
 
@@ -127,6 +128,7 @@ export default function Sidebar() {
           title: '로그아웃 완료!',
           icon: 'success'
         }).then(() => {
+          clearUserIdStorage();
           navigate('/login');
         });
       }

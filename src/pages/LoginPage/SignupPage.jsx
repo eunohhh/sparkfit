@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { RiUser3Line } from 'react-icons/ri';
 import { MdOutlineEmail } from 'react-icons/md';
 import { RiLockPasswordLine } from 'react-icons/ri';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { useUserStore } from '@/zustand/auth.store';
 import { useValidation } from '@/hooks/useValidation';
@@ -66,19 +66,6 @@ const SignupPage = () => {
         title: '로그인 실패',
         text: getUserErrorMessage(error)
       });
-      // } else if (error.message.includes('duplicate key value violates unique constraint "unique_nickname"')) {
-      //   Swal.fire({
-      //     icon: 'error',
-      //     title: '로그인 실패',
-      //     text: '중복된 닉네임입니다.'
-      //   });
-      // } else {
-      //   Swal.fire({
-      //     icon: 'error',
-      //     title: '로그인 실패',
-      //     text: '알 수 없는 에러입니다. 다시 시도해주세요.'
-      //   });
-      // }
     }
   };
 
@@ -125,6 +112,12 @@ const SignupPage = () => {
         <button className="flex justify-center items-center w-full h-14 text-lg rounded-xl bg-customLoginButton text-white mt-4 p-1.5 cursor-pointer">
           회원가입
         </button>
+        <Link
+          to="/login"
+          className="flex justify-center items-center w-full h-14 text-lg rounded-xl bg-customSignupButton text-black p-1.5 cursor-pointer"
+        >
+          로그인
+        </Link>
       </form>
     </div>
   );

@@ -1,5 +1,7 @@
 import supabase from '@/supabase/supabaseClient';
 import { create } from 'zustand';
+import { immer } from 'zustand/middleware/immer';
+import { persist } from 'zustand/middleware';
 
 export const useUserStore = create((set) => ({
   userData: null,
@@ -35,19 +37,6 @@ export const useUserStore = create((set) => ({
     }
   },
 
-  signIn: async (email, password) => {
-    try {
-      const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
-      if (signInError) {
-        throw new Error(signInError);
-      }
-      set({ userData: signInData, loading: false, error: null });
-    } catch (error) {
-      set({ loading: false, error: `Sign-in failed: ${error.message}` });
-      throw error;
-    }
-  },
-
   signOut: async () => {
     try {
       const { error: signOutError } = await supabase.auth.signOut();
@@ -60,3 +49,28 @@ export const useUserStore = create((set) => ({
     }
   }
 }));
+
+export const useSignInStore = create(
+  persist(
+    (set) => ({
+      userData: null,
+      loading: true,
+      error: null,
+      signIn: async (email, password) => {
+        try {
+          const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+          if (signInError) {
+            throw new Error(signInError);
+          }
+          set({ userData: signInData, loading: false, error: null });
+        } catch (error) {
+          set({ loading: false, error: `Sign-in failed: ${error.message}` });
+          throw error;
+        }
+      }
+    }),
+    {
+      name: 'sb-auth-token'
+    }
+  )
+);
