@@ -1,43 +1,27 @@
-import useFilterStore from '@/zustand/filter.list';
-import { useEffect, useState, useCallback } from 'react';
-import usePlaces from '@/hooks/usePlaces';
-import PlaceItem from './GatheringPage/PlaceItem';
-import Loading from './GatheringPage/Loading';
 import useMap from '@/hooks/useMap';
+import usePlaces from '@/hooks/usePlaces';
+import useFilterStore from '@/zustand/filter.list';
+import { useCallback, useEffect, useState } from 'react';
+import Loading from './GatheringPage/Loading';
+import PlaceItem from './GatheringPage/PlaceItem';
 
 const GatheringItem = () => {
   const { selectedButton } = useFilterStore();
   const { places, placesLoading } = usePlaces();
   const [sortedPlace, setSortedPlace] = useState([]);
   const [userLocation, setUserLocation] = useState(null);
+  const [loading, setLoading] = useState(true);
   const { gps } = useMap();
 
   console.log(gps);
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setUserLocation({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude
-        });
-      },
-      (error) => {
-        console.error('사용자의 위치를 가져오지 못했습니다.:', error);
-      }
-    );
-  }, []);
-
-  const sortPlaces = useCallback((places, userLocation) => {
-    const placesWithDistance = places.map((place) => ({
-      ...place,
-      distance: calculateDistance(userLocation.latitude, userLocation.longitude, place.lat, place.long)
-    }));
-
-    // 거리 계산된 값 오름차순
-    placesWithDistance.sort((a, b) => a.distance - b.distance);
-
-    return placesWithDistance;
+    if (gps) {
+      setUserLocation({
+        latitude: gps.lat,
+        longitude: gps.long
+      });
+    }
   }, []);
 
   useEffect(() => {
@@ -51,14 +35,22 @@ const GatheringItem = () => {
         // 최신등록순 정렬
         placeList = placeList.sort((a, b) => b.created_at.localeCompare(a.created_at));
       }
-
       setSortedPlace(placeList);
+      setLoading(false);
     }
   }, [userLocation, placesLoading, selectedButton]);
 
-  if (placesLoading) {
-    return <Loading />;
-  }
+  const sortPlaces = useCallback((places, userLocation) => {
+    const placesWithDistance = places.map((place) => ({
+      ...place,
+      distance: calculateDistance(userLocation.latitude, userLocation.longitude, place.lat, place.long)
+    }));
+
+    // 거리 계산된 값 오름차순
+    placesWithDistance.sort((a, b) => a.distance - b.distance);
+
+    return placesWithDistance;
+  }, []);
 
   function calculateDistance(lat1, lon1, lat2, lon2) {
     const R = 6371; // 지구 반지름 (km)
@@ -77,9 +69,13 @@ const GatheringItem = () => {
 
   return (
     <div className="flex flex-col gap-8 mb-20">
-      {sortedPlace.map((place) => {
-        return <PlaceItem key={place.id} place={place} />;
-      })}
+      {loading ? (
+        <Loading />
+      ) : (
+        sortedPlace.map((place) => {
+          return <PlaceItem key={place.id} place={place} />;
+        })
+      )}
     </div>
   );
 };
