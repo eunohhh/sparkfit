@@ -39,15 +39,15 @@ const UserInfo = () => {
   });
 
   if (isPending) {
-    // return <div>로딩 중...</div>;
-    return Swal.fire({
-      title: '사용자 정보 가져오는 중',
-      text: '빠르게 가져오는 중...',
-      allowOutsideClick: false,
-      showLoaderOnConfirm: false,
-      showCancelButton: false,
-      showConfirmButton: false
-    });
+    return <div>로딩 중...</div>;
+    // return Swal.fire({
+    //   title: '사용자 정보 가져오는 중',
+    //   text: '빠르게 가져오는 중...',
+    //   allowOutsideClick: false,
+    //   showLoaderOnConfirm: false,
+    //   showCancelButton: false,
+    //   showConfirmButton: false
+    // });
   }
 
   if (usersError) {

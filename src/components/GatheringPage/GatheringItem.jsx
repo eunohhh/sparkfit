@@ -2,7 +2,7 @@ import useMap from '@/hooks/useMap';
 import usePlaces from '@/hooks/usePlaces';
 import { calculateDistance } from '@/utils/gathering/distance';
 import useFilterStore from '@/zustand/filter.list';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import Loading from './Loading';
 import PlaceItem from './PlaceItem';
 import { useGatheringStore } from '@/zustand/gathering.store';
@@ -26,7 +26,7 @@ const GatheringItem = () => {
   }, []);
 
   useEffect(() => {
-    if (gps && places) {
+    if (gps) {
       const userLocation = {
         latitude: gps.lat,
         longitude: gps.long
@@ -43,7 +43,7 @@ const GatheringItem = () => {
       setSortedPlace(placeList);
       setLoading(false);
     }
-  }, [gps, placesLoading, selectedButton]);
+  }, [gps, placesLoading, selectedButton, sortPlaces]);
 
   return (
     <div className="flex flex-col gap-8 mb-20">
