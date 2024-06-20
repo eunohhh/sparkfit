@@ -5,21 +5,26 @@ import { getPost } from '@/api/postsListApi';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import supabase from '@/supabase/supabaseClient';
-// import { useUserStore } from '@/zustand/auth.store';
+import { loginUser } from '@/api/profileApi';
 
 const JoinModal = ({ close }) => {
-  // const [name, setName] = useState('');
   const { id } = useParams();
   const modalRef = useRef(null);
   const [openAlertModal, setOpenAlertModal] = useState(false);
   const { data: posts } = useQuery({ queryKey: ['posts', id], queryFn: () => getPost(id) });
-  // const { userData } = useUserStore();
+  const { data: user } = useQuery({ queryKey: ['user'], queryFn: loginUser });
+
+  const handleClose = () => {
+    close?.();
+  };
+
+  useOutsideClick(modalRef, handleClose);
 
   const test = async () => {
     setOpenAlertModal(true);
     const { data, error } = await supabase
       .from('Contracts')
-      .insert([{ gather_name: posts.gather_name, place_id: posts.id }])
+      .insert([{ gather_name: posts.gather_name, place_id: posts.id, user_id: user.id }])
       .select();
     if (error) {
       console.error(error.message);
@@ -27,11 +32,6 @@ const JoinModal = ({ close }) => {
       console.log(data);
     }
   };
-  const handleClose = () => {
-    close?.();
-  };
-
-  useOutsideClick(modalRef, handleClose);
 
   return (
     <div className="fixed inset-0 w-full h-full bg-black bg-opacity-10 z-50">

@@ -1,6 +1,7 @@
-const CoordInfoWindow = ({ htmlAddresses, infoWindow }) => {
+const CoordInfoWindow = ({ htmlAddresses, infoWindow, marker }) => {
   const handleCloseButton = () => {
     infoWindow.close();
+    marker.setMap(null);
   };
 
   return (
