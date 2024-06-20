@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 
 const PlaceItem = ({ place }) => {
   const navigate = useNavigate();
-  console.log(place);
 
   return (
     <div key={place.id} className="flex gap-8 bg-[#ffffff] p-8 shadow-lg rounded-xl relative">
