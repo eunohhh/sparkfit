@@ -1,61 +1,70 @@
 import useFilterStore from '@/zustand/filter.list';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PlaceItem from './PlaceItem';
 import usePlaces from '@/hooks/usePlaces';
 import Loading from './Loading';
-import useMapStore from '@/zustand/map.store';
 
 const GatheringItem = () => {
   const { selectedButton } = useFilterStore();
   const { places, placesLoading } = usePlaces();
   const [sortedPlace, setSortedPlace] = useState([]);
   const [userLocation, setUserLocation] = useState(null);
-  const { userGps } = useMapStore();
-
-  console.log(userGps);
+  console.log('places', places);
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      setUserLocation({
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude
-      });
-    });
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setUserLocation({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        });
+      },
+      (error) => {
+        console.error('사용자의 위치를 가져오지 못했습니다.:', error);
+      }
+    );
+  }, []);
+
+  const sortPlaces = useCallback((places, userLocation) => {
+    const placesWithDistance = places.map((place) => ({
+      ...place,
+      distance: calculateDistance(userLocation.latitude, userLocation.longitude, place.lat, place.long)
+    }));
+
+    // 거리 계산된 값 오름차순
+    placesWithDistance.sort((a, b) => a.distance - b.distance);
+
+    return placesWithDistance;
   }, []);
 
   useEffect(() => {
+    console.log('selectedButton', selectedButton);
     if (userLocation && places) {
-      const sortedPlace = sortPlaces(places, userLocation, selectedButton);
-      setSortedPlace(sortedPlace);
+      const placeList = sortPlaces(places, userLocation);
 
-      if (selectedButton === 1) {
-        // 마감기한순 정렬
-        sortedPlace.sort((a, b) => a.deadline.localeCompare(b.deadline));
-      } else if (selectedButton === 2) {
-        // 최신등록순 정렬
-        sortedPlace.sort((a, b) => b.created_at.localeCompare(a.created_at));
-      }
-      setSortedPlace(sortedPlace);
+      setSortedPlace(placeList);
     }
-  }, [userLocation, places, selectedButton]);
+  }, [userLocation, placesLoading]);
 
-  const sortPlaces = (places, userLocation, selectedButton) => {
-    return places
-      .map((place) => ({
-        ...place,
-        distance: calculateDistance(userLocation.latitude, userLocation.longitude, place.lat, place.long)
-      }))
-      .sort((a, b) => a.distance - b.distance)
-      .sort((a, b) => {
-        if (selectedButton === 1) {
-          // 마감기한순 정렬
-          return a.deadline.localeCompare(b.deadline);
-        } else if (selectedButton === 2) {
-          // 최신등록순 정렬
-          return b.created_at.localeCompare(a.created_at);
-        }
-      });
-  };
+  useEffect(() => {
+    const newSorted = [...sortedPlace];
+    if (selectedButton === 1) {
+      // 마감기한순 정렬
+      newSorted.sort((a, b) => a.deadline.localeCompare(b.deadline));
+      setSortedPlace(newSorted);
+    } else if (selectedButton === 2) {
+      // 최신등록순 정렬
+      newSorted.sort((a, b) => b.created_at.localeCompare(a.created_at));
+      setSortedPlace(newSorted);
+    } else if (selectedButton === 0) {
+      const newSorted = sortPlaces(places, userLocation);
+      setSortedPlace(newSorted);
+    }
+  }, [selectedButton]);
+
+  if (placesLoading) {
+    return <Loading />;
+  }
 
   function calculateDistance(lat1, lon1, lat2, lon2) {
     const R = 6371; // 지구 반지름 (km)
@@ -72,15 +81,8 @@ const GatheringItem = () => {
     return (degrees * Math.PI) / 180;
   }
 
-  if (placesLoading) {
-    return <Loading />;
-  }
-
   return (
     <div className="flex flex-col gap-8 mb-20">
-      <p>
-        사용자 위치: {userGps?.latitude}, {userGps?.longitude}
-      </p>
       {sortedPlace.map((place) => {
         return <PlaceItem key={place.id} place={place} />;
       })}
