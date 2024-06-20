@@ -1,5 +1,5 @@
 import { useSignInStore } from '@/zustand/auth.store';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { MdOutlineEmail } from 'react-icons/md';
 import { RiLockPasswordLine } from 'react-icons/ri';
 import { Link, useNavigate } from 'react-router-dom';
@@ -30,7 +30,7 @@ const LoginPage = () => {
         title: '로그인 완료!',
         icon: 'success'
       });
-      navigate('/');
+      navigate('/main');
     } catch (error) {
       console.log(error.message);
       if (error.message.includes('Invalid login credentials')) {

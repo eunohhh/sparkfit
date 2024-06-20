@@ -10,5 +10,5 @@ export const PrivateRouter = () => {
     checkAuthToken();
   }, [checkAuthToken]);
 
-  return isAuthenticated ? <Outlet /> : <Navigate to="/home" />;
+  return isAuthenticated ? <Outlet /> : <Navigate to="/" />;
 };
