@@ -1,5 +1,6 @@
 import SetInfoWindowContent from '@/components/navermap/SetInfoWindow';
 import swal from '../sweetalert/swal';
+import isMobile from './isMobile';
 import makeAddress from './makeAddress';
 
 function searchCoordinateToAddress(infoWindow, map, latlng, setSelectButtonDom, setSelectedGeoData, marker) {
@@ -41,16 +42,24 @@ function searchCoordinateToAddress(infoWindow, map, latlng, setSelectButtonDom, 
       infoWindow.setContent(container);
 
       infoWindow.setOptions({
-        anchorSkew: true,
+        anchorSkew: false,
         borderColor: '#cecdc7',
         anchorSize: {
           width: 10,
           height: 12
-        },
-        maxWidth: 300
+        }
+        // maxWidth: 370
       });
-
-      infoWindow.open(map, latlng);
+      let centerPositon = marker.getPosition();
+      centerPositon = {
+        x: centerPositon.x + 0.001,
+        y: centerPositon.y,
+        _lat: centerPositon._lat,
+        _long: centerPositon._long + 0.001
+      };
+      console.log(centerPositon);
+      map.setCenter(isMobile() ? centerPositon : marker.getPosition());
+      infoWindow.open(map, marker.getPosition());
 
       setTimeout(() => {
         const infoWindowInnerContent = infoWindow.getContentElement();
@@ -59,7 +68,8 @@ function searchCoordinateToAddress(infoWindow, map, latlng, setSelectButtonDom, 
 
         infoWindowInnerContent.parentNode.style.width = 'fit-content';
         infoWindowInnerContent.parentNode.style.height = 'fit-content';
-        infoWindowInnerContent.parentNode.style.minWidth = '370px';
+        infoWindowInnerContent.parentNode.style.minWidth = isMobile() ? '220px' : '370px';
+        infoWindowInnerContent.parentNode.style.maxWidth = isMobile() ? '220px' : '370px';
         infoWindowInnerContent.parentNode.style.fontSize = '14px';
 
         infoWindowOuterContent.style.top =

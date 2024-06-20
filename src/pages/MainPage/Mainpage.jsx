@@ -110,7 +110,7 @@ function Mainpage() {
     <>
       {openCreateGroupModal && <CreateGroupModal close={() => setCreateGroupModal(false)} />}
       <section className="relative flex w-dvw h-dvh">
-        <form className="absolute z-10 flex items-center gap-1 rounded-lg bg-white p-1 border border-gray-300 box-border left-20 ml-1">
+        <form className="md:left-20 absolute z-10 flex items-center gap-1 rounded-lg bg-white p-1 border border-gray-300 box-border left-1 ml-1">
           <input
             type="text"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 py-[3px] px-2"

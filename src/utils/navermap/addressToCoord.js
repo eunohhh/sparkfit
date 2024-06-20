@@ -1,5 +1,6 @@
 import SetInfoWindowContent from '@/components/navermap/SetInfoWindow';
 import swal from '../sweetalert/swal';
+import isMobile from './isMobile';
 
 function searchAddressToCoordinate(infoWindow, searchInputRef, map, setSelectedGeoData, setSelectButtonDom, marker) {
   const searchedValue = searchInputRef.value;
@@ -55,13 +56,13 @@ function searchAddressToCoordinate(infoWindow, searchInputRef, map, setSelectedG
       infoWindow.setContent(container);
 
       infoWindow.setOptions({
-        anchorSkew: true,
+        anchorSkew: false,
         borderColor: '#cecdc7',
         anchorSize: {
           width: 10,
           height: 12
-        },
-        maxWidth: 300
+        }
+        // maxWidth: 300
       });
 
       marker.setMap(map);
@@ -77,7 +78,8 @@ function searchAddressToCoordinate(infoWindow, searchInputRef, map, setSelectedG
 
         infoWindowInnerContent.parentNode.style.width = 'fit-content';
         infoWindowInnerContent.parentNode.style.height = 'fit-content';
-        infoWindowInnerContent.parentNode.style.minWidth = '300px';
+        infoWindowInnerContent.parentNode.style.minWidth = isMobile() ? '220px' : '300px';
+        infoWindowInnerContent.parentNode.style.maxWidth = isMobile() ? '220px' : '300px';
         infoWindowInnerContent.parentNode.style.fontSize = '14px';
 
         infoWindowOuterContent.style.top = '-130px';
