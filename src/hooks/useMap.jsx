@@ -81,7 +81,7 @@ function useMap() {
 
   // 사용자 gps 값 저장 성공시 실행
   useEffect(() => {
-    if (gps && basicMarker && mapRef.current) {
+    if (gps && basicMarker && mapRef.current && window.naver) {
       mapRef.current.setCenter(new window.naver.maps.LatLng(gps.lat, gps.long));
       basicMarker.setPosition(new window.naver.maps.LatLng(gps.lat, gps.long));
     }
@@ -89,7 +89,7 @@ function useMap() {
 
   // 기본 정보창 객체 생성
   useEffect(() => {
-    if (!infoWindow) {
+    if (!infoWindow && window.naver) {
       const infoWindow = new window.naver.maps.InfoWindow();
       setInfoWindow(infoWindow);
     }
@@ -98,7 +98,7 @@ function useMap() {
   // 마커 클릭시 동작 여기에
   useEffect(() => {
     let listener = null;
-    if (basicMarker && gps && infoWindow && mapRef.current && setMakeGatherButtonDom) {
+    if (basicMarker && gps && infoWindow && mapRef.current && setMakeGatherButtonDom && window.naver) {
       listener = window.naver.maps.Event.addListener(basicMarker, 'click', () => {
         if (selectedGeoData) {
           console.log(selectedGeoData);
