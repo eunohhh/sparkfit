@@ -38,7 +38,7 @@ const GatheringItem = () => {
       setSortedPlace(placeList);
       setLoading(false);
     }
-  }, [userLocation, placesLoading, selectedButton, places]);
+  }, [userLocation, placesLoading, selectedButton]);
 
   const sortPlaces = useCallback((places, userLocation) => {
     const placesWithDistance = places.map((place) => ({
