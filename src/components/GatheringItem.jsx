@@ -1,5 +1,5 @@
 import useFilterStore from '@/zustand/filter.list';
-import React, { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import usePlaces from '@/hooks/usePlaces';
 import PlaceItem from './GatheringPage/PlaceItem';
 import Loading from './GatheringPage/Loading';
