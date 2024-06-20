@@ -2,10 +2,8 @@ import CreateGroupModal from '@/components/DetailPage/CreateGroupModal';
 import SetInfoWindowContent from '@/components/navermap/SetInfoWindow';
 import usePlaces from '@/hooks/usePlaces';
 import checkForMarkersRendering from '@/utils/navermap/checkForMarkersRendering';
-import useMapStore from '@/zustand/map.store';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useShallow } from 'zustand/react/shallow';
 import useMap from '../../hooks/useMap';
 
 function Mainpage() {
@@ -14,10 +12,7 @@ function Mainpage() {
   const searchButtonRef = useRef();
   const [openCreateGroupModal, setCreateGroupModal] = useState(false);
 
-  const { gps, naverMap, basicMarker, makeGatherButtonDom } = useMap({ searchInputRef, searchButtonRef });
-  const { selectedGeoData } = useMapStore(
-    useShallow((state) => ({ selectedGeoData: state.selectedGeoData, setUserGps: state.setUserGps }))
-  );
+  const { gps, naverMap, basicMarker, makeGatherButtonDom, selectedGeoData } = useMap();
   const { places } = usePlaces();
 
   useEffect(() => {
@@ -40,6 +35,7 @@ function Mainpage() {
           position: new window.naver.maps.LatLng(place.lat, place.long),
           // 마커를 표시할 Map 객체
           map: naverMap
+          // animation: window.naver.maps.Animation.BOUNCE
         });
 
         // 정보창 객체
@@ -53,7 +49,7 @@ function Mainpage() {
         });
 
         // setInfoWindowContent 함수 호출
-        const container = SetInfoWindowContent('place', '', '', infoWindow, place, navigate);
+        const container = SetInfoWindowContent('place', '', '', infoWindow, place, navigate, marker);
 
         infoWindow.setContent(container);
 
@@ -74,6 +70,7 @@ function Mainpage() {
         marker.addListener('click', () => {
           if (basicMarker) basicMarker.setMap(null);
           infoWindows[idx].open(naverMap, marker);
+          naverMap.panTo(new window.naver.maps.LatLng(marker.position._lat, marker.position._lng), { duration: 200 });
         });
       });
 
@@ -108,15 +105,17 @@ function Mainpage() {
     <>
       {openCreateGroupModal && <CreateGroupModal close={() => setCreateGroupModal(false)} />}
       <section className="relative flex w-dvw h-dvh">
-        <form className="absolute z-10 flex items-center gap-1 rounded-lg bg-white p-1 border border-gray-300 box-border left-20 ml-1">
+        <form className="md:left-20 absolute z-10 flex items-center gap-1 rounded-lg bg-white p-1 border border-gray-300 box-border left-1 ml-1">
           <input
             type="text"
+            id="search-input"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 py-[3px] px-2"
             ref={searchInputRef}
           />
           <button
             type="submit"
-            className="bg-btn-blue hover:bg-blue-400 text-white font-bold py-0.5 px-2 rounded"
+            id="search-button"
+            className="bg-btn-blue hover:bg-blue-4000 text-white font-bold py-0.5 px-2 rounded"
             ref={searchButtonRef}
           >
             위치검색

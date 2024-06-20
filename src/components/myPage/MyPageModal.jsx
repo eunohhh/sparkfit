@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react';
-import Ellipse1 from '../../styles/image/Ellipse1.png';
-import { useSignInStore, useUserStore } from '@/zustand/auth.store';
+import { useSignInStore } from '@/zustand/auth.store';
 import supabase from '@/supabase/supabaseClient';
 import useOutsideClick from '../DetailPage/useOutsideClick';
 

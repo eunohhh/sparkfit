@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import ImagePlaceholder from '../../styles/image/ImagePlaceholder.png';
+import ImagePlaceholder from '../../../public/ImagePlaceholder.png';
 import { useQuery } from '@tanstack/react-query';
 import supabase from '@/supabase/supabaseClient';
 import styled from 'styled-components';

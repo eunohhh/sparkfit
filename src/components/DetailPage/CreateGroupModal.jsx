@@ -1,19 +1,35 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import useOutsideClick from './useOutsideClick';
 import { v4 as uuidv4 } from 'uuid';
 import supabase from '@/supabase/supabaseClient';
+import { loginUser } from '@/api/profileApi';
+import { useQuery } from '@tanstack/react-query';
+import useMapStore from '@/zustand/map.store';
+import { useShallow } from 'zustand/react/shallow';
 
 const CreateGroupModal = ({ close }) => {
-  // const [name, setName] = useState('');
   const modalRef = useRef(null);
 
   const [groupName, setGroupName] = useState('');
   const [sportsName, setSportsName] = useState('');
   const [deadline, setDeadLine] = useState('');
-  const [address, setAdderess] = useState('');
   const [contents, setContents] = useState('');
 
-  // const { data: users } = useQuery({ queryKey: ['users', id], queryFn: () => profileApi(id) });
+  const { selectedGeoData } = useMapStore(
+    useShallow((state) => ({ selectedGeoData: state.selectedGeoData, setUserGps: state.setUserGps }))
+  );
+
+  const [address, setAddress] = useState('');
+
+  useEffect(() => {
+    if (selectedGeoData) {
+      setAddress(selectedGeoData.address.jibunAddress);
+    } else {
+      setAddress('');
+    }
+  }, [selectedGeoData]);
+
+  const { data: user } = useQuery({ queryKey: ['user'], queryFn: loginUser });
 
   const createGroupForm = async (e) => {
     e.preventDefault();
@@ -27,7 +43,10 @@ const CreateGroupModal = ({ close }) => {
           gather_name: groupName,
           deadline: deadline,
           region: address,
-          texts: contents
+          texts: contents,
+          created_by: user?.id,
+          lat: selectedGeoData.coord.lat,
+          long: selectedGeoData.coord.long
         }
       ])
       .select();
@@ -104,13 +123,13 @@ const CreateGroupModal = ({ close }) => {
 
             <div className="flex flex-col">
               <label htmlFor="address" className="ml-1">
-                지역
+                주소
               </label>
               <input
                 className="px-5 py-2.5 rounded-md m-1.5 font-semibold border"
                 type="address"
                 onChange={(e) => {
-                  setAdderess(e.target.value);
+                  setAddress(e.target.value);
                 }}
                 value={address}
               />
@@ -122,7 +141,7 @@ const CreateGroupModal = ({ close }) => {
               </label>
               <input
                 className="px-5 py-2.5 rounded-md m-1.5 font-semibold border h-[300px]"
-                type="textarea"
+                type="text"
                 onChange={(e) => {
                   setContents(e.target.value);
                 }}

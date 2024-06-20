@@ -69,10 +69,7 @@ function NavermapScriptComponent() {
           allowOutsideClick: false,
           showLoaderOnConfirm: false,
           showCancelButton: false,
-          showConfirmButton: false,
-          onBeforeOpen: () => {
-            Swal.showLoading();
-          }
+          showConfirmButton: false
         });
         navigator.geolocation.getCurrentPosition(success, error);
       }

@@ -5,7 +5,9 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { INITIAL_CENTER, INITIAL_ZOOM } from '../constants/navermap';
 
-function useMap({ searchInputRef, searchButtonRef }) {
+function useMap() {
+  const [searchInput, setSearchInput] = useState(null);
+  const [searchButton, setSearchButton] = useState(null);
   const [basicMarker, setBasicMarker] = useState(null);
   const [infoWindow, setInfoWindow] = useState(() =>
     !window.naver
@@ -66,12 +68,20 @@ function useMap({ searchInputRef, searchButtonRef }) {
 
   // 최초 실행
   useEffect(() => {
-    initializeMap(INITIAL_CENTER);
+    const mapDiv = document.getElementById('map01');
+    if (mapDiv) initializeMap(INITIAL_CENTER);
+
+    const searchInput = document.getElementById('search-input');
+    const searchButton = document.getElementById('search-button');
+    if (searchInput && searchButton) {
+      setSearchInput(searchInput);
+      setSearchButton(searchButton);
+    }
   }, [initializeMap]);
 
   // 사용자 gps 값 저장 성공시 실행
   useEffect(() => {
-    if (gps && basicMarker && mapRef.current) {
+    if (gps && basicMarker && mapRef.current && window.naver) {
       mapRef.current.setCenter(new window.naver.maps.LatLng(gps.lat, gps.long));
       basicMarker.setPosition(new window.naver.maps.LatLng(gps.lat, gps.long));
     }
@@ -79,7 +89,7 @@ function useMap({ searchInputRef, searchButtonRef }) {
 
   // 기본 정보창 객체 생성
   useEffect(() => {
-    if (!infoWindow) {
+    if (!infoWindow && window.naver) {
       const infoWindow = new window.naver.maps.InfoWindow();
       setInfoWindow(infoWindow);
     }
@@ -88,7 +98,7 @@ function useMap({ searchInputRef, searchButtonRef }) {
   // 마커 클릭시 동작 여기에
   useEffect(() => {
     let listener = null;
-    if (basicMarker && gps && infoWindow && mapRef.current && setMakeGatherButtonDom) {
+    if (basicMarker && gps && infoWindow && mapRef.current && setMakeGatherButtonDom && window.naver) {
       listener = window.naver.maps.Event.addListener(basicMarker, 'click', () => {
         if (selectedGeoData) {
           console.log(selectedGeoData);
@@ -99,7 +109,8 @@ function useMap({ searchInputRef, searchButtonRef }) {
             mapRef.current,
             { y: gps.lat, x: gps.long },
             setMakeGatherButtonDom,
-            setSelectedGeoData
+            setSelectedGeoData,
+            basicMarker
           );
         }
       });
@@ -116,16 +127,24 @@ function useMap({ searchInputRef, searchButtonRef }) {
       initGeocoder(
         infoWindow,
         mapRef.current,
-        searchInputRef.current,
-        searchButtonRef.current,
+        searchInput,
+        searchButton,
         basicMarker,
         setSelectedGeoData,
         setMakeGatherButtonDom
       );
     }
-  }, [infoWindow, mapRef, searchInputRef, searchButtonRef, basicMarker, setSelectedGeoData, setMakeGatherButtonDom]);
+  }, [infoWindow, mapRef, searchInput, searchButton, basicMarker, setSelectedGeoData, setMakeGatherButtonDom]);
 
-  return { gps, naverMap: mapRef.current, infoWindow, basicMarker, makeGatherButtonDom, initializeMap };
+  return {
+    gps,
+    naverMap: mapRef.current,
+    infoWindow,
+    basicMarker,
+    makeGatherButtonDom,
+    selectedGeoData,
+    initializeMap
+  };
 }
 
 export default useMap;

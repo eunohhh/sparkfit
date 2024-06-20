@@ -3,7 +3,15 @@ import AddressInfoWindow from './AddressInfoWindow';
 import InfoWindow from './InfoWindow';
 import CoordInfoWindow from './SelectInfoWindow';
 
-function SetInfoWindowContent(type, searchedValue, htmlAddresses, infoWindow, place = null, navigate = null) {
+function SetInfoWindowContent(
+  type,
+  searchedValue,
+  htmlAddresses,
+  infoWindow,
+  place = null,
+  navigate = null,
+  marker = null
+) {
   // 임시 컨테이너 생성
   const container = document.createElement('div');
 
@@ -16,10 +24,15 @@ function SetInfoWindowContent(type, searchedValue, htmlAddresses, infoWindow, pl
   const root = ReactDOM.createRoot(container);
   if (type === 'address') {
     root.render(
-      <AddressInfoWindow searchedValue={searchedValue} htmlAddresses={htmlAddresses} infoWindow={infoWindow} />
+      <AddressInfoWindow
+        searchedValue={searchedValue}
+        htmlAddresses={htmlAddresses}
+        infoWindow={infoWindow}
+        marker={marker}
+      />
     );
   } else if (type === 'coord') {
-    root.render(<CoordInfoWindow htmlAddresses={htmlAddresses} infoWindow={infoWindow} />);
+    root.render(<CoordInfoWindow htmlAddresses={htmlAddresses} infoWindow={infoWindow} marker={marker} />);
   } else if (type === 'place') {
     root.render(<InfoWindow place={place} infoWindow={infoWindow} navigate={navigate} />);
   }
