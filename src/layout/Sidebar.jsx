@@ -25,16 +25,13 @@ export default function Sidebar() {
   const [searchKeyword, setSearchKeyword] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const currentDate = new Date().toISOString().split('T')[0];
-  // const [previousCount, setPreviousCount] = useState();
-  //이전카운터값이랑 새로운값비교하기위해
-  const { placesCount, startFetching, stopFetching, getPreviousCount, previousCount, updateApplicant, setpreviousCount } =
-    usePlacesCount((state) => state);
+  const [isUpdateComplete, setIsUpdateComplete] = useState(false);
+  const { placesCount, startFetching, stopFetching, getPreviousCount, previousCount, updateApplicant } = usePlacesCount(
+    (state) => state
+  );
   const clearUserIdStorage = useSignInStore.persist.clearStorage;
 
   const [user, setUser] = useState(null);
-
-  // console.log(userInfo[0].total_applicant)
-  // getUserInfo()
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -46,6 +43,7 @@ export default function Sidebar() {
 
         getPreviousCount(data.user.id);
         startFetching(data.user.id);
+        setIsUpdateComplete(false);
       }
     };
     fetchUserInfo();
@@ -54,6 +52,18 @@ export default function Sidebar() {
       stopFetching();
     };
   }, [startFetching, stopFetching]);
+
+  const handleUpdateAlarm = async () => {
+    try {
+      await updateApplicant(user, placesCount);
+      setIsUpdateComplete(true);
+      getPreviousCount(user);
+      navigate('/gathering');
+    } catch (error) {
+      console.error('Error', error);
+    }
+  };
+
   const openModal = () => {
     setActiveItem('검색');
     setIsModalOpen(true);
@@ -139,10 +149,6 @@ export default function Sidebar() {
       });
     }
   };
-
-  console.log('이전 지원자', previousCount);
-  console.log('현재 지원자', placesCount);
-
   return (
     <>
       <div className="bg-white shadow-sidebarshaow fixed top-0 left-0 h-lvh w-20 justify-center items-center h-screen sm:flex hidden text-sm z-10">
@@ -161,14 +167,7 @@ export default function Sidebar() {
                 text="모임"
                 placesCount={placesCount}
                 previousCount={previousCount}
-                onClick={async () => {
-                  try {
-                    await updateApplicant(user, placesCount);
-                    navigate('/gathering');
-                  } catch (error) {
-                    console.error('Error', error);
-                  }
-                }}
+                onClick={handleUpdateAlarm}
               />
               <SidebarItem
                 icon={RiArrowGoBackLine}
@@ -281,7 +280,7 @@ export default function Sidebar() {
               </button>
             </div>
           </form>
-          <div className="mt-4 h-[15rem] overflow-y-scroll text-xs">
+          <div className="mt-4 h-[25rem] overflow-y-scroll text-xs">
             {searchResults.length > 0 ? (
               <ul className="divide-y divide-gray-200">
                 {searchResults.map((item) => (
@@ -321,7 +320,7 @@ export default function Sidebar() {
 
 const SidebarItem = ({ icon: Icon, text, onClick, isActive, placesCount, previousCount }) => (
   <li className="cursor-pointer text-center relative" onClick={onClick}>
-    {text === '모임' && placesCount !== previousCount && (
+    {text === '모임' && placesCount > previousCount && (
       <RiInformationFill className="absolute right-[-5px] top-[-5px] w-[15px] h-[15px] text-red-500" />
     )}
     {/* {console.log(placesCount,previousCount)} */}
