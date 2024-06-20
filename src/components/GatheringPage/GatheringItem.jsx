@@ -27,7 +27,7 @@ const GatheringItem = () => {
   }, []);
 
   useEffect(() => {
-    if (gps && places) {
+    if (gps) {
       const userLocation = {
         latitude: gps.lat,
         longitude: gps.long
@@ -44,7 +44,7 @@ const GatheringItem = () => {
       setSortedPlace(placeList);
       setLoading(false);
     }
-  }, [gps, placesLoading, selectedButton, places, sortPlaces]);
+  }, [gps, placesLoading, selectedButton, sortPlaces]);
 
   return (
     <div className="flex flex-col gap-8 mb-20">
