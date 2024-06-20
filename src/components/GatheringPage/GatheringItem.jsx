@@ -1,8 +1,8 @@
 import useFilterStore from '@/zustand/filter.list';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import PlaceItem from './PlaceItem';
-import usePlaces from '@/hooks/usePlaces';
 import Loading from './Loading';
+import usePlaces from '@/hooks/usePlaces';
 
 const GatheringItem = () => {
   const { selectedButton } = useFilterStore();
