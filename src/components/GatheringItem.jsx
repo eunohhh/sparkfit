@@ -1,7 +1,7 @@
-import useFilterStore from '@/zustand/filter.list';
-import React, { useEffect, useState } from 'react';
-import PlaceItem from './PlaceItem';
 import supabase from '@/supabase/supabaseClient';
+import useFilterStore from '@/zustand/filter.list';
+import { useEffect, useState } from 'react';
+import PlaceItem from './PlaceItem';
 
 const GatheringItem = () => {
   const [places, setPlaces] = useState([]);
