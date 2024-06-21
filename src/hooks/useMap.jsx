@@ -150,7 +150,7 @@ function useMap() {
     if (basicMarker && gps && infoWindow && mapRef.current && setMakeGatherButtonDom && window.naver) {
       listener = window.naver.maps.Event.addListener(basicMarker, 'click', () => {
         if (selectedGeoData) {
-          console.log(selectedGeoData);
+          // console.log(selectedGeoData);
         } else {
           // console.log({ lat: gps.lat, long: gps.long });
           searchCoordinateToAddress(

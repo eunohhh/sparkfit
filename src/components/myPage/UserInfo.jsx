@@ -4,10 +4,9 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { HiPencilSquare } from 'react-icons/hi2';
 import { RiUser3Line } from 'react-icons/ri';
-import { STSection } from './MyPage';
 import MyPageModal from './MyPageModal';
-import Swal from 'sweetalert2';
 import Loading from '../GatheringPage/Loading';
+import { STSection } from './MyPage';
 
 const UserInfo = () => {
   const [myPageModal, setMyPageModal] = useState(false);
@@ -41,14 +40,6 @@ const UserInfo = () => {
 
   if (isPending) {
     return <Loading />;
-    // return Swal.fire({
-    //   title: '사용자 정보 가져오는 중',
-    //   text: '빠르게 가져오는 중...',
-    //   allowOutsideClick: false,
-    //   showLoaderOnConfirm: false,
-    //   showCancelButton: false,
-    //   showConfirmButton: false
-    // });
   }
 
   if (usersError) {

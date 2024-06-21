@@ -1,8 +1,7 @@
-// import ImagePlaceholder from '../../../public/ImagePlaceholder.png';
 import supabase from '@/supabase/supabaseClient';
 import { useQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
-import Swal from 'sweetalert2';
+import Loading from '../GatheringPage/Loading';
 
 const ClubInfo = ({ placeID }) => {
   const MyClubLists = async () => {
@@ -33,16 +32,7 @@ const ClubInfo = ({ placeID }) => {
   }
 
   if (isPending) {
-    return <div>로딩 중 ... </div>;
-
-    // Swal.fire({
-    //   title: '사용자 정보 가져오는 중',
-    //   text: '빠르게 가져오는 중...',
-    //   allowOutsideClick: false,
-    //   showLoaderOnConfirm: false,
-    //   showCancelButton: false,
-    //   showConfirmButton: false
-    // });
+    return <Loading />;
   }
 
   const getDeadlineStatus = (deadlineDate) => {
@@ -66,7 +56,6 @@ const ClubInfo = ({ placeID }) => {
 
   return (
     <>
-      {/* 가져온 모임 정보 맵으로 뿌리기*/}
       <div className="p-4 min-h-40 border-2 cursor-pointer min-h-35  border-indigo-300 rounded-lg mb-5 hover:shadow-xl transition-all duration-300 ease-in-out">
         <div className="flex justify-between">
           <div className="bg-[#efefef] rounded-md px-3 py-2 mb-2 text-center w-[120px]">{theClubs[0].sports_name}</div>

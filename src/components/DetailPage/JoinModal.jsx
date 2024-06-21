@@ -25,9 +25,6 @@ const JoinModal = ({ close }) => {
 
   useOutsideClick(modalRef, handleClose);
 
-  console.log(posts.created_by);
-  console.log(user);
-
   const joinGroup = async () => {
     if (posts.created_by === user.id) {
       alert('본인이 만든 모임에 참가 신청 할 수 없습니다');
@@ -48,8 +45,6 @@ const JoinModal = ({ close }) => {
 
     if (error) {
       console.error(error.message);
-    } else {
-      console.log(data);
     }
     setOpenAlertModal(false);
     close();

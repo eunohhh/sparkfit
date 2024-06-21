@@ -326,7 +326,6 @@ const SidebarItem = ({ icon: Icon, text, onClick, isActive, placesCount, previou
     {text === '모임' && placesCount > previousCount && (
       <RiInformationFill className="absolute right-[-5px] top-[-5px] w-[15px] h-[15px] text-red-500" />
     )}
-    {/* {console.log(placesCount,previousCount)} */}
     <Icon className={`mx-auto w-iconwidth transition-all h-iconheight ${isActive ? 'text-customLoginButton' : ''}`} />
     <p className={`mt-1.5 transition-all ${isActive ? 'text-[#82C0F9]' : ''}`}>{text}</p>
   </li>

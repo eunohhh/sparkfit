@@ -1,7 +1,6 @@
 import React from 'react';
 import ClubInfo, { STDeadline } from './ClubInfo';
 import { RiGroupLine } from 'react-icons/ri';
-import { STSection } from './MyPage';
 import supabase from '@/supabase/supabaseClient';
 import { useQuery } from '@tanstack/react-query';
 import { useSignInStore } from '@/zustand/auth.store';
@@ -9,6 +8,7 @@ import { AiOutlineThunderbolt } from 'react-icons/ai';
 import { AiFillThunderbolt } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import { STSection } from './MyPage';
 
 const ClubList = () => {
   const { userData } = useSignInStore();
@@ -109,7 +109,7 @@ const ClubList = () => {
                   <AiFillThunderbolt />
                   내가 가입한 번개
                 </span>
-                <div className="flex mx-auto">
+                <div className="flex mx-auto text-slate-400">
                   가입한 번개 <AiFillThunderbolt /> 모임이 없어요!
                 </div>
               </div>
@@ -146,7 +146,7 @@ const ClubList = () => {
                   <AiOutlineThunderbolt />
                   내가 만든 번개
                 </span>
-                <div className="flex mx-auto">
+                <div className="flex mx-auto text-slate-400">
                   만든 번개 <AiOutlineThunderbolt /> 모임이 없어요!
                 </div>
               </div>

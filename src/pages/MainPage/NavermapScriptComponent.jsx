@@ -22,7 +22,6 @@ function NavermapScriptComponent() {
     script.async = true;
     script.onload = () => {
       if (window.naver) {
-        console.log('네이버 맵 스크립트 로드 성공:', window.naver);
         setIsScriptLoaded(true);
       } else {
         console.error('네이버 맵 스크립트 로드 실패: window.naver가 정의되지 않음');

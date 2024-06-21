@@ -55,7 +55,6 @@ const CreateGroupModal = ({ close }) => {
       console.error(error.message);
       alert(`오류가 발생했습니다.`);
     } else {
-      console.log(data);
       alert('생성 되었습니다');
 
       close();
