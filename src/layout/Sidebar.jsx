@@ -7,10 +7,10 @@ import {
   RiCloseFill,
   RiGroupLine,
   RiHome2Line,
+  RiInformationFill,
   RiLogoutBoxRLine,
   RiSearchLine,
-  RiUser3Line,
-  RiInformationFill
+  RiUser3Line
 } from 'react-icons/ri';
 import Modal from 'react-modal';
 import { Link, useNavigate } from 'react-router-dom';
@@ -213,7 +213,6 @@ export default function Sidebar() {
           onClick={() => {
             setActiveItem('모임');
             navigate('/gathering');
-            setPreviousCount(placesCount);
           }}
         />
         <SidebarItem icon={RiSearchLine} text="검색" isActive={activeItem === '검색'} onClick={openModal} />
