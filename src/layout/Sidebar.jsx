@@ -160,7 +160,7 @@ export default function Sidebar() {
               </Link>
             </h1>
 
-            <ul className="h-60 flex flex-col justify-between items-center text-xs">
+            <ul className="h-60 flex flex-col justify-around items-center text-xs">
               <SidebarItem icon={RiSearchLine} text="검색" onClick={openModal} />
               <SidebarItem
                 icon={RiGroupLine}
@@ -180,7 +180,7 @@ export default function Sidebar() {
           </div>
 
           <div className="h-36">
-            <ul className="text-xs h-full flex flex-col justify-between items-center">
+            <ul className="text-xs h-full flex flex-col justify-around items-center">
               <SidebarItem
                 icon={RiUser3Line}
                 text="내 계정"
@@ -193,6 +193,7 @@ export default function Sidebar() {
           </div>
         </div>
       </div>
+
       <ul className="bg-white shadow-bottomsidebarshaow fixed bottom-0 left-0 w-full h-16 flex justify-around items-center sm:hidden text-sm z-10">
         <SidebarItem
           icon={RiHome2Line}
@@ -249,13 +250,10 @@ export default function Sidebar() {
         overlayClassName="overlay fixed inset-0 bg-black bg-opacity-50 absolute z-40"
         shouldCloseOnOverlayClick={false}
       >
-        <div className="bg-white p-6 rounded-lg w-2/3 absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/3 sm:top-1/2 sm:left-2/3 sm:transform sm:-translate-x-2/3 sm:-translate-y-1/2 ">
+        <div className="bg-white p-6 rounded-lg sm:w-2/3 absolute min-[320px]:translate-x-[-50%] min-[320px]:translate-y-[-50%] min-[320px]:top-[50%] min-[320px]:left-[50%] min-[320px]:w-[90%]">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="sm:text-2xl font-bold text-xl">
-              Spark Fit 검색{' '}
-              <span className="text-xs text-gray-500">
-                결과 : {searchResults.length > 99 ? '99+' : searchResults.length}
-              </span>
+            <h2 className="sm:text-2xl font-bold text-xl flex items-center gap-3">
+              <RiSearchLine /> Spark Fit 검색{' '}
             </h2>
 
             <button onClick={closeModal} className="w-logowidth h-logoheight">
@@ -263,33 +261,36 @@ export default function Sidebar() {
             </button>
           </div>
           <form onSubmit={searchPlace}>
-            <div className="mb-4 flex gap-4 flex-wrap">
+            <div className="flex gap-4 justify-between">
               <input
                 type="text"
                 value={searchKeyword}
                 onChange={(e) => setSearchKeyword(e.target.value)}
                 placeholder="지역 또는 스포츠명을 입력하세요"
-                className="px-3 py-2 border rounded sm:w-4/5 box-border w-full"
+                className="px-3 py-2 border rounded sm:w-5/6 box-border w-full"
                 maxLength={20}
               />
               <button
                 type="submit"
-                className="bg-customLoginButton text-white px-8 py-1 rounded box-border font-bold text-lg"
+                className="bg-customLoginButton sm:px-5 text-white px-8 py-1 min-[320px]:w-1/6 min-[320px]:text-xs min-[320px]:px-2 rounded box-border font-bold text-lg"
               >
                 검색
               </button>
             </div>
+            <span className="text-xs text-gray-500">
+              결과 : {searchResults.length > 99 ? '99+' : searchResults.length}
+            </span>
           </form>
           <div className="mt-4 h-[25rem] overflow-y-scroll text-xs">
             {searchResults.length > 0 ? (
               <ul className="divide-y divide-gray-200">
                 {searchResults.map((item) => (
                   <li key={item.id} className="py-4 box-border">
-                    <p className="text-base font-bold sm:text-xl text-lg">모임: {item.gather_name}</p>
-                    <p className="text-gray-500 mt-2 mb-2 sm:text-sm">모집기한: {item.deadline}</p>
-                    <p className="text-gray-700 sm:text-xl text-lg">
+                    <p className=" font-bold sm:text-sm ">{item.gather_name}</p>
+                    <p className="text-gray-700 sm:text-sm mt-2 mb-2 ">
                       {item.texts.length > 100 ? `${item.texts.slice(0, 100)}...` : item.texts}
                     </p>
+                    <p className="text-gray-500 sm:text-md">모집기한: {item.deadline}</p>
                     <div className="flex justify-between items-center mt-2">
                       <div className="text-gray-500">
                         <span>{item.region}</span> | <span>{item.sports_name}</span> |{' '}
@@ -309,7 +310,9 @@ export default function Sidebar() {
                 ))}
               </ul>
             ) : (
-              <p className="text-center text-gray-500 mt-2 sm:text-2xl text-xl">검색 결과가 없습니다.</p>
+              <p className="text-center text-gray-500 mt-2 sm:text-md text-xl min-[320px]:text-xs">
+                검색 결과가 없습니다.
+              </p>
             )}
           </div>
         </div>
@@ -323,7 +326,6 @@ const SidebarItem = ({ icon: Icon, text, onClick, isActive, placesCount, previou
     {text === '모임' && placesCount > previousCount && (
       <RiInformationFill className="absolute right-[-5px] top-[-5px] w-[15px] h-[15px] text-red-500" />
     )}
-    {/* {console.log(placesCount,previousCount)} */}
     <Icon className={`mx-auto w-iconwidth transition-all h-iconheight ${isActive ? 'text-customLoginButton' : ''}`} />
     <p className={`mt-1.5 transition-all ${isActive ? 'text-[#82C0F9]' : ''}`}>{text}</p>
   </li>

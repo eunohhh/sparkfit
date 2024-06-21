@@ -25,17 +25,14 @@ const MyPageModal = ({ close, nickname, setNickname, setImage }) => {
       if (file) {
         const fileName = `image_${userID}_${Date.now()}`;
 
-        // 사진 스토리지에 업로드
         const { data: profileImage, error } = await supabase.storage.from('imageFile').upload(fileName, file, {
           cacheControl: '3600',
           upsert: false
         });
 
-        //스토리지에서 가져와서 url로 바꾸고
         const { data: publicUrlData } = await supabase.storage.from('imageFile').getPublicUrl(fileName);
         const publicUrl = publicUrlData.publicUrl;
 
-        // users 테이블에 넣고
         const { data: updateData, error: updateError } = await supabase
           .from('Users')
           .update({
@@ -50,7 +47,6 @@ const MyPageModal = ({ close, nickname, setNickname, setImage }) => {
         }
       }
 
-      // 닉네임 변경
       const { data: userNameData, error: userNameError } = await supabase
         .from('Users')
         .update({

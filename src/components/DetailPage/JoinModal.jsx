@@ -25,9 +25,6 @@ const JoinModal = ({ close }) => {
 
   useOutsideClick(modalRef, handleClose);
 
-  console.log(posts.created_by);
-  console.log(user);
-
   const joinGroup = async () => {
     if (posts.created_by === user.id) {
       alert('본인이 만든 모임에 참가 신청 할 수 없습니다');
@@ -48,8 +45,6 @@ const JoinModal = ({ close }) => {
 
     if (error) {
       console.error(error.message);
-    } else {
-      console.log(data);
     }
     setOpenAlertModal(false);
     close();
@@ -58,18 +53,19 @@ const JoinModal = ({ close }) => {
   return (
     <div className="fixed inset-0 w-full h-full bg-black bg-opacity-10 z-50">
       <div
-        className="h-auto rounded-lg w-[700px] bg-white absolute top-[20%] left-1/2 transform -translate-x-1/2 - translate-y-1/2"
+        className="h-auto rounded-lg min-[320px]:w-[80%] md:w-[50%] sm:w-[60%] bg-white absolute top-[20%] left-1/2 transform -translate-x-1/2 - translate-y-1/2"
         ref={modalRef}
       >
-        <div className="py-10">
+        <div className="py-5">
           <div className="m-2 flex justify-center items-center flex-col">
+            <p className="p-5 bg-[#EBF7FF] rounded-full text-2xl mb-5">🎉</p>
             <h3 className="flex text-2xl mb-2">모임 가입</h3>
             <h1 className="flex">버튼 클릭시 즉시 신청됩니다</h1>
           </div>
 
           <div className="flex justify-center items-center my-3">
             <button
-              className=" text-base px-5 py-2.5 border-none bg-btn-blue rounded-md text-white m-1.5 font-semibold cursor-pointer "
+              className="hover:bg-[#6FA3D4] transition-all duration-300 ease-in-out text-base px-10 py-2 border-none bg-btn-blue rounded-md text-white m-1.5 font-semibold cursor-pointer "
               type="button"
               onClick={joinGroup}
             >
@@ -77,7 +73,7 @@ const JoinModal = ({ close }) => {
             </button>
 
             <button
-              className=" text-base px-5 py-2.5 border-none bg-btn-blue rounded-md text-white m-1.5 font-semibold cursor-pointer "
+              className="hover:bg-[#ddd] transition-all duration-300 ease-in-out text-base px-10 py-2 border-none bg-[#efefef] rounded-md text-[#2e2e2e] m-1.5 font-semibold cursor-pointer "
               type="button"
               onClick={close}
             >

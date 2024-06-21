@@ -72,8 +72,6 @@ export const usePlacesCount = create((set, get) => ({
       if (error) {
         throw new Error(error.message);
       }
-      console.log(data);
-      console.log('Total applicant updated successfully:', data);
     } catch (error) {
       console.error('Error updating total applicant:', error.message);
     }
