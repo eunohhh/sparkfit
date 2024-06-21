@@ -1,5 +1,4 @@
 import useFilterStore from '@/zustand/filter.list';
-import { RiPencilLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
 
 const FilteringList = () => {
@@ -28,9 +27,6 @@ const FilteringList = () => {
         onClick={() => navigate('/main')}
       >
         + 새로운 모임 만들기
-      </button>
-      <button className="sm:hidden min-[320px]:block rounded-[100%] bg-[#82C0F9] text-[#fff] text-xl p-4 fixed z-50 bottom-[25%] right-5">
-        <RiPencilLine />
       </button>
     </div>
   );
