@@ -1,6 +1,6 @@
 import useMapStore from '@/zustand/map.store';
 
-function InfoWindow({ place, infoWindow, navigate, user }) {
+function InfoWindow({ place, infoWindow, navigate, user, contracts }) {
   const { setUserGps: setGps } = useMapStore((state) => ({ setUserGps: state.setUserGps }));
 
   const handleCloseButton = () => {
@@ -17,12 +17,32 @@ function InfoWindow({ place, infoWindow, navigate, user }) {
     navigate(`/detail/${place.id}`);
   };
 
+  const handleViewJoinedGathering = () => {
+    navigate(`/mypage`);
+  };
+
+  const handleViewMyGathering = () => {
+    navigate(`/detail/${place.id}`);
+  };
+
+  const filteredContracts = contracts.filter((contract) => contract.place_id === place.id);
+
   return (
     <>
       <div className="flex flex-row justify-between text-sm">
         <h4 className="flex items-center">{place.sports_name}</h4>
         <div className="flex flex-row gap-1">
-          {place.created_by === user.id ? null : (
+          {place.created_by === user.id ? (
+            <button
+              onClick={handleViewMyGathering}
+              id="viewMyGathering"
+              className="bg-btn-blue hover:bg-blue-400 text-white font-bold py-0.5 px-2 rounded"
+            >
+              내가만든모임보기
+            </button>
+          ) : null}
+
+          {place.created_by !== user.id && filteredContracts.length === 0 ? (
             <button
               onClick={handleJoinButton}
               id="makeGathering"
@@ -30,7 +50,17 @@ function InfoWindow({ place, infoWindow, navigate, user }) {
             >
               모임참여하기
             </button>
-          )}
+          ) : null}
+
+          {place.created_by !== user.id && filteredContracts.length > 0 ? (
+            <button
+              onClick={handleViewJoinedGathering}
+              id="viewJoinedGathering"
+              className="bg-btn-blue hover:bg-blue-400 text-white font-bold py-0.5 px-2 rounded"
+            >
+              참여한모임보기
+            </button>
+          ) : null}
 
           <button
             id="closeCoord"

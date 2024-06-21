@@ -55,7 +55,6 @@ const CreateGroupModal = ({ close }) => {
       console.error(error.message);
       alert(`오류가 발생했습니다.`);
     } else {
-      console.log(data);
       alert('생성 되었습니다');
 
       close();
@@ -70,7 +69,7 @@ const CreateGroupModal = ({ close }) => {
 
   return (
     <div className="fixed inset-0 w-full h-full bg-black bg-opacity-10 z-50 flex justify-center items-center">
-      <div className=" sm:w-[50%] md:w-[50%] lg:w-[50%] xl:w-[35%]   bg-white p-6" ref={modalRef}>
+      <div className=" sm:w-[50%] md:w-[50%] lg:w-[50%] xl:w-[35%] bg-white p-6" ref={modalRef}>
         <div className="m-2 flex justify-center items-center">
           <h3>모임 생성</h3>
         </div>

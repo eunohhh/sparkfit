@@ -2,16 +2,15 @@ import useMap from '@/hooks/useMap';
 import usePlaces from '@/hooks/usePlaces';
 import { calculateDistance } from '@/utils/gathering/distance';
 import useFilterStore from '@/zustand/filter.list';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import Loading from './Loading';
 import PlaceItem from './PlaceItem';
+import { useGatheringStore } from '@/zustand/gathering.store';
 
 const GatheringItem = () => {
+  const { sortedPlace, loading, setSortedPlace, setLoading } = useGatheringStore();
   const { selectedButton } = useFilterStore();
   const { places, placesLoading } = usePlaces();
-  const [sortedPlace, setSortedPlace] = useState([]);
-  // const [userLocation, setUserLocation] = useState(null);
-  const [loading, setLoading] = useState(true);
   const { gps } = useMap();
 
   const sortPlaces = useCallback((places, userLocation) => {

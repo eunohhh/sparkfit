@@ -5,6 +5,8 @@ import { useState } from 'react';
 import { HiPencilSquare } from 'react-icons/hi2';
 import { RiUser3Line } from 'react-icons/ri';
 import MyPageModal from './MyPageModal';
+import Loading from '../GatheringPage/Loading';
+import { STSection } from './MyPage';
 
 const UserInfo = () => {
   const [myPageModal, setMyPageModal] = useState(false);
@@ -37,7 +39,7 @@ const UserInfo = () => {
   });
 
   if (isPending) {
-    return <div>로딩 중...</div>;
+    return <Loading />;
   }
 
   if (usersError) {
@@ -46,23 +48,19 @@ const UserInfo = () => {
   }
 
   return (
-    <section className="flex flex-col p-2 gap-4 w-full sm:p-1 mx-auto md:p-4 ml-4 lg:ml-6">
-      <h3 className="flex gap-2 border-b-2 border-slate-300 mt-4 ml-4 mr-4 w-[600px]">
+    <STSection>
+      <h3 className="flex gap-2 border-b-2 border-slate-300 text-lg items-center">
         <RiUser3Line />내 정보
       </h3>
-      <div className="flex rounded-2xl p-4 mr-4 mb-4 ml-4 gap-12 bg-customBackground w-[600px] h-[130px] max-h-[130px]">
+      <div className="flex rounded-2xl p-4  gap-12 bg-customBackground justify-between items-center">
         <div className="relative flex items-center">
-          <img
-            src={image}
-            alt="profile-img"
-            className="relative rounded-full overflow-hidden max-w-[95px] max-h-[95px] w-[95px] h-[95px]"
-          />
+          <img src={image} alt="profile-img" className="relative rounded-full overflow-hidden w-[70px] h-[70px]" />
         </div>
-        <div>
-          <div className="flex mt-5">{nickname} 님 반갑습니다.</div>
-          <div className="flex mt-2 text-slate-400 text-sm">email : {theUser && theUser[0].email}</div>
+        <div className="flex-auto">
+          <div>{nickname} 님 반갑습니다.</div>
+          <div className="text-slate-400 text-sm mt-2">email : {theUser && theUser[0].email}</div>
         </div>
-        <div className="relative left-40">
+        <div className="cursor-pointer">
           <HiPencilSquare
             className="w-6 h-6"
             onClick={() => {
@@ -81,7 +79,7 @@ const UserInfo = () => {
           )}
         </div>
       </div>
-    </section>
+    </STSection>
   );
 };
 

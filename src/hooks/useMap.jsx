@@ -103,7 +103,7 @@ function useMap() {
       } else {
         Swal.fire({
           title: '위치 정보 가져오는 중',
-          text: '당신의 위치로 이동중...',
+          text: '당신의 위치로 이동 중 🏃🏻‍♀️',
           allowOutsideClick: false,
           showLoaderOnConfirm: false,
           showCancelButton: false,
@@ -150,7 +150,7 @@ function useMap() {
     if (basicMarker && gps && infoWindow && mapRef.current && setMakeGatherButtonDom && window.naver) {
       listener = window.naver.maps.Event.addListener(basicMarker, 'click', () => {
         if (selectedGeoData) {
-          console.log(selectedGeoData);
+          // console.log(selectedGeoData);
         } else {
           // console.log({ lat: gps.lat, long: gps.long });
           searchCoordinateToAddress(
