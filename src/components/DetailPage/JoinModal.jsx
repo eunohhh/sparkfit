@@ -37,7 +37,7 @@ const JoinModal = ({ close }) => {
       close();
       return;
     }
-
+    alert('신청되었습니다');
     const { data, error } = await supabase
       .from('Contracts')
       .insert([{ gather_name: posts.gather_name, place_id: posts.id, user_id: user.id }])
