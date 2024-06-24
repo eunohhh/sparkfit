@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import UserInfo from './UserInfo';
 import ClubList from './ClubList';
+import UserInfo from './UserInfo';
 
 const MyPage = () => {
   return (

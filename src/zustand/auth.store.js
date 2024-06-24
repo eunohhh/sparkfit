@@ -1,6 +1,5 @@
 import supabase from '@/supabase/supabaseClient';
 import { create } from 'zustand';
-import { immer } from 'zustand/middleware/immer';
 import { persist } from 'zustand/middleware';
 
 export const useUserStore = create((set) => ({
@@ -24,8 +23,8 @@ export const useUserStore = create((set) => ({
       const userId = signUpData.user.id;
 
       const { data: userData, error: userError } = await supabase
-        .from('Users')
-        .insert([{ user_id: userId, email, nickname }]);
+        .from('userinfo')
+        .insert([{ id: userId, email, username: nickname }]);
       if (userError) {
         throw new Error(userError.message);
       }
@@ -42,7 +41,7 @@ export const useUserStore = create((set) => ({
       const { error: signOutError } = await supabase.auth.signOut();
       if (signOutError) throw new Error(signOutError.message);
       set({ loading: false, userData: null, error: null });
-      localStorage.removeItem('supabase.auth.token');
+      localStorage.removeItem('sb-auth-token');
     } catch (error) {
       set({ loading: false, error: `Sign-out failed: ${error.message}` });
       throw error;

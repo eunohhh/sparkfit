@@ -4,9 +4,9 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { HiPencilSquare } from 'react-icons/hi2';
 import { RiUser3Line } from 'react-icons/ri';
-import MyPageModal from './MyPageModal';
 import Loading from '../GatheringPage/Loading';
 import { STSection } from './MyPage';
+import MyPageModal from './MyPageModal';
 
 const UserInfo = () => {
   const [myPageModal, setMyPageModal] = useState(false);
@@ -16,9 +16,9 @@ const UserInfo = () => {
 
   const getUserInfo = async () => {
     const { data, error } = await supabase
-      .from('Users')
-      .select('email, profile_image, nickname')
-      .eq('user_id', userData.user.id);
+      .from('userinfo')
+      .select('email, profile_image, username')
+      .eq('id', userData.user.id);
 
     if (error) {
       console.log(error);
