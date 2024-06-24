@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
-import { RiUser3Line } from 'react-icons/ri';
+import { useValidation } from '@/hooks/useValidation';
+import { useUserStore } from '@/zustand/auth.store';
+import { useState } from 'react';
 import { MdOutlineEmail } from 'react-icons/md';
-import { RiLockPasswordLine } from 'react-icons/ri';
+import { RiLockPasswordLine, RiUser3Line } from 'react-icons/ri';
 import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { useUserStore } from '@/zustand/auth.store';
-import { useValidation } from '@/hooks/useValidation';
 import { getUserErrorMessage } from './getUserErrorMessage';
 
 const SignupPage = () => {
