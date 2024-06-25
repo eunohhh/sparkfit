@@ -1,12 +1,12 @@
 import supabase from '@/supabase/supabaseClient';
-import { useSignInStore } from '@/zustand/auth.store';
+import { useUserStore } from '@/zustand/auth.store';
 import { useRef, useState } from 'react';
 import useOutsideClick from '../DetailPage/useOutsideClick';
 
 const MyPageModal = ({ close, nickname, setNickname, setImage }) => {
   const [newNickname, setNewNickname] = useState(nickname);
   const [file, setFile] = useState(null);
-  const { userData } = useSignInStore();
+  const userData = useUserStore((state) => state.userData);
   const myModalRef = useRef(null);
 
   const handleCloseModal = () => {

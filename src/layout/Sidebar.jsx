@@ -1,5 +1,5 @@
 import supabase from '@/supabase/supabaseClient';
-import { useSignInStore, useUserStore } from '@/zustand/auth.store';
+import { useUserStore } from '@/zustand/auth.store';
 import { usePlacesCount } from '@/zustand/placescount.store';
 import { useCallback, useEffect, useState } from 'react';
 import {
@@ -21,43 +21,31 @@ export default function Sidebar() {
   const navigate = useNavigate();
   const [activeItem, setActiveItem] = useState('');
   const signOut = useUserStore((state) => state.signOut);
+  const checkSignIn = useUserStore((state) => state.checkSignIn);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const currentDate = new Date().toISOString().split('T')[0];
-  const [isUpdateComplete, setIsUpdateComplete] = useState(false);
+  const userData = useUserStore((state) => state.userData);
   const { placesCount, startFetching, stopFetching, getPreviousCount, previousCount, updateApplicant } = usePlacesCount(
     (state) => state
   );
-  const clearUserIdStorage = useSignInStore.persist.clearStorage;
 
-  const [user, setUser] = useState(null);
+  console.log(userData);
 
   useEffect(() => {
-    const fetchUserInfo = async () => {
-      const { data, error } = await supabase.auth.getUser();
-      if (error) {
-        console.error('Error:', error);
-      } else {
-        setUser(data.user.id);
-
-        getPreviousCount(data.user.id);
-        startFetching(data.user.id);
-        setIsUpdateComplete(false);
-      }
-    };
-    fetchUserInfo();
-
-    return () => {
-      stopFetching();
-    };
-  }, [startFetching, stopFetching]);
+    if (userData) {
+      getPreviousCount(userData.user.id);
+      startFetching(userData.user.id);
+    }
+  }, [checkSignIn, getPreviousCount, startFetching, userData]);
 
   const handleUpdateAlarm = async () => {
     try {
-      await updateApplicant(user, placesCount);
-      setIsUpdateComplete(true);
-      getPreviousCount(user);
+      if (userData) {
+        await updateApplicant(userData.user.id, placesCount);
+        getPreviousCount(userData.user.id);
+      }
       navigate('/gathering');
     } catch (error) {
       console.error('Error', error);
@@ -135,10 +123,11 @@ export default function Sidebar() {
         Swal.fire({
           title: '로그아웃 완료!',
           icon: 'success'
-        }).then(() => {
-          clearUserIdStorage();
-          navigate('/login');
         });
+        stopFetching();
+        setTimeout(() => {
+          navigate('/');
+        }, 0);
       }
     } catch (error) {
       console.error('로그아웃 중 에러 발생:', error);
