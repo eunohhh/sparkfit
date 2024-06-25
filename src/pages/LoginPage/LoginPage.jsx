@@ -1,4 +1,4 @@
-import { useSignInStore } from '@/zustand/auth.store';
+import { useUserStore } from '@/zustand/auth.store';
 import { useState } from 'react';
 import { MdOutlineEmail } from 'react-icons/md';
 import { RiLockPasswordLine } from 'react-icons/ri';
@@ -9,7 +9,7 @@ const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  const signIn = useSignInStore((state) => state.signIn);
+  const signIn = useUserStore((state) => state.signIn);
 
   const handleSignIn = async (event) => {
     event.preventDefault();

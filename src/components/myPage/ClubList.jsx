@@ -1,5 +1,5 @@
 import supabase from '@/supabase/supabaseClient';
-import { useSignInStore } from '@/zustand/auth.store';
+import { useUserStore } from '@/zustand/auth.store';
 import { useQuery } from '@tanstack/react-query';
 import { AiFillThunderbolt, AiOutlineThunderbolt } from 'react-icons/ai';
 import { RiGroupLine } from 'react-icons/ri';
@@ -9,7 +9,7 @@ import ClubInfo, { STDeadline } from './ClubInfo';
 import { STSection } from './MyPage';
 
 const ClubList = () => {
-  const { userData } = useSignInStore();
+  const userData = useUserStore((state) => state.userData);
   const navigate = useNavigate();
 
   const getMyGathering = async () => {

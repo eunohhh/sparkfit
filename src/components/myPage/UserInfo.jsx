@@ -1,5 +1,5 @@
 import supabase from '@/supabase/supabaseClient';
-import { useSignInStore } from '@/zustand/auth.store';
+import { useUserStore } from '@/zustand/auth.store';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { HiPencilSquare } from 'react-icons/hi2';
@@ -10,7 +10,7 @@ import MyPageModal from './MyPageModal';
 
 const UserInfo = () => {
   const [myPageModal, setMyPageModal] = useState(false);
-  const { userData } = useSignInStore();
+  const userData = useUserStore((state) => state.userData);
   const [nickname, setNickname] = useState('');
   const [image, setImage] = useState('/Ellipse1.png');
 

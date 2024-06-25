@@ -1,6 +1,5 @@
 import supabase from '@/supabase/supabaseClient';
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
 
 export const useUserStore = create((set) => ({
   userData: null,
@@ -41,35 +40,30 @@ export const useUserStore = create((set) => ({
       const { error: signOutError } = await supabase.auth.signOut();
       if (signOutError) throw new Error(signOutError.message);
       set({ loading: false, userData: null, error: null });
-      localStorage.removeItem('sb-auth-token');
     } catch (error) {
       set({ loading: false, error: `Sign-out failed: ${error.message}` });
       throw error;
     }
+  },
+
+  signIn: async (email, password) => {
+    try {
+      const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+      if (signInError) {
+        throw new Error(signInError);
+      }
+      set({ userData: signInData, loading: false, error: null });
+    } catch (error) {
+      set({ loading: false, error: `Sign-in failed: ${error.message}` });
+      throw error;
+    }
+  },
+
+  checkSignIn: async () => {
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+    if (userError) {
+      throw new Error(userError.message);
+    }
+    set({ userData, loading: false, error: null });
   }
 }));
-
-export const useSignInStore = create(
-  persist(
-    (set) => ({
-      userData: null,
-      loading: true,
-      error: null,
-      signIn: async (email, password) => {
-        try {
-          const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
-          if (signInError) {
-            throw new Error(signInError);
-          }
-          set({ userData: signInData, loading: false, error: null });
-        } catch (error) {
-          set({ loading: false, error: `Sign-in failed: ${error.message}` });
-          throw error;
-        }
-      }
-    }),
-    {
-      name: 'sb-auth-token'
-    }
-  )
-);
