@@ -31,8 +31,6 @@ export default function Sidebar() {
     (state) => state
   );
 
-  console.log(userData);
-
   useEffect(() => {
     if (userData) {
       getPreviousCount(userData.user.id);
