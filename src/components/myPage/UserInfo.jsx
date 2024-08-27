@@ -6,7 +6,7 @@ import { HiPencilSquare } from 'react-icons/hi2';
 import { RiUser3Line } from 'react-icons/ri';
 import MyPageModal from './MyPageModal';
 import Loading from '../GatheringPage/Loading';
-import { STSection } from './MyPage';
+import { STSection } from '../../pages/MyPage/MyPage';
 
 const UserInfo = () => {
   const [myPageModal, setMyPageModal] = useState(false);

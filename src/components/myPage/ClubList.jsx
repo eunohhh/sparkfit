@@ -1,4 +1,3 @@
-import React from 'react';
 import ClubInfo, { STDeadline } from './ClubInfo';
 import { RiGroupLine } from 'react-icons/ri';
 import supabase from '@/supabase/supabaseClient';
@@ -8,7 +7,7 @@ import { AiOutlineThunderbolt } from 'react-icons/ai';
 import { AiFillThunderbolt } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { STSection } from './MyPage';
+import { STSection } from '../../pages/MyPage/MyPage';
 
 const ClubList = () => {
   const { userData } = useSignInStore();

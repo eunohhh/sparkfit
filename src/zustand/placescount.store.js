@@ -1,6 +1,5 @@
 import supabase from '@/supabase/supabaseClient';
 import { create } from 'zustand';
-import { immer } from 'zustand/middleware/immer';
 
 const fetchPlacesCount = async (userId) => {
   const { data: placesData, error: placesError } = await supabase.from('Places').select('*').eq('created_by', userId);

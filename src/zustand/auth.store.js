@@ -1,6 +1,5 @@
 import supabase from '@/supabase/supabaseClient';
 import { create } from 'zustand';
-import { immer } from 'zustand/middleware/immer';
 import { persist } from 'zustand/middleware';
 
 export const useUserStore = create((set) => ({
