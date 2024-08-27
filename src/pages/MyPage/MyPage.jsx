@@ -1,6 +1,6 @@
+import ClubList from '@/components/myPage/ClubList';
+import UserInfo from '@/components/myPage/UserInfo';
 import styled from 'styled-components';
-import ClubList from './ClubList';
-import UserInfo from './UserInfo';
 
 const MyPage = () => {
   return (

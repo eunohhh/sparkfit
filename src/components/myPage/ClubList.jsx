@@ -1,15 +1,16 @@
-import supabase from '@/supabase/supabaseClient';
-import { useUserStore } from '@/zustand/auth.store';
-import { useQuery } from '@tanstack/react-query';
-import { AiFillThunderbolt, AiOutlineThunderbolt } from 'react-icons/ai';
+import ClubInfo, { STDeadline } from './ClubInfo';
 import { RiGroupLine } from 'react-icons/ri';
+import supabase from '@/supabase/supabaseClient';
+import { useQuery } from '@tanstack/react-query';
+import { useSignInStore } from '@/zustand/auth.store';
+import { AiOutlineThunderbolt } from 'react-icons/ai';
+import { AiFillThunderbolt } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import ClubInfo, { STDeadline } from './ClubInfo';
-import { STSection } from './MyPage';
+import { STSection } from '../../pages/MyPage/MyPage';
 
 const ClubList = () => {
-  const userData = useUserStore((state) => state.userData);
+  const { userData } = useSignInStore();
   const navigate = useNavigate();
 
   const getMyGathering = async () => {
