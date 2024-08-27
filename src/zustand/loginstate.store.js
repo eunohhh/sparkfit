@@ -3,10 +3,10 @@ import { immer } from 'zustand/middleware/immer';
 
 export const useAuthStore = create(
   immer((set) => ({
-    isAuthenticated: !!localStorage.getItem('sb-izvoqnbrmtyamauaimyt-auth-token'),
+    isAuthenticated: false,
 
     checkAuthToken: () => {
-      set({ isAuthenticated: !!localStorage.getItem('sb-izvoqnbrmtyamauaimyt-auth-token') });
+      set({ isAuthenticated: !!localStorage.getItem('sb-ageijospngqmyzptvsoo-auth-token') });
     }
   }))
 );

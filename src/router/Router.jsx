@@ -1,4 +1,3 @@
-import MyPage from '@/components/myPage/MyPage';
 import GatheringList from '@/pages/GatheringPage/GatheringList';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
@@ -10,6 +9,7 @@ import SignupPage from '../pages/LoginPage/SignupPage';
 import NavermapScriptComponent from '../pages/MainPage/NavermapScriptComponent';
 import { PrivateRouter } from './PrivateRouter';
 import { PublicRouter } from './PublicRouter';
+import MyPage from '@/pages/MyPage/MyPage';
 
 export default function Router() {
   return (

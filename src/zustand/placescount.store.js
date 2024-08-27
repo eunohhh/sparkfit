@@ -51,7 +51,7 @@ export const usePlacesCount = create((set, get) => ({
   },
   getPreviousCount: async (userId) => {
     try {
-      const { data, error } = await supabase.from('Users').select('*').eq('user_id', userId);
+      const { data, error } = await supabase.from('userinfo').select('*').eq('id', userId);
       if (error) {
         throw new Error(error.message);
       }
@@ -64,9 +64,9 @@ export const usePlacesCount = create((set, get) => ({
   updateApplicant: async (userId, newTotalApplicant) => {
     try {
       const { data, error } = await supabase
-        .from('Users')
+        .from('userinfo')
         .update({ total_applicant: newTotalApplicant })
-        .eq('user_id', userId);
+        .eq('id', userId);
 
       if (error) {
         throw new Error(error.message);
