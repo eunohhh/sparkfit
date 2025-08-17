@@ -77,7 +77,10 @@ const LoginPage = () => {
           />
         </div>
 
-        <button className="w-full h-14 text-lg rounded-xl bg-customLoginButton text-white mt-4 p-1.5 cursor-pointer">
+        <button
+          type="submit"
+          className="w-full h-14 text-lg rounded-xl bg-customLoginButton text-white mt-4 p-1.5 cursor-pointer"
+        >
           로그인하기
         </button>
         <div className="flex justify-evenly w-full">

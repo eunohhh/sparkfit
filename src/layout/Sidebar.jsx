@@ -21,7 +21,7 @@ export default function Sidebar() {
   const navigate = useNavigate();
   const [activeItem, setActiveItem] = useState('');
   const signOut = useUserStore((state) => state.signOut);
-  const checkSignIn = useUserStore((state) => state.checkSignIn);
+  // const checkSignIn = useUserStore((state) => state.checkSignIn);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState('');
   const [searchResults, setSearchResults] = useState([]);
@@ -36,7 +36,7 @@ export default function Sidebar() {
       getPreviousCount(userData.user.id);
       startFetching(userData.user.id);
     }
-  }, [checkSignIn, getPreviousCount, startFetching, userData]);
+  }, [getPreviousCount, startFetching, userData]);
 
   const handleUpdateAlarm = async () => {
     try {
@@ -102,7 +102,7 @@ export default function Sidebar() {
         Swal.close();
       }
     },
-    [searchKeyword]
+    [searchKeyword, currentDate]
   );
 
   const handleSignOut = async () => {
@@ -172,7 +172,16 @@ export default function Sidebar() {
                 icon={RiUser3Line}
                 text="내 계정"
                 onClick={() => {
-                  navigate('/mypage');
+                  if (userData) {
+                    navigate('/mypage');
+                  } else {
+                    Swal.fire({
+                      icon: 'warning',
+                      title: '로그인 필요',
+                      text: '비로그인 상태입니다.'
+                    });
+                  }
+                  return;
                 }}
               />
               <SidebarItem icon={RiLogoutBoxRLine} text="로그아웃" onClick={handleSignOut} />
@@ -242,7 +251,7 @@ export default function Sidebar() {
               <RiSearchLine /> Spark Fit 검색{' '}
             </h2>
 
-            <button onClick={closeModal} className="w-logowidth h-logoheight">
+            <button type="button" onClick={closeModal} className="w-logowidth h-logoheight">
               <RiCloseFill className="w-full h-full" />
             </button>
           </div>
@@ -283,6 +292,7 @@ export default function Sidebar() {
                         <span>{item.created_at.slice(0, 10)}</span>
                       </div>
                       <button
+                        type="button"
                         className="bg-customLoginButton text-white px-2 py-1 rounded box-border"
                         onClick={() => {
                           navigate(`/detail/${item.id}`);

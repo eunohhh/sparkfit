@@ -3,10 +3,11 @@ import { loginUser } from '@/api/profileApi';
 import Loading from '@/components/GatheringPage/Loading';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import Swal from 'sweetalert2';
 import Mainpage from './Mainpage';
 
 function NavermapScriptComponent() {
-  const { data: user, isLoading } = useQuery({ queryKey: ['user'], queryFn: loginUser });
+  const { data: user } = useQuery({ queryKey: ['user'], queryFn: loginUser });
   const { data: contracts, isLoading: isContractsLoading } = useQuery({
     queryKey: ['contracts'],
     queryFn: () => contractsApi.getContracts(),
@@ -37,7 +38,18 @@ function NavermapScriptComponent() {
     };
   }, []);
 
-  if (isLoading || !isScriptLoaded || isContractsLoading) {
+  useEffect(() => {
+    if (!user) {
+      Swal.fire({
+        icon: 'warning',
+        title: '로그인 필요',
+        text: '비로그인 상태입니다.'
+      });
+      return;
+    }
+  }, [user]);
+
+  if (!isScriptLoaded || isContractsLoading) {
     return <Loading />;
   }
 

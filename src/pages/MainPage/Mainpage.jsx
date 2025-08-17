@@ -14,7 +14,7 @@ function Mainpage({ user = null, contracts = [] }) {
   const searchInputRef = useRef();
   const searchButtonRef = useRef();
   const [openCreateGroupModal, setCreateGroupModal] = useState(false);
-  const { naverMap, basicMarker, infoWindow, makeGatherButtonDom, selectedGeoData } = useMap();
+  const { naverMap, basicMarker, infoWindow, makeGatherButtonDom } = useMap();
   const { places } = usePlaces();
   const queryClient = useQueryClient();
 
@@ -53,7 +53,7 @@ function Mainpage({ user = null, contracts = [] }) {
       const markers = [];
       const infoWindows = [];
 
-      places.forEach((place) => {
+      for (const place of places) {
         const marker = new window.naver.maps.Marker({
           // 생성될 마커의 위치
           position: new window.naver.maps.LatLng(place.lat, place.long),
@@ -92,7 +92,7 @@ function Mainpage({ user = null, contracts = [] }) {
 
         markers.push(marker);
         infoWindows.push(infoWindow);
-      });
+      }
 
       allMarkersRef.current = markers;
       allInfoWindowsRef.current = infoWindows;
@@ -131,7 +131,7 @@ function Mainpage({ user = null, contracts = [] }) {
     return () => {
       if (makeGatherButtonDom) makeGatherButtonDom.removeEventListener('click', handleSelectButtonDom);
     };
-  }, [makeGatherButtonDom, selectedGeoData]);
+  }, [makeGatherButtonDom]);
 
   return (
     <>
