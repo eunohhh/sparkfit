@@ -1,4 +1,3 @@
-import MyPage from '@/components/myPage/MyPage';
 import GatheringList from '@/pages/GatheringPage/GatheringList';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 

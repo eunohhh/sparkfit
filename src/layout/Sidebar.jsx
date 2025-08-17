@@ -106,6 +106,14 @@ export default function Sidebar() {
   );
 
   const handleSignOut = async () => {
+    if (!userData) {
+      Swal.fire({
+        icon: 'warning',
+        title: '로그인 필요',
+        text: '비로그인 상태입니다.'
+      });
+      return;
+    }
     try {
       const result = await Swal.fire({
         title: '로그아웃 하시겠습니까?',
